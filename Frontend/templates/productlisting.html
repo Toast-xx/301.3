@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products - Shoe Haven</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="CSS/products.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="home.html">Shoe Haven</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <form class="d-flex mx-auto w-75">
+                    <input class="form-control me-2" type="search" placeholder="Search for shoes..." aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="#"><i class="bi bi-person-circle" title="Login"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-cart3" title="Cart"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Listing Submenu -->
+    <div class="bg-light shadow-sm">
+        <div class="container">
+            <ul class="nav justify-content-center py-2">
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark mx-1" href="#">Men</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark mx-1" href="#">Women's</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark mx-1" href="#">Kids</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-danger mx-1" href="#">Sale</a>
+                </li>
+                <!-- Filter Button (Triggers Offcanvas) -->
+                <li class="nav-item">
+                    <button class="btn btn-dark mx-1" data-bs-toggle="offcanvas" data-bs-target="#filterSidebar">
+                        <i class="bi bi-funnel-fill"></i> Filter
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- Filter Offcanvas Sidebar -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="filterSidebar" aria-labelledby="filterSidebarLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="filterSidebarLabel">Filter Products</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+
+            <!-- Filter Dropdowns -->
+            <div class="mb-3">
+                <label for="brandFilter" class="form-label">Brand</label>
+                <select id="brandFilter" class="form-select">
+                    <option value="">All Brands</option>
+                    <option value="Nike">Nike</option>
+                    <option value="Adidas">Adidas</option>
+                    <option value="Vans">Vans</option>
+                    <!-- Add remaining brands -->
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="modelFilter" class="form-label">Model</label>
+                <select id="modelFilter" class="form-select">
+                    <!-- Populate via JavaScript or add static options with data-brand attributes -->
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="styleFilter" class="form-label">Style</label>
+                <select id="styleFilter" class="form-select">
+                    <!-- Populate via JavaScript or add static options with data-brand attributes -->
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="priceFilter" class="form-label">Price</label>
+                <select class="form-select">
+                    <option value="">All Prices</option>
+                    <option value="0-50">Under £50</option>
+                    <option value="50-100">£50–£100</option>
+                    <option value="100-150">£100–£150</option>
+                    <option value="150+">Over £150</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="genderFilter" class="form-label">Gender</label>
+                <select class="form-select">
+                    <option value="">All</option>
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                    <option value="Kids">Kids</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary w-100 mt-3">Apply Filters</button>
+        </div>
+    </div>
+
+
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
