@@ -7,7 +7,9 @@
     <!-- Bootstrap CSS & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="CSS/products.css" rel="stylesheet">
+    
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/productlistings.css') }}">
 </head>
 <body>
 
@@ -70,7 +72,7 @@
         </div>
         <div class="offcanvas-body">
 
-            <!-- Filter Dropdowns -->
+            <!-- Brand Filter -->
             <div class="mb-3">
                 <label for="brandFilter" class="form-label">Brand</label>
                 <select id="brandFilter" class="form-select">
@@ -78,27 +80,160 @@
                     <option value="Nike">Nike</option>
                     <option value="Adidas">Adidas</option>
                     <option value="Vans">Vans</option>
-                    <!-- Add remaining brands -->
+                    <option value="Etnies">Etnies</option>
+                    <option value="DC Shoes">DC Shoes</option>
+                    <option value="Skechers">Skechers</option>
+                    <option value="Nw Balance">New Balance</option>
+                    <option value="Converse">Converse</option>
+                    <option value="Dr Martens">Dr. Martens</option>
+                    <option value="Puma">Puma</option>
+                    <option value="Reebok">Reebok</option>
+                    <option value="Crocs">Crocs</option>
                 </select>
             </div>
 
+            <!-- Model Filter -->
             <div class="mb-3">
                 <label for="modelFilter" class="form-label">Model</label>
                 <select id="modelFilter" class="form-select">
-                    <!-- Populate via JavaScript or add static options with data-brand attributes -->
+                    <option value="">All Models</option>
+                    <optgroup label="Nike">
+                        <option value="Air Force">Air Force 1</option>
+                        <option value="Air Max 90">Air Max 90</option>
+                        <option value="Air Max 95">Air Max 95</option>
+                        <option value="Air Jordan">Air Jordan</option>
+                        <option value="Dunk">Dunk</option>
+                        <option value="Pegasus">Pegasus</option>
+                    </optgroup>
+                    <optgroup label="Adidas">
+                        <option value="Samba">Samba</option>
+                        <option value="Gazelle">Gazelle</option>
+                        <option value="Stan Smith">Stan Smith</option>
+                        <option value="Ultraboost">Ultraboost</option>
+                        <option value="Superstar">Superstar</option>
+                    </optgroup>
+                    <optgroup label="Vans">
+                        <option value="Old Skool">Old Skool</option>
+                        <option value="Authentic">Authentic</option>
+                        <option value="SK8-Hi">Sk8-Hi</option>
+                        <option value="Slip-On">Slip-On</option>
+                    </optgroup>
+                    <optgroup label="Etnies">
+                        <option value="Marana">Marana</option>
+                        <option value="Jameson">Jameson</option>
+                        <option value="Scout">Scout</option>
+                    </optgroup>
+                    <optgroup label="DC Shoes">
+                        <option value="Court Graffik">Court Graffik</option>
+                        <option value="Lynx OG">Lynx OG</option>
+                        <option value="Manteca">Manteca</option>
+                    </optgroup>
+                    <optgroup label="Skechers">
+                        <option value="GOwalk">GOwalk</option>
+                        <option value="D'Lites">D'Lites</option>
+                        <option value="Arch Fit">Arch Fit</option>
+                    </optgroup>
+                    <optgroup label="New Balance">
+                        <option value="574">574</option>
+                        <option value="990">990</option>
+                        <option value="9060">9060</option>
+                    </optgroup>
+                    <optgroup label="Converse">
+                        <option value="Chuck Taylor All Star">Chuck Taylor All Star</option>
+                        <option value="Chuck 70">Chuck 70</option>
+                        <option value="One Star">One Star</option>
+                    </optgroup>
+                    <optgroup label="Dr. Martens">
+                        <option value="1460">1460</option>
+                        <option value="2976">2976</option>
+                        <option value="101">101</option>
+                    </optgroup>
+                    <optgroup label="Puma">
+                        <option value="Suede Classic">Suede Classic</option>
+                        <option value="RS-X">RS-X</option>
+                        <option value="Clyde">Clyde</option>
+                    </optgroup>
+                    <optgroup label="Reebok">
+                        <option value="Classic Leather">Classic Leather</option>
+                        <option value="Club C">Club C</option>
+                        <option value="Nano">Nano</option>
+                    </optgroup>
+                    <optgroup label="Crocs">
+                        <option value="Classic Clog">Classic Clog</option>
+                        <option value="Mellow Slide">Mellow Slide</option>
+                        <option value="Brooklyn Low Wedge">Brooklyn Low Wedge</option>
+                    </optgroup>
                 </select>
             </div>
 
+            <!-- Style Filter -->
             <div class="mb-3">
                 <label for="styleFilter" class="form-label">Style</label>
                 <select id="styleFilter" class="form-select">
-                    <!-- Populate via JavaScript or add static options with data-brand attributes -->
+                    <option value="">All Styles</option>
+                    <optgroup label="Nike">
+                        <option>Sneakers</option>
+                        <option>Running Shoes</option>
+                        <option>Basketball Shoes</option>
+                        <option>Lifestyle Shoes</option>
+                    </optgroup>
+                    <optgroup label="Adidas">
+                        <option>Sneakers</option>
+                        <option>Running Shoes</option>
+                        <option>Training Shoes</option>
+                    </optgroup>
+                    <optgroup label="Vans">
+                        <option>Skate Shoes</option>
+                        <option>High Tops</option>
+                        <option>Slip-Ons</option>
+                    </optgroup>
+                    <optgroup label="Etnies">
+                        <option>Skate Shoes</option>
+                        <option>Lifestyle Shoes</option>
+                    </optgroup>
+                    <optgroup label="DC Shoes">
+                        <option>Skate Shoes</option>
+                        <option>Casual Sneakers</option>
+                    </optgroup>
+                    <optgroup label="Skechers">
+                        <option>Walking Shoes</option>
+                        <option>Slip-Ons</option>
+                        <option>Sandals</option>
+                    </optgroup>
+                    <optgroup label="New Balance">
+                        <option>Running Shoes</option>
+                        <option>Lifestyle Sneakers</option>
+                    </optgroup>
+                    <optgroup label="Converse">
+                        <option>High Tops</option>
+                        <option>Low Tops</option>
+                        <option>Slip-Ons</option>
+                    </optgroup>
+                    <optgroup label="Dr. Martens">
+                        <option>Combat Boots</option>
+                        <option>Chelsea Boots</option>
+                        <option>Oxford Shoes</option>
+                    </optgroup>
+                    <optgroup label="Puma">
+                        <option>Running Shoes</option>
+                        <option>Lifestyle Shoes</option>
+                    </optgroup>
+                    <optgroup label="Reebok">
+                        <option>Running Shoes</option>
+                        <option>Lifestyle Sneakers</option>
+                    </optgroup>
+                    <optgroup label="Crocs">
+                        <option>Clogs</option>
+                        <option>Slides</option>
+                        <option>Sandals</option>
+                    </optgroup>
                 </select>
             </div>
 
+            <!-- Price Filter -->
             <div class="mb-3">
                 <label for="priceFilter" class="form-label">Price</label>
-                <select class="form-select">
+                <select id="priceFilter" class="form-select">
                     <option value="">All Prices</option>
                     <option value="0-50">Under £50</option>
                     <option value="50-100">£50–£100</option>
@@ -107,23 +242,170 @@
                 </select>
             </div>
 
+            <!-- Gender Filter -->
             <div class="mb-3">
                 <label for="genderFilter" class="form-label">Gender</label>
-                <select class="form-select">
+                <select id="genderFilter" class="form-select">
                     <option value="">All</option>
-                    <option value="Men">Men</option>
-                    <option value="Women">Women</option>
-                    <option value="Kids">Kids</option>
+                    <option>Men</option>
+                    <option>Women</option>
+                    <option>Kids</option>
                 </select>
             </div>
 
+            <!-- Apply Button -->
             <button class="btn btn-primary w-100 mt-3">Apply Filters</button>
+
         </div>
     </div>
+    <!-- Product Grid -->
+    <div class="container my-5">
+        <div class="row" id="product-list">
+            <!-- JS will inject product cards here -->
+        </div>
+    </div>
+    <div class="container my-4">
+        <nav>
+            <ul class="pagination justify-content-center" id="pagination">
+                <!-- JS will inject pagination buttons here -->
+            </ul>
+        </nav>
+    </div>
+    <!-- Footer Navbar -->
+    <footer class="bg-light py-3">
+        <div class="container d-flex justify-content-center flex-wrap gap-3">
+            <button class="btn btn-outline-secondary">Contact Us</button>
+            <button class="btn btn-outline-secondary">Order Status</button>
+            <button class="btn btn-outline-secondary">Shipping & Delivery</button>
+            <button class="btn btn-outline-secondary">Store Finder</button>
+            <button class="btn btn-outline-secondary">Returns & Refunds</button>
+            <button class="btn btn-outline-secondary">Help Center</button>
+        </div>
+    </footer>
+
+    <script>
+        const products = [
+            { title: "Nike Air Force 1", price: 90 },
+            { title: "Nike Air Max 90", price: 110 },
+            { title: "Nike Air Max 95", price: 120 },
+            { title: "Nike Air Jordan", price: 150 },
+            { title: "Nike Dunk", price: 100 },
+            { title: "Nike Pegasus", price: 95 },
+            { title: "Adidas Samba", price: 85 },
+            { title: "Adidas Gazelle", price: 90 },
+            { title: "Adidas Stan Smith", price: 95 },
+            { title: "Adidas Ultraboost", price: 140 },
+            { title: "Adidas Superstar", price: 100 },
+            { title: "Vans Old Skool", price: 70 },
+            { title: "Vans Authentic", price: 65 },
+            { title: "Vans Sk8-Hi", price: 80 },
+            { title: "Vans Slip-On", price: 60 },
+            { title: "Etnies Marana", price: 75 },
+            { title: "Etnies Jameson", price: 70 },
+            { title: "Etnies Scout", price: 65 },
+            { title: "DC Court Graffik", price: 80 },
+            { title: "DC Lynx OG", price: 90 },
+            { title: "DC Manteca", price: 85 },
+            { title: "Skechers GOwalk", price: 75 },
+            { title: "Skechers D'Lites", price: 85 },
+            { title: "Skechers Arch Fit", price: 95 },
+            { title: "New Balance 574", price: 80 },
+            { title: "New Balance 990", price: 140 },
+            { title: "New Balance 9060", price: 150 },
+            { title: "Converse Chuck Taylor All Star", price: 65 },
+            { title: "Converse Chuck 70", price: 85 },
+            { title: "Converse One Star", price: 70 },
+            { title: "Dr. Martens 1460", price: 150 },
+            { title: "Dr. Martens 2976", price: 160 },
+            { title: "Dr. Martens 101", price: 140 },
+            { title: "Puma Suede Classic", price: 75 },
+            { title: "Puma RS-X", price: 110 },
+            { title: "Puma Clyde", price: 85 },
+            { title: "Reebok Classic Leather", price: 80 },
+            { title: "Reebok Club C", price: 75 },
+            { title: "Reebok Nano", price: 130 },
+            { title: "Crocs Classic Clog", price: 45 },
+            { title: "Crocs Mellow Slide", price: 50 },
+            { title: "Crocs Brooklyn Low Wedge", price: 55 }
+        ];
 
 
+    const productsPerPage = 12;
+    let currentPage = 1;
 
-    <!-- Bootstrap JS Bundle -->
+    function renderProducts() {
+        const start = (currentPage - 1) * productsPerPage;
+        const end = start + productsPerPage;
+        const container = document.getElementById('product-list');
+        let cardsHtml = '';
+
+        products.slice(start, end).forEach(product => {
+            cardsHtml += `
+                <div class="col-md-3 mb-4">
+                    <div class="product-card">
+                        <img src="https://via.placeholder.com/300x200?text=No+Image" alt="${product.title}">
+                        <div class="card-body">
+                            <h5 class="card-title">${product.title}</h5>
+                            <p class="card-text">NZD $${product.price.toFixed(2)}</p>
+                            <a href="#" class="btn-buy">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = cardsHtml;
+        renderPagination();
+    }
+
+    function renderPagination() {
+        const totalPages = Math.ceil(products.length / productsPerPage);
+        const pagination = document.getElementById('pagination');
+        let buttons = '';
+
+        // Prev button
+        buttons += `
+            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                <button class="page-link" onclick="goToPage(${currentPage - 1})">Previous</button>
+            </li>
+        `;
+
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+            buttons += `
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <button class="page-link" onclick="goToPage(${i})">${i}</button>
+                </li>
+            `;
+        }
+
+        // Next button
+        buttons += `
+            <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                <button class="page-link" onclick="goToPage(${currentPage + 1})">Next</button>
+            </li>
+        `;
+
+        pagination.innerHTML = buttons;
+    }
+
+    function goToPage(page) {
+        const totalPages = Math.ceil(products.length / productsPerPage);
+        if (page >= 1 && page <= totalPages) {
+            currentPage = page;
+            renderProducts();
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", renderProducts);
+    </script>
+
+
+    <!-- Bootstrap JS (optional) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+
+
+
