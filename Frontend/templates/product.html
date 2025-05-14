@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products | Shoe Haven</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="home.html">Shoe Haven</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <form class="d-flex mx-auto w-75">
+                    <input class="form-control me-2" type="search" placeholder="Search for shoes..." aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="#"><i class="bi bi-person-circle" title="Login"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-cart3" title="Cart"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Listing Submenu -->
+    <div class="bg-light shadow-sm">
+        <div class="container">
+            <ul class="nav justify-content-center py-2">
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark mx-1" href="#">Men</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark mx-1" href="#">Women's</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark mx-1" href="#">Kids</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-danger mx-1" href="#">Sale</a>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-dark mx-1" data-bs-toggle="offcanvas" data-bs-target="#filterSidebar">
+                        <i class="bi bi-funnel-fill"></i> Filter
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- Individual Product Section -->
+    <div class="container my-5">
+        <div class="row">
+            <!-- Left Column: Product Images -->
+            <div class="col-md-6">
+                <img src="https://via.placeholder.com/500x400" class="img-fluid rounded shadow-sm mb-3" alt="Main Shoe Image">
+                <!-- Optional: Thumbnail Gallery -->
+                <div class="d-flex gap-2">
+                    <img src="https://via.placeholder.com/100x80" class="img-thumbnail" alt="Thumb 1">
+                    <img src="https://via.placeholder.com/100x80" class="img-thumbnail" alt="Thumb 2">
+                    <img src="https://via.placeholder.com/100x80" class="img-thumbnail" alt="Thumb 3">
+                </div>
+            </div>
+
+            <!-- Right Column: Details -->
+            <div class="col-md-6">
+                <h2>Nike Air Force 1 '07</h2>
+                <h4 class="text-danger">$115.00</h4>
+                <p class="text-muted">Comfortable and stylish sneakers perfect for everyday wear. Made with breathable fabric and a cushioned sole.</p>
+
+                <!-- Sizes Grid -->
+                <h6>Select Size:</h6>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <button class="btn btn-outline-dark">6</button>
+                    <button class="btn btn-outline-dark">7</button>
+                    <button class="btn btn-outline-dark">8</button>
+                    <button class="btn btn-outline-dark">9</button>
+                    <button class="btn btn-outline-dark">10</button>
+                    <button class="btn btn-outline-dark">11</button>
+                </div>
+
+                <!-- Add to Cart -->
+                <div class="d-grid mb-3">
+                    <button class="btn btn-primary btn-lg"><i class="bi bi-cart-plus me-2"></i>Add to Cart</button>
+                </div>
+
+                <!-- Shipping Info -->
+                <div class="border-top pt-3">
+                    <h6>Select Shipping Option:</h6>
+                    <form>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="shippingOption" id="standardShipping" value="standard" checked>
+                            <label class="form-check-label" for="standardShipping">
+                                <i class="bi bi-truck"></i> Free Standard Shipping (3–5 business days)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="shippingOption" id="expressShipping" value="express">
+                            <label class="form-check-label" for="expressShipping">
+                                <i class="bi bi-lightning"></i> Express Shipping (1–2 business days) – $9.99
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="shippingOption" id="pickup" value="pickup">
+                            <label class="form-check-label" for="pickup">
+                                <i class="bi bi-shop"></i> In-Store Pickup (Ready in 2 hours)
+                            </label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- You May Also Like -->
+    <div class="container my-5">
+        <h4 class="mb-3">You May Also Like</h4>
+        <div class="d-flex overflow-auto gap-3 pb-2" id="related-products-container">
+            <!-- Product cards inserted by JS -->
+        </div>
+    </div>
+    <!-- Footer Navbar -->
+    <footer class="bg-light py-3">
+        <div class="container d-flex justify-content-center flex-wrap gap-3">
+            <button class="btn btn-outline-secondary">Contact Us</button>
+            <button class="btn btn-outline-secondary">Order Status</button>
+            <button class="btn btn-outline-secondary">Shipping & Delivery</button>
+            <button class="btn btn-outline-secondary">Store Finder</button>
+            <button class="btn btn-outline-secondary">Returns & Refunds</button>
+            <button class="btn btn-outline-secondary">Help Center</button>
+        </div>
+    </footer>
+    <!-- Temporary JS path for static file access without Flask -->
+    <script src="C:\Users\casst\OneDrive\Documents\GitHub\301.3\Frontend\static\js\products.js"></script>
+
+    <!-- Flask version (for later when serving with Flask) -->
+    <!-- <script src="{{ url_for('static', filename='js/products.js') }}"></script> -->
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
