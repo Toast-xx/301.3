@@ -1,6 +1,6 @@
 
     const relatedProducts = [
-    {title: "Running Shoes", price: "$89.99", img: "https://via.placeholder.com/200x150", link: "product1.html" },
+    { title: "Nike Air Force 1 '07", price: "$89.99", img: "", link: "product1.html" },
     {title: "High-Top Sneakers", price: "$74.99", img: "https://via.placeholder.com/200x150", link: "product2.html" },
     {title: "Leather Boots", price: "$129.99", img: "https://via.placeholder.com/200x150", link: "product3.html" },
     {title: "Slip-Ons", price: "$54.99", img: "https://via.placeholder.com/200x150", link: "product4.html" },

@@ -8,7 +8,11 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <!-- Temporary plain CSS path for local testing -->
+    <link rel="stylesheet" href="static/css/home.css">
+
+    <!-- Flask version (uncomment when using Flask) -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}"> -->
 
 
 </head>
@@ -35,13 +39,16 @@
 
                 <!-- Icons on Right -->
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item me-3">
-                        <a class="nav-link" href="#" title="Login"><i class="bi bi-person-circle"></i></a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="Login" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="bi bi-person-circle"></i>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" title="Cart"><i class="bi bi-cart3"></i></a>
                     </li>
                 </ul>
+
 
             </div>
         </div>
@@ -132,15 +139,26 @@
         <div class="row text-center">
             <!-- Men's Category -->
             <div class="col-md-4 mb-4">
-                <img src="{{ url_for('static', filename='images/SNEAKER_GUIDE_OPENER.webp') }}" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Men's Category">
+                <!-- Men's Category -->
+                <img src="C:\Users\casst\OneDrive\Documents\GitHub\301.3\Frontend\static\images\SNEAKER_GUIDE_OPENER.webp" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Men's Category">
+
+                <!-- Flask version -->
+                <!-- <img src="{{ url_for('static', filename='images/SNEAKER_GUIDE_OPENER.webp') }}" ... > -->
+
                 <a href="#" class="btn btn-dark btn-lg w-100">Men's</a>
             </div>
 
             <!-- Women's Category -->
             <div class="col-md-4 mb-4">
-                <img src="{{ url_for('static', filename='images/aleali-may-for-feature-tsw.png.webp') }}" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Women's Category">
+                <!-- Women's Category -->
+                <img src="C:\Users\casst\OneDrive\Documents\GitHub\301.3\Frontend\static\images\aleali-may-for-feature-tsw.png.webp" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Women's Category">
+
+                <!-- Flask version -->
+                <!-- <img src="{{ url_for('static', filename='images/aleali-may-for-feature-tsw.png.webp') }}" ... > -->
                 <a href="#" class="btn btn-dark btn-lg w-100">Women's</a>
             </div>
+
+
 
             <!-- Kids' Category -->
             <div class="col-md-4 mb-4">
@@ -148,7 +166,34 @@
                 <a href="#" class="btn btn-dark btn-lg w-100">Kids'</a>
             </div>
         </div>
-    </div><!-- Footer -->
+    </div>
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="loginEmail" placeholder="Enter email" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" placeholder="Password" required />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Continue as Guest</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
     <footer class="bg-dark text-light pt-5 pb-4 mt-5">
         <div class="container">
             <div class="row">
