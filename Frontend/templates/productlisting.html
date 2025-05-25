@@ -14,6 +14,9 @@
 
     <!-- Flask version (for later when using Flask) -->
     <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/productlistings.css') }}"> -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
 
@@ -48,17 +51,19 @@
         <div class="container">
             <ul class="nav justify-content-center py-2">
                 <li class="nav-item">
-                    <a class="btn btn-outline-dark mx-1" href="#">Men</a>
+                    <a class="btn btn-outline-dark mx-1 filter-btn" href="#" data-filter="men">Men</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-outline-dark mx-1" href="#">Women's</a>
+                    <a class="btn btn-outline-dark mx-1 filter-btn" href="#" data-filter="women">Women's</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-outline-dark mx-1" href="#">Kids</a>
+                    <a class="btn btn-outline-dark mx-1 filter-btn" href="#" data-filter="kids">Kids</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-outline-danger mx-1" href="#">Sale</a>
+                    <a class="btn btn-outline-danger mx-1 filter-btn" href="#" data-filter="sale">Sale</a>
                 </li>
+
+
                 <!-- Filter Button (Triggers Offcanvas) -->
                 <li class="nav-item">
                     <button class="btn btn-dark mx-1" data-bs-toggle="offcanvas" data-bs-target="#filterSidebar">
@@ -68,6 +73,9 @@
             </ul>
         </div>
     </div>
+
+
+
     <!-- Filter Offcanvas Sidebar -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="filterSidebar" aria-labelledby="filterSidebarLabel">
         <div class="offcanvas-header">
@@ -81,18 +89,15 @@
                 <label for="brandFilter" class="form-label">Brand</label>
                 <select id="brandFilter" class="form-select">
                     <option value="">All Brands</option>
-                    <option value="Nike">Nike</option>
-                    <option value="Adidas">Adidas</option>
-                    <option value="Vans">Vans</option>
-                    <option value="Etnies">Etnies</option>
-                    <option value="DC Shoes">DC Shoes</option>
-                    <option value="Skechers">Skechers</option>
-                    <option value="Nw Balance">New Balance</option>
-                    <option value="Converse">Converse</option>
-                    <option value="Dr Martens">Dr. Martens</option>
-                    <option value="Puma">Puma</option>
-                    <option value="Reebok">Reebok</option>
-                    <option value="Crocs">Crocs</option>
+                    <option>Nike</option>
+                    <option>Adidas</option>
+                    <option>Vans</option>
+                    <option>Etnies</option>
+                    <option>DC Shoes</option>
+                    <option>New Balance</option>
+                    <option>Converse</option>
+                    <option>Puma</option>
+                    <option>Reebok</option>
                 </select>
             </div>
 
@@ -102,70 +107,54 @@
                 <select id="modelFilter" class="form-select">
                     <option value="">All Models</option>
                     <optgroup label="Nike">
-                        <option value="Air Force">Air Force 1</option>
-                        <option value="Air Max 90">Air Max 90</option>
-                        <option value="Air Max 95">Air Max 95</option>
-                        <option value="Air Jordan">Air Jordan</option>
-                        <option value="Dunk">Dunk</option>
-                        <option value="Pegasus">Pegasus</option>
+                        <option>Air Force 1</option>
+                        <option>Air Max 90</option>
+                        <option>Air Max 95</option>
+                        <option>Air Jordan</option>
+                        <option>Dunk</option>
+                        <option>Pegasus</option>
                     </optgroup>
                     <optgroup label="Adidas">
-                        <option value="Samba">Samba</option>
-                        <option value="Gazelle">Gazelle</option>
-                        <option value="Stan Smith">Stan Smith</option>
-                        <option value="Ultraboost">Ultraboost</option>
-                        <option value="Superstar">Superstar</option>
+                        <option>Samba</option>
+                        <option>Gazelle</option>
+                        <option>Stan Smith</option>
+                        <option>Ultraboost</option>
                     </optgroup>
                     <optgroup label="Vans">
-                        <option value="Old Skool">Old Skool</option>
-                        <option value="Authentic">Authentic</option>
-                        <option value="SK8-Hi">Sk8-Hi</option>
-                        <option value="Slip-On">Slip-On</option>
+                        <option>Old Skool</option>
+                        <option>Authentic</option>
+                        <option>Sk8-Hi</option>
+                        <option>Slip-On</option>
                     </optgroup>
                     <optgroup label="Etnies">
-                        <option value="Marana">Marana</option>
-                        <option value="Jameson">Jameson</option>
-                        <option value="Scout">Scout</option>
+                        <option>Marana</option>
+                        <option>Jameson</option>
+                        <option>Scout</option>
                     </optgroup>
                     <optgroup label="DC Shoes">
-                        <option value="Court Graffik">Court Graffik</option>
-                        <option value="Lynx OG">Lynx OG</option>
-                        <option value="Manteca">Manteca</option>
-                    </optgroup>
-                    <optgroup label="Skechers">
-                        <option value="GOwalk">GOwalk</option>
-                        <option value="D'Lites">D'Lites</option>
-                        <option value="Arch Fit">Arch Fit</option>
+                        <option>Court Graffik</option>
+                        <option>Lynx OG</option>
+                        <option>Manteca</option>
                     </optgroup>
                     <optgroup label="New Balance">
-                        <option value="574">574</option>
-                        <option value="990">990</option>
-                        <option value="9060">9060</option>
+                        <option>574</option>
+                        <option>990</option>
+                        <option>9060</option>
                     </optgroup>
                     <optgroup label="Converse">
-                        <option value="Chuck Taylor All Star">Chuck Taylor All Star</option>
-                        <option value="Chuck 70">Chuck 70</option>
-                        <option value="One Star">One Star</option>
-                    </optgroup>
-                    <optgroup label="Dr. Martens">
-                        <option value="1460">1460</option>
-                        <option value="2976">2976</option>
-                        <option value="101">101</option>
+                        <option>Chuck Taylor All Star</option>
+                        <option>Chuck 70</option>
+                        <option>One Star</option>
                     </optgroup>
                     <optgroup label="Puma">
-                        <option value="Suede Classic">Suede Classic</option>
-                        <option value="RS-X">RS-X</option>
-                        <option value="Clyde">Clyde</option>
+                        <option>Suede Classic</option>
+                        <option>RS-X</option>
+                        <option>Clyde</option>
                     </optgroup>
                     <optgroup label="Reebok">
-                        <option value="Classic Leather">Classic Leather</option>
-                        <option value="Club C">Club C</option>
-                        <option value="Nano">Nano</option>
-                    </optgroup>
-                    <optgroup label="Crocs">
-                        <option value="Classic Clog">Classic Clog</option>
-                        <option value="Mellow Slide">Mellow Slide</option>
-                        <option value="Brooklyn Low Wedge">Brooklyn Low Wedge</option>
+                        <option>Classic Leather</option>
+                        <option>Club C</option>
+                        <option>Nano</option>
                     </optgroup>
                 </select>
             </div>
@@ -226,6 +215,11 @@
                         <option>Running Shoes</option>
                         <option>Lifestyle Sneakers</option>
                     </optgroup>
+                    <optgroup label="Crocs">
+                        <option>Clogs</option>
+                        <option>Slides</option>
+                        <option>Sandals</option>
+                    </optgroup>
                 </select>
             </div>
 
@@ -234,21 +228,10 @@
                 <label for="priceFilter" class="form-label">Price</label>
                 <select id="priceFilter" class="form-select">
                     <option value="">All Prices</option>
-                    <option value="0-50">Under £50</option>
-                    <option value="50-100">£50–£100</option>
-                    <option value="100-150">£100–£150</option>
-                    <option value="150+">Over £150</option>
-                </select>
-            </div>
-
-            <!-- Gender Filter -->
-            <div class="mb-3">
-                <label for="genderFilter" class="form-label">Gender</label>
-                <select id="genderFilter" class="form-select">
-                    <option value="">All</option>
-                    <option>Men</option>
-                    <option>Women</option>
-                    <option>Kids</option>
+                    <option value="0-50">Under $50</option>
+                    <option value="50-100">$50–$100</option>
+                    <option value="100-150">$100–$150</option>
+                    <option value="150+">Over $150</option>
                 </select>
             </div>
 
@@ -257,6 +240,8 @@
 
         </div>
     </div>
+
+
     <!-- Product Grid -->
     <div class="container my-5">
         <div class="row" id="product-list">
@@ -270,6 +255,7 @@
             </ul>
         </nav>
     </div>
+
     <!-- Footer Navbar -->
     <footer class="bg-light py-3">
         <div class="container d-flex justify-content-center flex-wrap gap-3">
@@ -282,13 +268,15 @@
         </div>
     </footer>
     <!-- Temporary JS path for static file access without Flask -->
-    <script src="C:\Users\casst\OneDrive\Documents\GitHub\301.3\Frontend\static\js\productlistings.js"></script>
+    <script src="C:\Users\Software Engineering\GitHub\MVP\Frontend\static\js\productlistings.js"></script>
+    <script src="C:\Users\Software Engineering\GitHub\MVP\Frontend\static\js\filtering.js"></script>
 
     <!-- Flask version (for later when serving with Flask) -->
     <!-- <script src="{{ url_for('static', filename='js/productlistings.js') }}"></script> -->
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </body>
 </html>

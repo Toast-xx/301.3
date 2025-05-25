@@ -1,0 +1,194 @@
+<!-- Product Listing Submenu -->
+<div class="bg-light shadow-sm">
+    <div class="container">
+        <ul class="nav justify-content-center py-2">
+            <li class="nav-item">
+                <a class="btn btn-outline-dark mx-1 filter-btn" href="#" data-filter="men">Men</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-dark mx-1 filter-btn" href="#" data-filter="women">Women's</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-dark mx-1 filter-btn" href="#" data-filter="kids">Kids</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-danger mx-1 filter-btn" href="#" data-filter="sale">Sale</a>
+            </li>
+
+
+            <!-- Filter Button (Triggers Offcanvas) -->
+            <li class="nav-item">
+                <button class="btn btn-dark mx-1" data-bs-toggle="offcanvas" data-bs-target="#filterSidebar">
+                    <i class="bi bi-funnel-fill"></i> Filter
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Filter Offcanvas Sidebar -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="filterSidebar" aria-labelledby="filterSidebarLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="filterSidebarLabel">Filter Products</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+
+        <!-- Brand Filter -->
+        <div class="mb-3">
+            <label for="brandFilter" class="form-label">Brand</label>
+            <select id="brandFilter" class="form-select">
+                <option value="">All Brands</option>
+                <option>Nike</option>
+                <option>Adidas</option>
+                <option>Vans</option>
+                <option>Etnies</option>
+                <option>DC Shoes</option>
+                <option>New Balance</option>
+                <option>Converse</option>
+                <option>Puma</option>
+                <option>Reebok</option>
+            </select>
+        </div>
+
+        <!-- Model Filter -->
+        <div class="mb-3">
+            <label for="modelFilter" class="form-label">Model</label>
+            <select id="modelFilter" class="form-select">
+                <option value="">All Models</option>
+                <optgroup label="Nike">
+                    <option>Air Force 1</option>
+                    <option>Air Max 90</option>
+                    <option>Air Max 95</option>
+                    <option>Air Jordan</option>
+                    <option>Dunk</option>
+                    <option>Pegasus</option>
+                </optgroup>
+                <optgroup label="Adidas">
+                    <option>Samba</option>
+                    <option>Gazelle</option>
+                    <option>Stan Smith</option>
+                    <option>Ultraboost</option>
+                </optgroup>
+                <optgroup label="Vans">
+                    <option>Old Skool</option>
+                    <option>Authentic</option>
+                    <option>Sk8-Hi</option>
+                    <option>Slip-On</option>
+                </optgroup>
+                <optgroup label="Etnies">
+                    <option>Marana</option>
+                    <option>Jameson</option>
+                    <option>Scout</option>
+                </optgroup>
+                <optgroup label="DC Shoes">
+                    <option>Court Graffik</option>
+                    <option>Lynx OG</option>
+                    <option>Manteca</option>
+                </optgroup>
+                <optgroup label="New Balance">
+                    <option>574</option>
+                    <option>990</option>
+                    <option>9060</option>
+                </optgroup>
+                <optgroup label="Converse">
+                    <option>Chuck Taylor All Star</option>
+                    <option>Chuck 70</option>
+                    <option>One Star</option>
+                </optgroup>
+                <optgroup label="Puma">
+                    <option>Suede Classic</option>
+                    <option>RS-X</option>
+                    <option>Clyde</option>
+                </optgroup>
+                <optgroup label="Reebok">
+                    <option>Classic Leather</option>
+                    <option>Club C</option>
+                    <option>Nano</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <!-- Style Filter -->
+        <div class="mb-3">
+            <label for="styleFilter" class="form-label">Style</label>
+            <select id="styleFilter" class="form-select">
+                <option value="">All Styles</option>
+                <optgroup label="Nike">
+                    <option>Sneakers</option>
+                    <option>Running Shoes</option>
+                    <option>Basketball Shoes</option>
+                    <option>Lifestyle Shoes</option>
+                </optgroup>
+                <optgroup label="Adidas">
+                    <option>Sneakers</option>
+                    <option>Running Shoes</option>
+                    <option>Training Shoes</option>
+                </optgroup>
+                <optgroup label="Vans">
+                    <option>Skate Shoes</option>
+                    <option>High Tops</option>
+                    <option>Slip-Ons</option>
+                </optgroup>
+                <optgroup label="Etnies">
+                    <option>Skate Shoes</option>
+                    <option>Lifestyle Shoes</option>
+                </optgroup>
+                <optgroup label="DC Shoes">
+                    <option>Skate Shoes</option>
+                    <option>Casual Sneakers</option>
+                </optgroup>
+                <optgroup label="Skechers">
+                    <option>Walking Shoes</option>
+                    <option>Slip-Ons</option>
+                    <option>Sandals</option>
+                </optgroup>
+                <optgroup label="New Balance">
+                    <option>Running Shoes</option>
+                    <option>Lifestyle Sneakers</option>
+                </optgroup>
+                <optgroup label="Converse">
+                    <option>High Tops</option>
+                    <option>Low Tops</option>
+                    <option>Slip-Ons</option>
+                </optgroup>
+                <optgroup label="Dr. Martens">
+                    <option>Combat Boots</option>
+                    <option>Chelsea Boots</option>
+                    <option>Oxford Shoes</option>
+                </optgroup>
+                <optgroup label="Puma">
+                    <option>Running Shoes</option>
+                    <option>Lifestyle Shoes</option>
+                </optgroup>
+                <optgroup label="Reebok">
+                    <option>Running Shoes</option>
+                    <option>Lifestyle Sneakers</option>
+                </optgroup>
+                <optgroup label="Crocs">
+                    <option>Clogs</option>
+                    <option>Slides</option>
+                    <option>Sandals</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <!-- Price Filter -->
+        <div class="mb-3">
+            <label for="priceFilter" class="form-label">Price</label>
+            <select id="priceFilter" class="form-select">
+                <option value="">All Prices</option>
+                <option value="0-50">Under $50</option>
+                <option value="50-100">$50–$100</option>
+                <option value="100-150">$100–$150</option>
+                <option value="150+">Over $150</option>
+            </select>
+        </div>
+
+        <!-- Apply Button -->
+        <button class="btn btn-primary w-100 mt-3">Apply Filters</button>
+
+    </div>
+</div>
+
+<script src="G:\My Drive\Y3 Software Engineering Resources\GitHub\MVP\Frontend\static\js\filtering.js"></script>

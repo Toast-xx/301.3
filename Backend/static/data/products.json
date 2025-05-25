@@ -1,0 +1,54 @@
+[
+	{
+		"model": "Air Force 1 '07",
+		"brand": "Nike",
+		"style": "Lifestyle Shoes",
+		"price": 200,
+		"category": "men",
+		"sizes": [ 6, 7, 8, 9, 10, 11, 12, 13, 14 ],
+		"image": "https://images.footlocker.com/is/image/FLEU/245345564602_01?wid=500&hei=500&fmt=png-alpha"
+	},
+	{
+		"model": "Pegasus 41",
+		"brand": "Nike",
+		"style": "Running Shoes",
+		"price": 210,
+		"category": "men",
+		"sizes": [ 6, 7, 8, 9, 10, 11, 12 ],
+		"image": "https://images.footlocker.com/is/image/FLEU/244209668904_01?wid=500&hei=500&fmt=png-alpha"
+	},
+	{
+		"model": "Stan Smith",
+		"brand": "Adidas",
+		"style": "Lifestyle Shoes",
+		"price": 110,
+		"category": "kids",
+		"sizes": [ 5, 6, 7, 8, 9, 10 ],
+		"image": "https://images.footlocker.com/is/image/FLEU/316475371304_01?wid=500&hei=500&fmt=png-alpha"
+	},
+	{
+		"model": "Authentic",
+		"brand": "Vans",
+		"style": "Skate Shoes",
+		"price": 109.99,
+		"category": "women",
+		"sizes": [ 5, 6, 7, 8, 9, 10 ],
+		"image": "https://media.hypedc.com/cdn-cgi/image/fit=scale-down,f=auto,w=1280/products/34bd8bd4/vn-0ee3blk_blk_01.jpg"
+	},
+	{
+		"model": "Marana",
+		"brand": "Etnies",
+		"style": "Skate Shoes",
+		"price": 127.99,
+		"category": "men",
+		"sizes": [ 6, 7, 8, 9, 10, 11 ],
+		"image": "https://cdn2.n2erp.co.nz/hyp_19sj232-ask2-dfk2-am29-89fkl348fd/images/products/xlarge/d2661f264d044332a2cf_1sgmojtc.sim.webp"
+	},
+	{
+		"model": "Court Graffik",
+		"brand": "DC",
+		"style": "Skate Shoes",
+		"price": 114.99,
+		"category": "men",
+		"sizes": [ 7, 8, 9, 10, 11 ],
+		"image": "https://cdn2.n2erp
