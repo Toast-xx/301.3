@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Products - Shoe Haven</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+          rel="stylesheet" />
+
+    <!-- Your CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/productlistings.css') }}" />
+
+    <!-- jQuery (optional, if your JS depends on it) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('home') }}">Shoe Haven</a>
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent"
+                    aria-controls="navbarContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <form class="d-flex mx-auto w-75" role="search">
+                    <input class="form-control me-2"
+                           type="search"
+                           placeholder="Search for shoes..."
+                           aria-label="Search" />
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="#" aria-label="Login">
+                            <i class="bi bi-person-circle" title="Login"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" aria-label="Cart">
+                            <i class="bi bi-cart3" title="Cart"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Listing Submenu -->
+    <div class="bg-light shadow-sm">
+        <div class="container">
+            <ul class="nav justify-content-center py-2">
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='men') }}" data-filter="men">Men</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='woman') }}" data-filter="women">Women's</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='kids') }}" data-filter="kids">Kids</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-danger mx-1 filter-btn" href="#" data-filter="sale">Sale</a>
+                </li>
+
+                <!-- Filter Button (Triggers Offcanvas) -->
+                <li class="nav-item">
+                    <button class="btn btn-dark mx-1"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#filterSidebar"
+                            aria-controls="filterSidebar">
+                        <i class="bi bi-funnel-fill"></i> Filter
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+  <!-- Filter Offcanvas Sidebar -->
+<div class="offcanvas offcanvas-end"
+     tabindex="-1"
+     id="filterSidebar"
+     aria-labelledby="filterSidebarLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="filterSidebarLabel">Filter Products</h5>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <!-- Brand Filter -->
+        <div class="mb-3">
+            <label for="brandFilter" class="form-label">Brand</label>
+            <select id="brandFilter" class="form-select" aria-label="Filter by Brand" disabled>
+                <option value="">All Brands</option>
+            </select>
+        </div>
+
+        <!-- Model Filter -->
+        <div class="mb-3">
+            <label for="modelFilter" class="form-label">Model</label>
+            <select id="modelFilter" class="form-select" aria-label="Filter by Model" disabled>
+                <option value="">All Models</option>
+            </select>
+        </div>
+
+        <!-- Style Filter -->
+        <div class="mb-3">
+            <label for="styleFilter" class="form-label">Style</label>
+            <select id="styleFilter" class="form-select" aria-label="Filter by Style" disabled>
+                <option value="">All Styles</option>
+            </select>
+        </div>
+
+        <!-- Price Filter -->
+        <div class="mb-3">
+            <label for="priceFilter" class="form-label">Price</label>
+            <select id="priceFilter" class="form-select" aria-label="Filter by Price">
+                <option value="">All Prices</option>
+                <option value="0-50">Under $50</option>
+                <option value="50-100">$50–$100</option>
+                <option value="100-150">$100–$150</option>
+                <option value="150+">Over $150</option>
+            </select>
+        </div>
+
+        <!-- Apply Button -->
+        <button class="btn btn-primary w-100 mt-3" id="applyFiltersBtn" type="button">
+            Apply Filters
+        </button>
+    </div>
+</div>
+
+    <!-- Product Grid -->
+    <main class="container my-5" role="main">
+        <div class="row" id="product-list" aria-live="polite" aria-relevant="additions">
+            <!-- JS will inject product cards here -->
+        </div>
+    </main>
+
+    <!-- Pagination -->
+    <div class="container my-4">
+        <nav aria-label="Product pagination">
+            <ul class="pagination justify-content-center" id="pagination">
+                <!-- JS will inject pagination buttons here -->
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Footer Navbar -->
+    <footer class="bg-light py-3">
+        <div class="container d-flex justify-content-center flex-wrap gap-3">
+            <button class="btn btn-outline-secondary">Contact Us</button>
+            <button class="btn btn-outline-secondary">Order Status</button>
+            <button class="btn btn-outline-secondary">Shipping & Delivery</button>
+            <button class="btn btn-outline-secondary">Store Finder</button>
+            <button class="btn btn-outline-secondary">Returns & Refunds</button>
+            <button class="btn btn-outline-secondary">Help Center</button>
+        </div>
+    </footer>
+
+    <!-- Your JS -->
+    <script  type="module" src="{{ url_for('static', filename='js/productlistings.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/filtering.js') }}"></script>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

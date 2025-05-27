@@ -1,54 +1,105 @@
 [
-	{
-		"model": "Air Force 1 '07",
-		"brand": "Nike",
-		"style": "Lifestyle Shoes",
-		"price": 200,
-		"category": "men",
-		"sizes": [ 6, 7, 8, 9, 10, 11, 12, 13, 14 ],
-		"image": "https://images.footlocker.com/is/image/FLEU/245345564602_01?wid=500&hei=500&fmt=png-alpha"
-	},
-	{
-		"model": "Pegasus 41",
-		"brand": "Nike",
-		"style": "Running Shoes",
-		"price": 210,
-		"category": "men",
-		"sizes": [ 6, 7, 8, 9, 10, 11, 12 ],
-		"image": "https://images.footlocker.com/is/image/FLEU/244209668904_01?wid=500&hei=500&fmt=png-alpha"
-	},
-	{
-		"model": "Stan Smith",
-		"brand": "Adidas",
-		"style": "Lifestyle Shoes",
-		"price": 110,
-		"category": "kids",
-		"sizes": [ 5, 6, 7, 8, 9, 10 ],
-		"image": "https://images.footlocker.com/is/image/FLEU/316475371304_01?wid=500&hei=500&fmt=png-alpha"
-	},
-	{
-		"model": "Authentic",
-		"brand": "Vans",
-		"style": "Skate Shoes",
-		"price": 109.99,
-		"category": "women",
-		"sizes": [ 5, 6, 7, 8, 9, 10 ],
-		"image": "https://media.hypedc.com/cdn-cgi/image/fit=scale-down,f=auto,w=1280/products/34bd8bd4/vn-0ee3blk_blk_01.jpg"
-	},
-	{
-		"model": "Marana",
-		"brand": "Etnies",
-		"style": "Skate Shoes",
-		"price": 127.99,
-		"category": "men",
-		"sizes": [ 6, 7, 8, 9, 10, 11 ],
-		"image": "https://cdn2.n2erp.co.nz/hyp_19sj232-ask2-dfk2-am29-89fkl348fd/images/products/xlarge/d2661f264d044332a2cf_1sgmojtc.sim.webp"
-	},
-	{
-		"model": "Court Graffik",
-		"brand": "DC",
-		"style": "Skate Shoes",
-		"price": 114.99,
-		"category": "men",
-		"sizes": [ 7, 8, 9, 10, 11 ],
-		"image": "https://cdn2.n2erp
+  {
+    "title": "Nike Air Force 1 '07",
+    "model": "Air Force 1 '07",
+    "brand": "Nike",
+    "style": "Lifestyle",
+    "price": 200,
+    "category": "men",
+    "sizes": [ 6, 7, 8, 9, 10, 11, 12, 13, 14 ],
+    "image": "https://images.footlocker.com/is/image/FLEU/245345564602_01?wid=500&hei=500&fmt=png-alpha",
+    "featured": true
+  },
+  {
+    "title": "Nike Pegasus 41",
+    "model": "Pegasus 41",
+    "brand": "Nike",
+    "style": "Running",
+    "price": 210,
+    "category": "men",
+    "sizes": [ 6, 7, 8, 9, 10, 11, 12 ],
+    "image": "https://images.footlocker.com/is/image/FLEU/244209668904_01?wid=500&hei=500&fmt=png-alpha"
+  },
+  {
+    "title": "Adidas Stan Smith",
+    "model": "Stan Smith",
+    "brand": "Adidas",
+    "style": "Lifestyle",
+    "price": 110,
+    "category": "kids",
+    "sizes": [ 5, 6, 7, 8, 9, 10 ],
+    "image": "https://images.footlocker.com/is/image/FLEU/316475371304_01?wid=500&hei=500&fmt=png-alpha"
+  },
+  {
+    "title": "Vans Authentic",
+    "model": "Authentic",
+    "brand": "Vans",
+    "style": "Skate",
+    "price": 109.99,
+    "category": "women",
+    "sizes": [ 5, 6, 7, 8, 9, 10 ],
+    "image": "https://media.hypedc.com/cdn-cgi/image/fit=scale-down,f=auto,w=1280/products/34bd8bd4/vn-0ee3blk_blk_01.jpg",
+    "featured": true
+  },
+  {
+    "title": "Etnies Marana",
+    "model": "Marana",
+    "brand": "Etnies",
+    "style": "Skate",
+    "price": 127.99,
+    "category": "men",
+    "sizes": [ 6, 7, 8, 9, 10, 11 ],
+    "image": "https://cdn2.n2erp.co.nz/hyp_19sj232-ask2-dfk2-am29-89fkl348fd/images/products/xlarge/d2661f264d044332a2cf_1sgmojtc.sim.webp"
+  },
+  {
+    "title": "DC Court Graffik",
+    "model": "Court Graffik",
+    "brand": "DC",
+    "style": "Skate",
+    "price": 114.99,
+    "category": "men",
+    "sizes": [ 7, 8, 9, 10, 11 ],
+    "image": "https://media.hypedc.com/cdn-cgi/image/fit=scale-down,f=auto,w=1024/products/d3682d6e-e7cd-4a8e-95c9-a318175e19cd/gy0952_1_footwear_photography_side-lateral-center-view_white.jpg"
+  },
+  {
+    "title": "New Balance 574",
+    "brand": "New Balance",
+    "model": "574",
+    "style": "Running",
+    "price": 170,
+    "category": "men",
+    "sizes": [ 7, 8, 9, 10, 11, 12, 13 ],
+    "image": "https://images.footlocker.com/is/image/FLEU/245240893502_01?wid=500&hei=500&fmt=png-alpha"
+  },
+  {
+    "title": "Converse Chuck Taylor All Star Top",
+    "brand": "Converse",
+    "model": "Chuck Taylor All Star Top",
+    "style": "Lifestyle",
+    "price": 130,
+    "category": "men",
+    "sizes": [ 6, 7, 8, 9, 10, 11 ],
+    "image": "https://images.footlocker.com/is/image/FLEU/285550062702_01?wid=500&hei=500&fmt=png-alpha"
+  },
+  {
+    "title": "Puma RS-X DRIFT PRM",
+    "brand": "Puma",
+    "model": "RS-X DRIFT PRM",
+    "style": "Lifestyle",
+    "price": 220,
+    "category": "men",
+    "sizes": [ 7, 8, 9, 10, 11, 12 ],
+    "image": "https://images.footlocker.com/is/image/FLEU/244205134604_01?wid=500&hei=500&fmt=png-alpha",
+    "featured": true
+  },
+  {
+    "title": "Reebok Classic Leather",
+    "brand": "Reebok",
+    "model": "Classic Leather",
+    "style": "Lifestyle",
+    "price": 170,
+    "category": "men",
+    "sizes": [ 7, 8, 9, 10, 11, 12 ],
+    "image": "https://media.hypedc.com/cdn-cgi/image/fit=scale-down,f=auto,w=1024/products/d3682d6e-e7cd-4a8e-95c9-a318175e19cd/gy0952_1_footwear_photography_side-lateral-center-view_white.jpg"
+  }
+]

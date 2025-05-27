@@ -1,295 +1,172 @@
-﻿
-function applyFilters() {
-    const brand = document.getElementById('brandFilter').value.trim();
-    const model = document.getElementById('modelFilter').value.trim();
-    const style = document.getElementById('styleFilter').value.trim();
-    const priceRange = document.getElementById('priceFilter').value;
+﻿document.addEventListener('DOMContentLoaded', () => {
+    const brandFilter = document.getElementById('brandFilter');
+    const modelFilter = document.getElementById('modelFilter');
+    const styleFilter = document.getElementById('styleFilter');
+    const priceFilter = document.getElementById('priceFilter');
+    const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+    const productList = document.getElementById('product-list');
 
-    filteredProducts = products.filter(product => {
-        let match = true;
-
-        // Category filtering
-        if (currentCategory && currentCategory !== 'all') {
-            if (currentCategory === 'sale') {
-                if (!product.onsale) match = false;
-            } else if (product.category.toLowerCase() !== currentCategory) {
-                match = true;
-            }
-        }
-
-        if (brand && product.brand !== brand) match = false;
-        if (model && product.model !== model) match = false;
-        if (style && product.style !== style) match = false;
-
-        if (priceRange) {
-            if (priceRange === "150+" && product.price <= 150) match = false;
-            else {
-                const [min, max] = priceRange.split('-');
-                if (max) {
-                    if (product.price < +min || product.price > +max) match = false;
-                } else {
-                    if (product.price < +min) match = false;
-                }
-            }
-        }
-
-        return match;
-    });
-
-    currentPage = 1; // Reset to first page when filters applied
-    displayProducts(filteredProducts, currentPage);
-}
+    let allProducts = [];
+    let filteredProducts = [];
+   
 
 
-// Event listener for "Apply Filters" button
-document.querySelector('.btn-primary.w-100').addEventListener('click', e => {
-    e.preventDefault(); // Prevent form submit if inside a form
-    applyFilters();
-});
-
-document.querySelectorAll('.brand-option').forEach(item => {
-    item.addEventListener('click', function (e) {
-        e.preventDefault();
-        const selectedBrand = this.getAttribute('data-brand');
-        document.getElementById('brandFilter').value = selectedBrand;
-
-        // Update dependent dropdowns (if brandData defined)
-        if (brandData[selectedBrand]) {
-            updateDropdown('modelFilter', brandData[selectedBrand].models);
-            updateDropdown('styleFilter', brandData[selectedBrand].styles);
-        } else {
-            updateDropdown('modelFilter', []);
-            updateDropdown('styleFilter', []);
-        }
-
-        applyFilters();
-    });
-});
-
-document.querySelectorAll('.style-option').forEach(item => {
-    item.addEventListener('click', function (e) {
-        e.preventDefault();
-        const selectedStyle = this.getAttribute('data-style');
-        document.getElementById('styleFilter').value = selectedStyle;
-        applyFilters();
-    });
-});
-
-document.querySelectorAll('.filter-btn').forEach(button => {
-    button.addEventListener('click', e => {
-        e.preventDefault();
-        currentCategory = button.dataset.filter.toLowerCase();
-
-        // Highlight active category button
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-
-        applyFilters();
-    });
-});
-
-let brandData = {
-    "Nike": {
-        models: ["Air Force 1", "Air Max 90", "Air Max 95", "Air Jordan", "Dunk", "Pegasus"],
-        styles: ["Sneakers", "Running Shoes", "Basketball Shoes", "Lifestyle Shoes"]
-    },
-    "Adidas": {
-        models: ["Samba", "Gazelle", "Stan Smith", "Ultraboost"],
-        styles: ["Sneakers", "Running Shoes", "Training Shoes"]
-    },
-    "Vans": {
-        models: ["Old Skool", "Authentic", "Sk8-Hi", "Slip-On"],
-        styles: ["Skate Shoes", "High Tops", "Slip-Ons"]
-    },
-    "Etnies": {
-        models: ["Marana", "Jameson", "Scout"],
-        styles: ["Skate Shoes", "Lifestyle Shoes"]
-    },
-    "DC Shoes": {
-        models: ["Court Graffik", "Lynx OG", "Manteca"],
-        styles: ["Skate Shoes", "Casual Sneakers"]
-    },
-    "New Balance": {
-        models: ["574", "990", "9060"],
-        styles: ["Running Shoes", "Lifestyle Sneakers"]
-    },
-    "Converse": {
-        models: ["Chuck Taylor All Star", "Chuck 70", "One Star"],
-        styles: ["High Tops", "Low Tops", "Slip-Ons"]
-    },
-    "Puma": {
-        models: ["Suede Classic", "RS-X", "Clyde"],
-        styles: ["Running Shoes", "Lifestyle Shoes"]
-    },
-    "Reebok": {
-        models: ["Classic Leather", "Club C", "Nano"],
-        styles: ["Running Shoes", "Lifestyle Sneakers"]
+    // Utility: get unique sorted values by key from products
+    function getUniqueValues(products, key) {
+        return [...new Set(products.map(p => p[key]))].sort();
     }
-};
 
-function applyFilters() {
-    const brand = document.getElementById('brandFilter').value.trim();
-    const model = document.getElementById('modelFilter').value.trim();
-    const style = document.getElementById('styleFilter').value.trim();
-    const priceRange = document.getElementById('priceFilter').value;
-
-    filteredProducts = products.filter(product => {
-        let match = true;
-
-        if (currentCategory && currentCategory !== 'all') {
-            if (currentCategory === 'sale') {
-                if (!product.onsale) match = false;
-            } else if (product.category.toLowerCase() !== currentCategory) {
-                match = false;
-            }
+    // Populate select options dynamically, keeping first option (placeholder)
+    function populateFilterOptions(selectEl, options) {
+        // Remove all except first placeholder option
+        while (selectEl.options.length > 1) {
+            selectEl.remove(1);
         }
-
-        if (brand && product.brand !== brand) match = false;
-        if (model && product.model !== model) match = false;
-        if (style && product.style !== style) match = false;
-
-        if (priceRange) {
-            if (priceRange === "150+" && product.price <= 150) match = false;
-            else {
-                const [min, max] = priceRange.split('-');
-                if (max) {
-                    if (product.price < +min || product.price > +max) match = false;
-                } else {
-                    if (product.price < +min) match = false;
-                }
-            }
-        }
-
-        return match;
-    });
-
-    currentPage = 1;
-    displayProducts(filteredProducts, currentPage);
-}
-
-document.querySelector('.btn-primary.w-100').addEventListener('click', e => {
-    e.preventDefault();
-    applyFilters();
-});
-
-document.querySelectorAll('.brand-option').forEach(item => {
-    item.addEventListener('click', function (e) {
-        e.preventDefault();
-        const selectedBrand = this.getAttribute('data-brand');
-        document.getElementById('brandFilter').value = selectedBrand;
-
-        if (brandData[selectedBrand]) {
-            updateDropdown('modelFilter', brandData[selectedBrand].models);
-            updateDropdown('styleFilter', brandData[selectedBrand].styles);
-        } else {
-            updateDropdown('modelFilter', []);
-            updateDropdown('styleFilter', []);
-        }
-
-        applyFilters();
-    });
-});
-
-document.querySelectorAll('.style-option').forEach(item => {
-    item.addEventListener('click', function (e) {
-        e.preventDefault();
-        const selectedStyle = this.getAttribute('data-style');
-        document.getElementById('styleFilter').value = selectedStyle;
-        applyFilters();
-    });
-});
-
-document.querySelectorAll('.filter-btn').forEach(button => {
-    button.addEventListener('click', e => {
-        e.preventDefault();
-        currentCategory = button.dataset.filter.toLowerCase();
-
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-
-        applyFilters();
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    function updateDropdown(selectId, options) {
-        const select = document.getElementById(selectId);
-        select.innerHTML = '';
-
-        const defaultOption = document.createElement('option');
-        defaultOption.value = '';
-        defaultOption.textContent = `All ${selectId.replace('Filter', '')}s`;
-        select.appendChild(defaultOption);
-
-        options.forEach(option => {
-            const opt = document.createElement('option');
-            opt.value = option;
-            opt.textContent = option;
-            select.appendChild(opt);
+        options.forEach(opt => {
+            const optionEl = document.createElement('option');
+            optionEl.value = opt;
+            optionEl.textContent = opt;
+            selectEl.appendChild(optionEl);
         });
     }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const brand = urlParams.get("brand");
-    const model = urlParams.get("model");
-    const style = urlParams.get("style");
-    const price = urlParams.get("price");
-    const category = urlParams.get("category");
+    // Fetch your product data JSON (adjust path if different)
+    async function fetchProducts() {
+        try {
+            const res = await fetch('static/data/products.json');
+            if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+            allProducts = await res.json();
 
-    if (brand) {
-        document.getElementById('brandFilter').value = brand;
-        if (brandData[brand]) {
-            updateDropdown('modelFilter', brandData[brand].models);
-            updateDropdown('styleFilter', brandData[brand].styles);
+            // Initialize brand filter on load and enable it
+            const brands = getUniqueValues(allProducts, 'brand');
+            populateFilterOptions(brandFilter, brands);
+            brandFilter.disabled = false;
+
+            // Reset and disable model and style filters initially
+            modelFilter.value = '';
+            styleFilter.value = '';
+            modelFilter.disabled = true;
+            styleFilter.disabled = true;
+
+            filteredProducts = allProducts; // initially no filters applied
+            renderProducts(filteredProducts);
+        } catch (err) {
+            console.error('Failed to load products:', err);
         }
     }
 
-    if (model) {
-        const brandForModel = document.getElementById('brandFilter').value;
-        if (brandForModel && brandData[brandForModel]) {
-            updateDropdown('modelFilter', brandData[brandForModel].models);
+    // Update model and style filters depending on current selections
+    function updateDependentFilters() {
+        const selectedBrand = brandFilter.value;
+        const selectedModel = modelFilter.value;
+        const selectedStyle = styleFilter.value;
+
+        // === MODEL OPTIONS ===
+        let modelSource = allProducts;
+        if (selectedBrand && selectedStyle) {
+            modelSource = allProducts.filter(p => p.brand === selectedBrand && p.style === selectedStyle);
+        } else if (selectedBrand) {
+            modelSource = allProducts.filter(p => p.brand === selectedBrand);
         }
-        document.getElementById('modelFilter').value = model;
-    }
+        // If only style is selected, leave modelSource as allProducts
 
-    if (style) {
-        const brandForStyle = document.getElementById('brandFilter').value;
-        if (brandForStyle && brandData[brandForStyle]) {
-            updateDropdown('styleFilter', brandData[brandForStyle].styles);
+        const models = getUniqueValues(modelSource, 'model');
+        populateFilterOptions(modelFilter, models);
+        modelFilter.disabled = models.length === 0;
+
+        // === STYLE OPTIONS ===
+        let styleSource = allProducts;
+        if (selectedBrand && selectedModel) {
+            styleSource = allProducts.filter(p => p.brand === selectedBrand && p.model === selectedModel);
+        } else if (selectedBrand) {
+            styleSource = allProducts.filter(p => p.brand === selectedBrand);
+        } else if (selectedModel) {
+            styleSource = allProducts.filter(p => p.model === selectedModel);
         }
-        document.getElementById('styleFilter').value = style;
+        // If none selected, keep all styles
+
+        const styles = getUniqueValues(styleSource, 'style');
+        populateFilterOptions(styleFilter, styles);
+        styleFilter.disabled = styles.length === 0;
     }
 
-    if (price) {
-        document.getElementById('priceFilter').value = price;
+    // Filter products based on all filter selections including price
+    function filterProducts() {
+        let result = allProducts;
+
+        const brand = brandFilter.value;
+        const model = modelFilter.value;
+        const style = styleFilter.value;
+        const price = priceFilter.value;
+
+        if (brand) result = result.filter(p => p.brand === brand);
+        if (model) result = result.filter(p => p.model === model);
+        if (style) result = result.filter(p => p.style === style);
+
+        if (price) {
+            if (price === '150+') {
+                result = result.filter(p => p.price > 150);
+            } else {
+                const [min, max] = price.split('-').map(Number);
+                result = result.filter(p => p.price >= min && p.price <= max);
+            }
+        }
+
+        return result;
     }
 
-    if (category) {
-        currentCategory = category.toLowerCase();
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.filter.toLowerCase() === currentCategory);
+    // Basic product rendering to #product-list (you can expand)
+    function renderProducts(products) {
+        const container = document.getElementById('product-list');
+        container.innerHTML = ''; // Clear existing content
+
+        if (products.length === 0) {
+            container.innerHTML = '<p class="text-center">No products found.</p>';
+            return;
+        }
+
+        products.forEach(product => {
+            const productHTML = `
+      <div class="col-12 col-sm-6 col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          <img src="${product.image_url || product.image}" class="card-img-top" alt="${product.model || product.name}" />
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">${product.brand} ${product.model || product.name}</h5>
+            <p class="card-text fw-bold">$${product.price.toFixed ? product.price.toFixed(2) : product.price}</p>
+            <button class="btn btn-light border mt-auto">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    `;
+            container.insertAdjacentHTML('beforeend', productHTML);
         });
     }
 
-    document.getElementById('brandFilter').addEventListener('change', function () {
-        const selectedBrand = this.value;
-        if (selectedBrand && brandData[selectedBrand]) {
-            updateDropdown('modelFilter', brandData[selectedBrand].models);
-            updateDropdown('styleFilter', brandData[selectedBrand].styles);
-        } else {
-            updateDropdown('modelFilter', []);
-            updateDropdown('styleFilter', []);
-        }
-        applyFilters();
+    // Event listeners
+    brandFilter.addEventListener('change', () => {
+        modelFilter.value = '';
+        styleFilter.value = '';
+        updateDependentFilters();
     });
 
-    document.getElementById('modelFilter').addEventListener('change', applyFilters);
-    document.getElementById('styleFilter').addEventListener('change', applyFilters);
+    modelFilter.addEventListener('change', () => {
+        styleFilter.value = '';
+        updateDependentFilters();
+    });
 
-    if (!brand) {
-        updateDropdown('modelFilter', []);
-        updateDropdown('styleFilter', []);
-    }
+    styleFilter.addEventListener('change', () => {
+        // No further dependent filters after style
+    });
 
-    applyFilters();
+    applyFiltersBtn.addEventListener('click', () => {
+        filteredProducts = filterProducts();
+        renderProducts(filteredProducts);
+        // Optionally close offcanvas here:
+        const offcanvasEl = document.getElementById('filterSidebar');
+        const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+        offcanvas.hide();
+    });
+
+    // Initialize filters and products on page load
+    fetchProducts();
 });

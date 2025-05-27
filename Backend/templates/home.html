@@ -20,7 +20,7 @@
         <div class="container-fluid">
 
             <!-- Brand/Home Link -->
-            <a class="navbar-brand" href="index.html">Shoe Haven</a>
+            <a class="navbar-brand" href="{{ url_for('home') }}">Shoe Haven</a>
 
             <!-- Mobile toggle button (collapsible menu on small screens) -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
@@ -71,19 +71,22 @@
                         <li>
                             <div class="row">
                                 <div class="col-4">
-                                    <a class="dropdown-item brand-option" href="productlisting.html?brand=Nike">Nike</a>
-                                    <a class="dropdown-item brand-option" href="productlisting.html?brand=Adidas">Adidas</a>
-                                    <a class="dropdown-item brand-option" href="productlisting.html?brand=Vans">Vans</a>
-                                    <a class="dropdown-item brand-option" href="productlisting.html?brand=Etnies">Etnies</a>
+                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='Nike') }}">Nike</a>
+                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='Adidas') }}">Adidas</a>
+                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='Vans') }}">Vans</a>
+                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='Etnies') }}">Etnies</a>
+
+
                                 </div>
                                 <div class="col-4">
-                                    <a class="dropdown-item brand-option" href="productlisting.html?brand=DC%20Shoes">DC Shoes</a>
-                                    <a class="dropdown-item brand-option" href="productlisting.html?brand=New%20Balance">New Balance</a>
-                                    <a class="dropdown-item brand-option" href="productlisting.html?brand=Converse">Converse</a>
+                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='DC Shoes') }}">DC Shoes</a>
+                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='New Balance') }}">New Balance</a>
+                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='Converse') }}">Converse</a>
                                 </div>
                                 <div class="col-4">
-                                    <a class="dropdown-item brand-option" href="productlisting.html?brand=Puma">Puma</a>
-                                    <a class="dropdown-item brand-option" href="productlisting.html?brand=Reebok">Reebok</a>
+                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='Puma') }}">Puma</a>
+                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='Reebok') }}">Reebok</a>
+
 
                                 </div>
                             </div>
@@ -100,15 +103,11 @@
                         <li>
                             <div class="row">
                                 <div class="col-6">
-                                    <a class="dropdown-item style-option" href="productlisting.html?style=Running Shoes">Running Shoes</a>
-                                    <a class="dropdown-item style-option" href="productlisting.html?style=Skate%20%26%20Streetwear">Skate & Streetwear</a>
-                                    <a class="dropdown-item style-option" href="productlisting.html?style=Running%20%26%20Activewear">Running & Activewear</a>
+                                    <a class="dropdown-item style-option" href="{{ url_for('product_listing', style='Running') }}">Running</a>
+                                    <a class="dropdown-item style-option" href="{{ url_for('product_listing', style='Skate') }}">Skate</a>
+                                    <a class="dropdown-item style-option" href="{{ url_for('product_listing', style='Lifestyle') }}">Lifestyle</a>
                                 </div>
-                                <div class="col-6">
-                                    <a class="dropdown-item style-option" href="productlisting.html?style=Boots%20%26%20High%20Tops">Boots & High Tops</a>
-                                    <a class="dropdown-item style-option" href="productlisting.html?style=Slides%2C%20Sandals%20%26%20Casuals">Slides, Sandals & Casuals</a>
-                                    <a class="dropdown-item style-option" href="productlisting.html?style=Work%20%26%20Comfort">Work & Comfort</a>
-                                </div>
+
                             </div>
                         </li>
                     </ul>
@@ -139,25 +138,27 @@
             <!-- Men's Category -->
             <div class="col-md-4 mb-4">
                 <img src="{{ url_for('static', filename='images/SNEAKER_GUIDE_OPENER.webp') }}" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Men's Category">
-
-                <a href="productlisting.html?category=men" class="btn btn-dark btn-lg w-100 " data-filter="men">Men</a>
-
-
+                <a href="{{ url_for('product_listing', category='men') }}" class="btn btn-dark btn-lg w-100" data-filter="men">Men</a>
             </div>
+
             <!-- Women's Category -->
             <div class="col-md-4 mb-4">
                 <img src="{{ url_for('static', filename='images/aleali-may-for-feature-tsw.png.webp') }}" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Women's Category">
-
-                <a href="productlisting.html?category=woman" class="btn btn-dark btn-lg w-100">Woman's</a>
-
+                <a href="{{ url_for('product_listing', category='women') }}" class="btn btn-dark btn-lg w-100" data-filter="women">Women</a>
             </div>
+
             <!-- Kids' Category -->
             <div class="col-md-4 mb-4">
                 <img src="{{ url_for('static', filename='images/Best Sneakers.jpg') }}" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Kids Category">
-
-                <a href="productlisting.html?category=kids" class="btn btn-dark btn-lg w-100">Kids'</a>
-
+                <a href="{{ url_for('product_listing', category='kids') }}" class="btn btn-dark btn-lg w-100" data-filter="kids">Kids</a>
             </div>
+        </div>
+    </div>
+    <!-- Featured Products Section -->
+    <div class="container my-5">
+        <h2 class="text-center mb-4 fw-bold">Featured Products</h2>
+        <div class="row" id="featured-products-container">
+            <!-- Dynamic featured products will be inserted here -->
         </div>
     </div>
 
@@ -253,8 +254,9 @@
     <script src="C:\Users\Software Engineering\GitHub\MVP\Frontend\static\js\home.js"></script>
     <script src="C:\Users\Software Engineering\GitHub\MVP\Frontend\static\js\filtering.js"></script>-->
 
-    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/filtering.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/home.js') }}"></script>
+
+
 
 
 </body>
