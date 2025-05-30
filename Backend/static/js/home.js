@@ -1,10 +1,24 @@
 console.log('home.js loaded');
 import { fetchProducts } from './productlistings.js';
 
-
 async function loadFeaturedProducts() {
     console.log('Loading featured products...');
     try {
+        // DB fetch code - active now
+        const response = await fetch('/api/products');
+        if (!response.ok) throw new Error('Failed to load products from backend API');
+
+        const allProducts = await response.json();
+        console.log('All products loaded:', allProducts.length);
+
+        // Filter only featured products (make sure your API returns "featured" correctly)
+        const featuredProducts = allProducts.filter(p => p.featured);
+        console.log('Featured products:', featuredProducts.length);
+
+        displayFeaturedProducts(featuredProducts);
+
+        /*
+        // JSON fetch code - commented out because you're using DB fetch now
         const response = await fetch('/static/data/products.json');
         if (!response.ok) throw new Error('Failed to load products JSON');
 
@@ -15,6 +29,7 @@ async function loadFeaturedProducts() {
         console.log('Featured products:', featuredProducts.length);
 
         displayFeaturedProducts(featuredProducts);
+        */
     } catch (err) {
         console.error(err);
         const container = document.getElementById('featured-products-container');
@@ -23,7 +38,6 @@ async function loadFeaturedProducts() {
         }
     }
 }
-
 
 function displayFeaturedProducts(products) {
     const container = document.getElementById('featured-products-container');
@@ -50,6 +64,5 @@ function displayFeaturedProducts(products) {
         container.insertAdjacentHTML('beforeend', productHTML);
     });
 }
-
 
 window.addEventListener('DOMContentLoaded', loadFeaturedProducts);

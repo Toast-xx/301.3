@@ -6,10 +6,19 @@ let selectedCategory = '';       // current category filter from submenu buttons
 
 export async function fetchProducts() {
     try {
+       /* // --- JSON fetch (active for now) 
         const response = await fetch('static/data/products.json');
         if (!response.ok) throw new Error('Failed to load products JSON');
 
+        allProducts = await response.json(); */
+
+        // --- DB fetch (commented out for later) ---
+        
+        const response = await fetch('/api/products');  // Flask API endpoint here
+        if (!response.ok) throw new Error('Failed to load products from DB');
+
         allProducts = await response.json();
+        
 
         // --- NEW: Get URL filters and apply them ---
         const urlParams = new URLSearchParams(window.location.search);
@@ -49,23 +58,26 @@ function displayProducts(products) {
         return;
     }
 
-    products.forEach(product => {
+     products.forEach(product => {
+        const productURL = `/product.html?id=${product.id}`; // Assuming product has an id field
+
         const productHTML = `
-      <div class="col-12 col-sm-6 col-md-4 mb-4">
-        <div class="card h-100 shadow-sm">
-          <img src="${product.image}" class="card-img-top" alt="${product.model}" />
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title">${product.brand} ${product.model}</h5>
-            <p class="card-text fw-bold">$${product.price}</p>
-            <button class="btn btn-light border mt-auto">Add to Cart</button>
+          <div class="col-12 col-sm-6 col-md-4 mb-4">
+            <a href="${productURL}" class="text-decoration-none text-dark">
+              <div class="card h-100 shadow-sm">
+                <img src="${product.image}" class="card-img-top" alt="${product.model}" />
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title">${product.brand} ${product.model}</h5>
+                  <p class="card-text fw-bold">$${product.price}</p>
+                  <button class="btn btn-light border mt-auto" type="button">Add to Cart</button>
+                </div>
+              </div>
+            </a>
           </div>
-        </div>
-      </div>
-    `;
+        `;
         container.insertAdjacentHTML('beforeend', productHTML);
     });
 }
-
 function displayProductsPage(page) {
     currentPage = page;
     const start = (page - 1) * itemsPerPage;
