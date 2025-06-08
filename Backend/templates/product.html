@@ -7,20 +7,21 @@
     <title>Products | Shoe Haven</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='product.css') }}">
 </head>
 <body>
+
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <!-- Navbar brand link: static now, Flask URL later -->
-            <a class="navbar-brand" href="home.html"><!--"{{ url_for('home') }}-->Shoe Haven</a>
+            <a class="navbar-brand" href="{{ url_for('home') }}">Shoe Haven</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarContent">
-                <form class="d-flex mx-auto w-75">
-                    <input class="form-control me-2" type="search" placeholder="Search for shoes..." aria-label="Search">
+                <form class="d-flex mx-auto w-75" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search for shoes..." aria-label="Search" />
                     <button class="btn btn-outline-light" type="submit">Search</button>
                 </form>
                 <ul class="navbar-nav ms-auto">
@@ -31,6 +32,7 @@
         </div>
     </nav>
 
+
     <!-- Product Listing Submenu -->
     <div class="bg-light shadow-sm">
         <div class="container">
@@ -40,9 +42,10 @@
                 <li class="nav-item"><a class="btn btn-outline-dark mx-1" href="#">Kids</a></li>
                 <li class="nav-item"><a class="btn btn-outline-danger mx-1" href="#">Sale</a></li>
                 <li class="nav-item">
-                    <!-- Filter Button (Triggers Offcanvas) -->
-                <li class="nav-item">
-                    <button class="btn btn-dark mx-1" data-bs-toggle="offcanvas" data-bs-target="#filterSidebar">
+                    <button class="btn btn-dark mx-1"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#filterSidebar"
+                            aria-controls="filterSidebar">
                         <i class="bi bi-funnel-fill"></i> Filter
                     </button>
                 </li>
@@ -50,152 +53,43 @@
         </div>
     </div>
 
-
-
     <!-- Filter Offcanvas Sidebar -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="filterSidebar" aria-labelledby="filterSidebarLabel">
+    <div class="offcanvas offcanvas-end"
+         tabindex="-1"
+         id="filterSidebar"
+         aria-labelledby="filterSidebarLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="filterSidebarLabel">Filter Products</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-
             <!-- Brand Filter -->
             <div class="mb-3">
                 <label for="brandFilter" class="form-label">Brand</label>
                 <select id="brandFilter" class="form-select">
                     <option value="">All Brands</option>
-                    <option>Nike</option>
-                    <option>Adidas</option>
-                    <option>Vans</option>
-                    <option>Etnies</option>
-                    <option>DC Shoes</option>
-                    <option>New Balance</option>
-                    <option>Converse</option>
-                    <option>Puma</option>
-                    <option>Reebok</option>
+                    <!-- JS will populate brands here -->
                 </select>
             </div>
 
             <!-- Model Filter -->
             <div class="mb-3">
                 <label for="modelFilter" class="form-label">Model</label>
-                <select id="modelFilter" class="form-select">
+                <select id="modelFilter" class="form-select" disabled>
                     <option value="">All Models</option>
-                    <optgroup label="Nike">
-                        <option>Air Force 1</option>
-                        <option>Air Max 90</option>
-                        <option>Air Max 95</option>
-                        <option>Air Jordan</option>
-                        <option>Dunk</option>
-                        <option>Pegasus</option>
-                    </optgroup>
-                    <optgroup label="Adidas">
-                        <option>Samba</option>
-                        <option>Gazelle</option>
-                        <option>Stan Smith</option>
-                        <option>Ultraboost</option>
-                    </optgroup>
-                    <optgroup label="Vans">
-                        <option>Old Skool</option>
-                        <option>Authentic</option>
-                        <option>Sk8-Hi</option>
-                        <option>Slip-On</option>
-                    </optgroup>
-                    <optgroup label="Etnies">
-                        <option>Marana</option>
-                        <option>Jameson</option>
-                        <option>Scout</option>
-                    </optgroup>
-                    <optgroup label="DC Shoes">
-                        <option>Court Graffik</option>
-                        <option>Lynx OG</option>
-                        <option>Manteca</option>
-                    </optgroup>
-                    <optgroup label="New Balance">
-                        <option>574</option>
-                        <option>990</option>
-                        <option>9060</option>
-                    </optgroup>
-                    <optgroup label="Converse">
-                        <option>Chuck Taylor All Star</option>
-                        <option>Chuck 70</option>
-                        <option>One Star</option>
-                    </optgroup>
-                    <optgroup label="Puma">
-                        <option>Suede Classic</option>
-                        <option>RS-X</option>
-                        <option>Clyde</option>
-                    </optgroup>
-                    <optgroup label="Reebok">
-                        <option>Classic Leather</option>
-                        <option>Club C</option>
-                        <option>Nano</option>
-                    </optgroup>
+                    <!-- JS will populate models based on brand -->
                 </select>
             </div>
 
             <!-- Style Filter -->
             <div class="mb-3">
                 <label for="styleFilter" class="form-label">Style</label>
-                <select id="styleFilter" class="form-select">
+                <select id="styleFilter" class="form-select" disabled>
                     <option value="">All Styles</option>
-                    <optgroup label="Nike">
-                        <option>Sneakers</option>
-                        <option>Running Shoes</option>
-                        <option>Basketball Shoes</option>
-                        <option>Lifestyle Shoes</option>
-                    </optgroup>
-                    <optgroup label="Adidas">
-                        <option>Sneakers</option>
-                        <option>Running Shoes</option>
-                        <option>Training Shoes</option>
-                    </optgroup>
-                    <optgroup label="Vans">
-                        <option>Skate Shoes</option>
-                        <option>High Tops</option>
-                        <option>Slip-Ons</option>
-                    </optgroup>
-                    <optgroup label="Etnies">
-                        <option>Skate Shoes</option>
-                        <option>Lifestyle Shoes</option>
-                    </optgroup>
-                    <optgroup label="DC Shoes">
-                        <option>Skate Shoes</option>
-                        <option>Casual Sneakers</option>
-                    </optgroup>
-                    <optgroup label="Skechers">
-                        <option>Walking Shoes</option>
-                        <option>Slip-Ons</option>
-                        <option>Sandals</option>
-                    </optgroup>
-                    <optgroup label="New Balance">
-                        <option>Running Shoes</option>
-                        <option>Lifestyle Sneakers</option>
-                    </optgroup>
-                    <optgroup label="Converse">
-                        <option>High Tops</option>
-                        <option>Low Tops</option>
-                        <option>Slip-Ons</option>
-                    </optgroup>
-                    <optgroup label="Dr. Martens">
-                        <option>Combat Boots</option>
-                        <option>Chelsea Boots</option>
-                        <option>Oxford Shoes</option>
-                    </optgroup>
-                    <optgroup label="Puma">
-                        <option>Running Shoes</option>
-                        <option>Lifestyle Shoes</option>
-                    </optgroup>
-                    <optgroup label="Reebok">
-                        <option>Running Shoes</option>
-                        <option>Lifestyle Sneakers</option>
-                    </optgroup>
-                    <optgroup label="Crocs">
-                        <option>Clogs</option>
-                        <option>Slides</option>
-                        <option>Sandals</option>
-                    </optgroup>
+                    <!-- JS will populate styles based on brand/model -->
                 </select>
             </div>
 
@@ -211,132 +105,74 @@
                 </select>
             </div>
 
-            <!-- Apply Button -->
-            <button class="btn btn-primary w-100 mt-3">Apply Filters</button>
+            <!-- Gender Filter -->
+            <div class="mb-3">
+                <label for="genderFilter" class="form-label">Gender</label>
+                <select id="genderFilter" class="form-select">
+                    <option value="">All Genders</option>
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                    <option value="Kids">Kids</option>
+                </select>
+            </div>
 
+            <button class="btn btn-primary w-100" id="applyFiltersBtn">Apply Filters</button>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <a href="/productlistings" class="text-decoration-none">
+            <i class="bi bi-arrow-left"></i> Back to Products
+        </a>
+    </div>
+
+    <!-- Product Grid Container: JS will inject product cards here -->
+    <main class="container my-5" id="productGrid">
+        <!-- Product cards dynamically generated here -->
+
+    </main>
+
+    <!-- Offcanvas Cart Overlay -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOverlay" aria-labelledby="cartOverlayLabel">
+        <div class="offcanvas-header">
+            <h5 id="cartOverlayLabel">Cart</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div id="cart-items"></div>
+            <hr />
+            <p><strong>Total:</strong> $<span id="cart-total">0.00</span></p>
+
+        </div>
+
+        <!-- Add more cart info here if needed -->
+
+        <div class="d-flex justify-content-between mt-4">
+            <button class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Continue Shopping</button>
+            <a href="/checkout" class="btn btn-primary">Checkout</a>
         </div>
     </div>
 
 
-    <!-- Individual Product Section -->
-    <div class="container my-5">
-        <div class="row">
-            <!-- Left Column: Product Images -->
-            <div class="col-md-6">
-                <img id="main-shoe-img" src="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0020.jpg?v=1737503185&auto=compress,format" class="img-fluid rounded shadow-sm mb-3" alt="Main Shoe Image">
-                <!-- Thumbnail Gallery -->
-                <div id="thumbnails-container" class="thumbnails d-flex flex-wrap gap-2">
-                    <img src="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0021.jpg?v=1737503187&auto=compress,format"
-                         data-large="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0021.jpg?v=1737503187&auto=compress,format"
-                         class="thumbnail img-thumbnail" alt="Thumb 2" style="width: 24%;">
-                    <img src="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0022.jpg?v=1737503187&auto=compress,format"
-                         data-large="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0022.jpg?v=1737503187&auto=compress,format"
-                         class="thumbnail img-thumbnail" alt="Thumb 3" style="width: 24%;">
-                    <img src="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0023.jpg?v=1737503187&auto=compress,format"
-                         data-large="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0023.jpg?v=1737503187&auto=compress,format"
-                         class="thumbnail img-thumbnail" alt="Thumb 4" style="width: 24%;">
-                    <img src="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0024.jpg?v=1737503187&auto=compress,format"
-                         data-large="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0024.jpg?v=1737503187&auto=compress,format"
-                         class="thumbnail img-thumbnail" alt="Thumb 5" style="width: 24%;">
-                    <img src="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0025.jpg?v=1737503187&auto=compress,format"
-                         data-large="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0025.jpg?v=1737503187&auto=compress,format"
-                         class="thumbnail img-thumbnail" alt="Thumb 6" style="width: 24%;">
-                    <img src="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0026.jpg?v=1737503187&auto=compress,format"
-                         data-large="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0026.jpg?v=1737503187&auto=compress,format"
-                         class="thumbnail img-thumbnail" alt="Thumb 7" style="width: 24%;">
-                    <img src="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0027.jpg?v=1737503187&auto=compress,format"
-                         data-large="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0027.jpg?v=1737503187&auto=compress,format"
-                         class="thumbnail img-thumbnail" alt="Thumb 8" style="width: 24%;">
-                </div>
-
-            </div>
-
-
-            <!-- Right Column: Details -->
-            <div class="col-md-6">
-                <h2 id="product-title"> Nike Air Force 1 '07</h2>
-                <!-- Flask dynamic title placeholder commented out -->
-                <!-- <h2 id="product-title">{{ product.title }}</h2> -->
-                <h4 class="text-danger" id="product-price">$115.00</h4>
-                <!-- Flask dynamic price placeholder -->
-                <!-- <h4 class="text-danger" id="product-price">${{ product.price }}</h4> -->
-                <p class="text-muted" id="product-description">Comfortable and stylish sneakers perfect for everyday wear. Made with breathable fabric and a cushioned sole.</p>
-                <!-- Flask dynamic description placeholder -->
-                <!-- <p class="text-muted" id="product-description">{{ product.description }}</p> -->
-                <!-- Sizes Grid -->
-                <h6>Select Size:</h6>
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                    <button class="btn btn-outline-dark">6</button>
-                    <button class="btn btn-outline-dark">7</button>
-                    <button class="btn btn-outline-dark">8</button>
-                    <button class="btn btn-outline-dark">9</button>
-                    <button class="btn btn-outline-dark">10</button>
-                    <button class="btn btn-outline-dark">11</button>
-                </div>
-
-                <!-- Color Selection (Image Thumbnails) -->
-                <div class="mb-3">
-                    <label class="form-label">Color:</label>
-                    <div class="d-flex gap-2" id="color-options">
-                        <img src="https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0020.jpg?v=1737503185&auto=compress,format" data-color="white" alt="White Nike Air Force 1 '07 Shoe"
-                             class="img-thumbnail border border-2 rounded p-1 color-option" style="width: 60px; height: 60px; cursor: pointer;">
-                        <img src="https://culture-kings-nz.imgix.net/files/05008948-YW986_default_0010.jpg?v=1743984723&fit=crop&h=1000&w=800&auto=compress,format" data-color="white/black" alt="White/Black Nike Air Force 1 '07 Shoe"
-                             class="img-thumbnail border border-2 rounded p-1 color-option" style="width: 60px; height: 60px; cursor: pointer;">
-                        <img src="https://culture-kings-nz.imgix.net/files/194499062899_default_0010.jpg?v=1698299819&fit=crop&h=1000&w=800&auto=compress,format" data-color="black/white" alt="Black/White Nike Air Force 1 '07 Shoe"
-                             class="img-thumbnail border border-2 rounded p-1 color-option" style="width: 60px; height: 60px; cursor: pointer;">
-                        <img src="https://culture-kings-nz.imgix.net/files/194954083278_default_0010.jpg?v=1705956928&fit=crop&h=1000&w=800&auto=compress,format" data-color="black" alt="Black Nike Air Force 1 '07 Shoe "
-                             class="img-thumbnail border border-2 rounded p-1 color-option" style="width: 60px; height: 60px; cursor: pointer;">
-                        <img src="https://culture-kings-nz.imgix.net/files/05013129-YP276_default_0010.jpg?v=1745893567&fit=crop&h=1000&w=800&auto=compress,format" data-color="tan/brown" alt="Tan/Brown Nike Air Force 1 '07 Shoe "
-                             class="img-thumbnail border border-2 rounded p-1 color-option" style="width: 60px; height: 60px; cursor: pointer;">
-                        <img src="https://culture-kings-nz.imgix.net/files/196153294493_default_0010.jpg?v=1722898025&fit=crop&h=1000&w=800&auto=compress,format" data-color="panda" alt="Panda Nike Air Force 1 '07 Shoe "
-                             class="img-thumbnail border border-2 rounded p-1 color-option" style="width: 60px; height: 60px; cursor: pointer;">
-                    </div>
-                </div>
-
-
-                <!-- Add to Cart -->
-                <div class="d-grid mb-3">
-                    <button class="btn btn-primary btn-lg"><i class="bi bi-cart-plus me-2"></i>Add to Cart</button>
-                </div>
-
-                <!-- Shipping Info -->
-                <div class="border-top pt-3">
-                    <h6>Select Shipping Option:</h6>
-                    <form>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="shippingOption" id="standardShipping" value="standard" checked>
-                            <label class="form-check-label" for="standardShipping"><i class="bi bi-truck"></i> Free Standard Shipping</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="shippingOption" id="expressShipping" value="express">
-                            <label class="form-check-label" for="expressShipping"><i class="bi bi-lightning"></i> Express Shipping $9.99</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="shippingOption" id="pickup" value="pickup">
-                            <label class="form-check-label" for="pickup"><i class="bi bi-shop"></i> In-Store Pickup</label>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- You May Also Like -->
     <div class="container my-5">
         <h4 class="mb-3">You May Also Like</h4>
         <div class="d-flex overflow-auto gap-3 pb-2" id="related-products-container">
-            <!--Static related products here 
-             Flask dynamic rendering example 
-            
-    {% for related in related_products %}
-        <div class="related-product-card">
-            <img src="{{ related.image_url }}" alt="{{ related.name }}">
-            <p>{{ related.name }}</p>
+            <!--Static related products here
+                     Flask dynamic rendering example
+
+            {% for related in related_products %}
+                <div class="related-product-card">
+                    <img src="{{ related.image_url }}" alt="{{ related.name }}">
+                    <p>{{ related.name }}</p>
+                </div>
+            {% endfor %}
+
+                     Related products injected via JS -->
+            di
         </div>
-    {% endfor %}
-    
-             Related products injected via JS -->
-        </div>
+        di
     </div>
 
     <!-- Footer -->
@@ -351,14 +187,12 @@
         </div>
     </footer>
 
-    <!-- Static mode JS (active) -->
+    <!-- Static mode JS (active)
     <script src="G:\My Drive\Y3 Software Engineering Resources\GitHub\MVP\Frontend\static\js\products.js"></script>
     <script src="G:\My Drive\Y3 Software Engineering Resources\GitHub\MVP\Frontend\static\js\product-images.js"></script>
-    <script src="G:\My Drive\Y3 Software Engineering Resources\GitHub\MVP\Frontend\static\js\filtering.js"></script>
-
-    <!-- Flask mode JS (commented out for future integration) -->
-    <!-- <script src="{{ url_for('static', filename='js/products.js') }}"></script> -->
-    <!-- <script src="{{ url_for('static', filename='js/product-images.js') }}"></script> -->
+    <script src="G:\My Drive\Y3 Software Engineering Resources\GitHub\MVP\Frontend\static\js\filtering.js"></script> -->
+    <!-- Flask mode JS -->
+    <script src="{{ url_for('static', filename='js/products.js') }}"></script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

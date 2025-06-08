@@ -12,10 +12,12 @@
     <link rel="stylesheet" href="static/css/home.css">-->
     <!-- Flask version (uncomment when using Flask) -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-
+   
 
 </head>
 <body>
+
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
 
@@ -38,15 +40,11 @@
 
                 <!-- Icons on Right -->
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" title="Login" data-bs-toggle="modal" data-bs-target="#loginModal">
-                            <i class="bi bi-person-circle"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" title="Cart"><i class="bi bi-cart3"></i></a>
-                    </li>
+                    <li class="nav-item me-3"><a class="nav-link" href="#"><i class="bi bi-person-circle" title="Login"></i></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cart3" title="Cart"></i></a></li>
                 </ul>
+                <!-- JS will populate this -->
+
 
 
             </div>
@@ -163,6 +161,7 @@
     </div>
 
 
+
     <!-- Login Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -172,15 +171,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="loginForm">
+                    <form id="loginForm" method="POST" action="/login">
                         <div class="mb-3">
                             <label for="loginEmail" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="loginEmail" placeholder="Enter email" required />
+                            <input type="email" class="form-control" id="loginEmail" name="email" placeholder="Enter email" required/>
                         </div>
                         <div class="mb-3">
                             <label for="loginPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="loginPassword" placeholder="Password" required />
+                            <input type="password" class="form-control" id="loginPassword" name="password" placeholder="Password" required />
                         </div>
+                        <p class="text-muted small mb-0">
+                            New here? <a href="/register" class="text-decoration-none">Register</a>
+                        </p>
                         <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
                     </form>
                     <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Continue as Guest</button>
@@ -188,6 +190,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Footer -->
     <footer class="bg-dark text-light pt-5 pb-4 mt-5">
@@ -245,6 +248,14 @@
         </div>
     </footer>
 
+    <script>
+  window.USER_EMAIL = "{{ user_email | default('', true) }}";
+  console.log("USER_EMAIL set to:", window.USER_EMAIL);
+    </script>
+
+
+
+
 
 
     <!-- Bootstrap JS Bundle -->
@@ -255,7 +266,8 @@
     <script src="C:\Users\Software Engineering\GitHub\MVP\Frontend\static\js\filtering.js"></script>-->
 
     <script type="module" src="{{ url_for('static', filename='js/home.js') }}"></script>
-
+    <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
 
 
 

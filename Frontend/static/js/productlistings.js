@@ -18,7 +18,7 @@
 ];*/
 async function fetchProducts() {
     try {
-        const response = await fetch('static/data/products.json');z  // adjust path if needed
+        const response = await fetch('static/data/products.json');  // adjust path if needed
         if (!response.ok) throw new Error('Failed to load products JSON');
 
         const products = await response.json();

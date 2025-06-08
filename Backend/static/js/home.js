@@ -18,7 +18,7 @@ async function loadFeaturedProducts() {
         displayFeaturedProducts(featuredProducts);
 
         /*
-        // JSON fetch code - commented out because you're using DB fetch now
+        // JSON fetch code - commented out because using DB fetch now
         const response = await fetch('/static/data/products.json');
         if (!response.ok) throw new Error('Failed to load products JSON');
 

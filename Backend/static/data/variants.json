@@ -1,9 +1,9 @@
 {
-  "title": "Nike Air Force 1 '07 - White/Black",
+  "title": "Nike Air Force 1 '07 - White",
   "price": "$115.00",
 
   "white": {
-    "mainImg": "C:/Users/Software Engineering/GitHub/MVP/Backend/static/images/Nike Air Force 1 '07-White_Men.webp",
+    "mainImg": "https://images.footlocker.com/is/image/EBFL2/W2288111_01?wid=500&hei=500&fmt=png-alpha",
     "thumbnails": [
       "https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0021.jpg?v=1737503187&auto=compress,format",
       "https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0022.jpg?v=1737503187&auto=compress,format",
@@ -12,20 +12,6 @@
       "https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0025.jpg?v=1737503187&auto=compress,format",
       "https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0026.jpg?v=1737503187&auto=compress,format",
       "https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0027.jpg?v=1737503187&auto=compress,format"
-    ],
-    "title": "Nike Air Force 1 '07 - White/Black",
-    "price": "$115.00"
-  },
-  "white/black": {
-    "mainImg": "https://culture-kings-nz.imgix.net/files/05008948-YW986_default_0010.jpg?v=1743984723&fit=crop&h=1000&w=800&auto=compress,format",
-    "thumbnails": [
-      "https://culture-kings-nz.imgix.net/files/05008948-YW986_default_0010.jpg?v=1743984723&fit=crop&h=1000&w=800&auto=compress,format",
-      "https://images.footlocker.com/is/image/FLEU/314102199404_02?wid=500&hei=500&fmt=png-alpha",
-      "https://images.footlocker.com/is/image/FLEU/314102199404_03?wid=500&hei=500&fmt=png-alpha",
-      "https://images.footlocker.com/is/image/FLEU/314102199404_04?wid=500&hei=500&fmt=png-alpha",
-      "https://images.footlocker.com/is/image/FLEU/314102199404_05?wid=500&hei=500&fmt=png-alpha",
-      "https://images.footlocker.com/is/image/FLEU/314102199404_06?wid=500&hei=500&fmt=png-alpha",
-      "https://images.footlocker.com/is/image/FLEU/314102199404_07?wid=500&hei=500&fmt=png-alpha"
     ],
     "title": "Nike Air Force 1 '07 - White/Black",
     "price": "$115.00"

@@ -16,7 +16,7 @@ def import_shoes_from_json(json_file_path):
                 style=shoe['style'],
                 brand=shoe['brand'],
                 main_image=shoe['main_image'],
-                 gallery=','.join(shoe['gallery'])  # all gallery URLs joined with commas
+                gallery=','.join(shoe['gallery'])  # all gallery URLs joined with commas
             )
             db.session.add(new_shoe)
         
