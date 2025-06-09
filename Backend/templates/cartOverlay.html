@@ -1,0 +1,21 @@
+<!-- templates/cartOverlay.html -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOverlay" aria-labelledby="cartOverlayLabel">
+    <div class="offcanvas-header">
+        <h5 id="cartOverlayLabel">Cart</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div id="cart-items"></div>
+        <!-- View Cart and Clear Cart buttons -->
+        <a href="/cart" class="btn btn-primary w-100 mb-2">View Cart</a>
+        <button id="clear-cart-btn" class="btn btn-danger w-100 mb-3">Clear Cart</button>
+        <hr />
+        <p><strong>Total:</strong> $<span id="cart-total">0.00</span></p>
+        <div class="d-flex justify-content-between mt-4">
+            <button class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Continue Shopping</button>
+            <a href="/checkout" class="btn btn-primary">Checkout</a>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/cartOverlay.js') }}"></script>

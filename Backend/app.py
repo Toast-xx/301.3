@@ -151,35 +151,60 @@ def get_product(shoe_id):
 @app.route('/add-to-cart', methods=['POST'])
 def add_to_cart():
     data = request.get_json()
-    app.logger.debug(f"Add to Cart Request: {data}")
-
     product_id = data.get("id")
     size = data.get("size")
     quantity = data.get("quantity", 1)
 
     if not product_id or not size:
-        app.logger.error("Missing product ID or size in Add to Cart")
         return jsonify({"error": "Missing product ID or size"}), 400
-    
+
+    # Fetch the shoe from the database
+    shoe = Shoes.query.get(product_id)
+    if not shoe:
+        return jsonify({"error": "Product not found"}), 404
+
     # Initialize cart in session if not present
     if 'cart' not in session:
         session['cart'] = []
 
-        # Add item to cart
+    # Add item to cart
     cart = session['cart']
     cart.append({
         "id": product_id,
+        "title": shoe.title,
+        "price": float(shoe.price),
         "size": size,
-        "quantity": quantity
+        "quantity": quantity,
+        "imageSrc": shoe.main_image  # <-- Add image here
     })
-    session['cart'] = cart  # Update session
+    session['cart'] = cart  # Save back to session
+
+    return jsonify({"message": "Product added to cart"}), 200
+
+@app.route('/api/cart', methods=['POST'])
+def get_cart():
+    data = request.get_json()
+    app.logger.debug(f"Received data for cart: {data}")
+    if not data or 'id' not in data:
+        return jsonify({'error': 'Invalid data'}), 400
+
+    cart = session.get('cart', [])
+    for item in cart:
+        if item.get('id') == data['id']:
+            item['quantity'] += data.get('quantity', 1)
+            break
+    else:
+        cart.append({
+            'id': data.get('id'),
+            'title': data.get('title'),
+            'price': data.get('price'),
+            'quantity': data.get('quantity', 1),
+            'imageSrc': data.get('imageSrc'),
+            'size': data.get('size')
+        })
+    session['cart'] = cart
+    return jsonify({'cart': cart})
     
-    return jsonify({
-        "message": "Product added to cart",
-        "id": product_id,
-        "size": size,
-        "quantity": quantity
-    }), 200
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -240,6 +265,13 @@ def inject_user():
         
     }
 
+@app.route('/cart')
+def cart_page():
+    return render_template('cart.html')
+
+@app.route('/checkout')
+def checkout():
+    return render_template('checkout.html')
 
 @app.route('/api/products')
 def api_products():
