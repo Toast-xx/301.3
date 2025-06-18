@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Order Status - Shoe Haven{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Order Status</h2>
+    <div class="alert alert-warning mb-4">
+        <strong>Order status tracking is coming soon!</strong>
+    </div>
+    <p>For now, you will receive a tracking link via email once your order ships. If you have questions about your order, please <a href="{{ url_for('contact_us') }}">contact us</a> with your order number.</p>
+    <ul class="list-group mb-4">
+        <li class="list-group-item">
+            <i class="bi bi-geo-alt-fill"></i> 123 Shoe St, Wellington New Zealand
+        </li>
+        <li class="list-group-item">
+            <i class="bi bi-telephone-fill"></i> +44 1234 567890
+        </li>
+        <li class="list-group-item">
+            <i class="bi bi-envelope-fill"></i> <a href="mailto:support@shoehaven.com">support@shoehaven.com</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}

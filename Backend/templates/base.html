@@ -5,13 +5,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Shoe Haven{% endblock %}</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
     {% block head %}{% endblock %}
 </head>
 <body>
-    <!-- Navbar (shared) -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url_for('home') }}">Shoe Haven</a>
@@ -19,21 +19,90 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarContent">
-                <form class="d-flex mx-auto w-75">
-                    <input class="form-control me-2" type="search" placeholder="Search for shoes..." aria-label="Search">
+                <!-- Updated search form -->
+                <form class="d-flex mx-auto w-75" method="get" action="{{ url_for('search') }}">
+                    <input class="form-control me-2" type="search" name="query" placeholder="Search for shoes..." aria-label="Search">
                     <button class="btn btn-outline-light" type="submit">Search</button>
                 </form>
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item me-3"><a class="nav-link" href="#"><i class="bi bi-person-circle" title="Login"></i></a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cart3" title="Cart"></i></a></li>
+                    {% if user %}
+                    <li class="nav-item me-3">
+                        <span class="nav-link">Welcome, {{ user.first_name }}</span>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="#" title="Login" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="bi bi-person-circle" title="Login"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="{{ url_for('register') }}">
+                            <i class="bi bi-person-plus"></i> Register
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item position-relative">
+                        <a class="nav-link" href="{{ url_for('get_cart') }}">
+                            <i class="bi bi-cart3" title="Cart"></i>
+                            <span id="cart-count-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.75em; display:none;">0</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
-    <!-- Main content block -->
+
     {% block content %}{% endblock %}
-    <!-- Footer, scripts, etc. can go here -->
+    <!-- Flash messages (add here) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- Login Modal (now available on all pages) -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm" method="POST" action="/login">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="loginEmail" name="email" placeholder="Enter email" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" name="password" placeholder="Password" required />
+                        </div>
+                        <p class="text-muted small mb-0">
+                            New here? <a href="/register" class="text-decoration-none">Register</a>
+                        </p>
+                        <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Continue as Guest</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+  window.USER_EMAIL = "{{ user_email | default('', true) }}";
+  window.USER_FIRSTNAME = "{{ user.first_name if user else '' }}";
+    </script>
+    <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

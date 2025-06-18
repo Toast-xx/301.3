@@ -1,0 +1,70 @@
+﻿{% extends "base.html" %}
+{% block head %}
+<style>
+    .new-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #198754;
+        color: #fff;
+        padding: 0.3em 0.8em;
+        font-weight: bold;
+        border-radius: 0.5em;
+        font-size: 1em;
+        z-index: 2;
+        box-shadow: 0 2px 8px rgba(25,135,84,0.15);
+        letter-spacing: 1px;
+    }
+
+    .card-img-top {
+        height: 220px;
+        object-fit: cover;
+        border-bottom: 2px solid #198754;
+    }
+
+    .card {
+        border: 2px solid #d1e7dd;
+        transition: box-shadow 0.2s;
+    }
+
+        .card:hover {
+            box-shadow: 0 4px 24px rgba(25,135,84,0.15);
+            border-color: #198754;
+        }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">
+        <span style="color: #198754; font-weight: bold;">🆕 New Arrivals</span>
+    </h2>
+    <div class="row g-4">
+        {% if arrivals %}
+        {% for item in arrivals %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <a href="{{ url_for('product_page') }}?id={{ item.id }}" class="text-decoration-none text-dark">
+                <div class="card position-relative h-100 shadow-sm">
+                    <span class="new-badge">NEW</span>
+                    <img src="{{ item.main_image }}" class="card-img-top" alt="{{ item.title }}">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                        <div class="mb-2">
+                            <span class="fw-bold">${{ '%.2f'|format(item.price) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-warning text-center">No new arrivals at the moment. Please check back soon!</div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="text-center mt-4">
+        <a href="{{ url_for('home') }}" class="btn btn-outline-dark">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

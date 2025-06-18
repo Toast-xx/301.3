@@ -33,7 +33,7 @@
     // Fetch your product data JSON (adjust path if different)
     async function fetchProducts() {
         try {
-            const res = await fetch('static/data/products.json');
+            const res = await fetch('/api/products');
             if (!res.ok) throw new Error(`HTTP error ${res.status}`);
             allProducts = await res.json();
 

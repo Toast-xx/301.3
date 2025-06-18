@@ -1,4 +1,21 @@
-let cart = [];
+let cart = []; // Array to hold cart items
+
+document.addEventListener('cart:cleared', function () {
+    // Listen for custom cart cleared event and refresh cart
+    console.log('cart:cleared event received in cartOverlay.js');
+    loadCartFromLocalStorage();
+    renderCartItems();
+    if (typeof updateCartBadge === 'function') updateCartBadge();
+});
+window.addEventListener('storage', function (e) {
+    // Listen for storage changes (multi-tab sync)
+    if (e.key === 'cart') {
+        console.log('storage event received in cartOverlay.js');
+        loadCartFromLocalStorage();
+        renderCartItems();
+        if (typeof updateCartBadge === 'function') updateCartBadge();
+    }
+});
 
 // Load cart from localStorage
 function loadCartFromLocalStorage() {
@@ -26,9 +43,19 @@ export function clearCart() {
     renderCartItems();
 }
 
-// Remove a single item by its id and size
-function removeCartItem(id, size) {
-    cart = cart.filter(item => !(item.id === id && item.size === size));
+// Remove a single item by its id, size, color, and variant
+function removeCartItem(id, size, color, variant) {
+    // Remove item matching id, size, color, and variant (variant can be undefined/empty)
+    cart = cart.filter(item => {
+        // If id, size, or color do not match, keep the item
+        if (item.id !== id || item.size !== size || item.color !== color) return true;
+        // If both variant and item.variant are undefined/empty, remove (return false)
+        if ((!item.variant && !variant) || (item.variant === "" && (variant === undefined || variant === ""))) return false;
+        // If both are defined and equal, remove (return false)
+        if (item.variant === variant) return false;
+        // Otherwise, keep the item
+        return true;
+    });
     saveCartToLocalStorage();
     renderCartItems();
 }
@@ -44,13 +71,18 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Add to cart and persist only to localStorage
-export function addToCart({ id, title, price, imageSrc, size, quantity = 1 }) {
+export function addToCart({ id, title, price, imageSrc, size, color, variant, quantity = 1 }) {
     loadCartFromLocalStorage();
-    const existing = cart.find(item => item.id === id && item.size === size);
+    const existing = cart.find(item =>
+        item.id === id &&
+        item.size === size &&
+        item.color === color &&
+        item.variant === variant
+    );
     if (existing) {
         existing.quantity += quantity;
     } else {
-        cart.push({ id, title, price, imageSrc, size, quantity });
+        cart.push({ id, title, price, imageSrc, size, color, variant, quantity });
     }
     saveCartToLocalStorage();
     renderCartItems();
@@ -72,8 +104,16 @@ function renderCartItems() {
             <div>
                 <p class="mb-0"><strong>${item.title}</strong></p>
                 <p class="mb-0 text-muted">$${item.price.toFixed(2)} x ${item.quantity || 1}</p>
+                ${item.color ? `<p class="mb-0">Color: ${item.color}</p>` : ""}
                 ${item.size ? `<p class="mb-0">Size: ${item.size}</p>` : ""}
-                <button class="btn btn-sm btn-outline-danger mt-1 remove-item-btn" data-id="${item.id}" data-size="${item.size}">Remove</button>
+                ${item.variant ? `<p class="mb-0">Variant: ${item.variant}</p>` : ""}
+                <button class="btn btn-sm btn-outline-danger mt-1 remove-item-btn" 
+                    data-id="${item.id}" 
+                    data-size="${item.size}" 
+                    data-color="${item.color ? item.color : ''}"
+                    data-variant="${item.variant ? item.variant : ''}">
+                    Remove
+                </button>
             </div>
         </div>
         `;
@@ -82,12 +122,14 @@ function renderCartItems() {
     const totalElement = document.getElementById("cart-total");
     if (totalElement) totalElement.textContent = total.toFixed(2);
 
-    // Attach remove event listeners
-    document.querySelectorAll('.remove-item-btn').forEach(btn => {
+    // Attach remove event listeners for all remove buttons, including variant
+    cartItemsContainer.querySelectorAll('.remove-item-btn').forEach(btn => {
         btn.addEventListener('click', function () {
             const id = parseInt(this.getAttribute('data-id'));
             const size = this.getAttribute('data-size');
-            removeCartItem(id, size);
+            const color = this.getAttribute('data-color');
+            const variant = this.getAttribute('data-variant');
+            removeCartItem(id, size, color, variant);
         });
     });
 }

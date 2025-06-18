@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Show Haven</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Temporary plain CSS path for local testing -->
+    <link rel="stylesheet" href="static/css/home.css">
+
+    <!-- Flask version (uncomment when using Flask) -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}"> -->
+
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+
+            <!-- Brand/Home Link -->
+            <a class="navbar-brand" href="index.html">Shoe Haven</a>
+
+            <!-- Mobile toggle button (collapsible menu on small screens) -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navbar Content -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+
+                <!-- Search Bar in Center -->
+                <form class="d-flex mx-auto w-75">
+                    <input class="form-control me-2" type="search" placeholder="Search for shoes..." aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
+                </form>
+
+                <!-- Icons on Right -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="Login" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="bi bi-person-circle"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="Cart"><i class="bi bi-cart3"></i></a>
+                    </li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+    <!-- Submenu -->
+    <div class="bg-light shadow-sm">
+        <div class="container">
+            <ul class="nav justify-content-center py-2">
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark mx-1" href="#">New Arrivals</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-dark mx-1" href="productlisting.html">Products</a>
+                </li>
+                <!-- Dropdown for Brands -->
+                <li class="nav-item dropdown">
+                    <a class="btn btn-outline-dark mx-1" href="#" id="brandsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Brands
+                    </a>
+                    <ul class="dropdown-menu p-3 position-absolute start-50 translate-middle-x mt-5" style="min-width: 500px;" aria-labelledby="brandsDropdown">
+                        <li>
+                            <div class="row">
+                                <div class="col-4">
+                                    <a class="dropdown-item" href="#">Nike</a>
+                                    <a class="dropdown-item" href="#">Adidas</a>
+                                    <a class="dropdown-item" href="#">Vans</a>
+                                    <a class="dropdown-item" href="#">Etnies</a>
+                                </div>
+                                <div class="col-4">
+                                    <a class="dropdown-item" href="#">DC Shoes</a>
+                                    <a class="dropdown-item" href="#">Skechers</a>
+                                    <a class="dropdown-item" href="#">New Balance</a>
+                                    <a class="dropdown-item" href="#">Converse</a>
+                                </div>
+                                <div class="col-4">
+                                    <a class="dropdown-item" href="#">Dr. Martens</a>
+                                    <a class="dropdown-item" href="#">Puma</a>
+                                    <a class="dropdown-item" href="#">Reebok</a>
+                                    <a class="dropdown-item" href="#">Crocs</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <!-- Dropdown for Styles -->
+                <li class="nav-item dropdown position-relative">
+                    <a class="btn btn-outline-dark mx-1" href="#" id="stylesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Styles
+                    </a>
+                    <ul class="dropdown-menu p-3 position-absolute start-50 translate-middle-x mt-5" style="min-width: 400px;" aria-labelledby="stylesDropdown">
+                        <li>
+                            <div class="row">
+                                <div class="col-6">
+                                    <a class="dropdown-item" href="#">Sneakers & Trainers</a>
+                                    <a class="dropdown-item" href="#">Skate & Streetwear</a>
+                                    <a class="dropdown-item" href="#">Running & Activewear</a>
+                                </div>
+                                <div class="col-6">
+                                    <a class="dropdown-item" href="#">Boots & High Tops</a>
+                                    <a class="dropdown-item" href="#">Slides, Sandals & Casuals</a>
+                                    <a class="dropdown-item" href="#">Work & Comfort</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- Exclusive Sale Section -->
+    <div class="container my-5">
+        <div class="row justify-content-center align-items-center bg-light p-4 shadow rounded">
+            <!-- Text + Button Column (larger) -->
+            <div class="col-md-8 text-center text-md-start">
+                <h2 class="fw-bold">Exclusive Shoe Sale</h2>
+                <p class="lead">Shop your favorite styles now with unbeatable discounts on top brands.</p>
+                <a href="#" class="btn btn-outline-dark btn-lg mt-2">Shop Now</a>
+            </div>
+
+            <!-- Image Column (smaller) -->
+            <div class="col-md-4 text-center mb-3 mb-md-0">
+                <img src="https://img.freepik.com/premium-vector/poster-super-sale-shows-collection-sneakers_1321897-537.jpg" class="img-fluid rounded" alt="Exclusive Sale">
+            </div>
+        </div>
+    </div>
+    <!-- Product Categories -->
+    <div class="container my-5">
+        <div class="row text-center">
+            <!-- Men's Category -->
+            <div class="col-md-4 mb-4">
+                <img src="G:\My Drive\Y3 Software Engineering Resources\GitHub\MVP\Frontend\static\images\SNEAKER_GUIDE_OPENER.webp" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Men's Category">
+                <a href="#" class="btn btn-dark btn-lg w-100 filter-btn" data-filter="mens">Men's</a>
+            </div>
+            <!-- Women's Category -->
+            <div class="col-md-4 mb-4">
+                <img src="G:\My Drive\Y3 Software Engineering Resources\GitHub\MVP\Frontend\static\images\aleali-may-for-feature-tsw.png.webp" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Women's Category">
+                <a href="#" class="btn btn-dark btn-lg w-100 filter-btn" data-filter="womens">Women's</a>
+            </div>
+            <!-- Kids' Category -->
+            <div class="col-md-4 mb-4">
+                <img src="https://image-cdn.hypb.st/https%3A%2F%2Fbae.hypebeast.com%2Ffiles%2F2019%2F08%2Fbest-sneaker-collaboration-editorial-shoes-footwear-nike-adidas-off-white-sacai-converse-0.jpg?w=2000&cbr=1&q=90&fit=max" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Kids Category">
+                <a href="#" class="btn btn-dark btn-lg w-100 filter-btn" data-filter="kids">Kids'</a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="loginEmail" placeholder="Enter email" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" placeholder="Password" required />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Continue as Guest</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light pt-5 pb-4 mt-5">
+        <div class="container">
+            <div class="row">
+
+                <!-- Helpful Links -->
+                <div class="col-md-3 mb-4">
+                    <h5 class="text-uppercase">Helpful Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Order Status</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Size Guide</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Shipping Info</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Returns</a></li>
+                    </ul>
+                </div>
+
+                <!-- Customer Service -->
+                <div class="col-md-3 mb-4">
+                    <h5 class="text-uppercase">Customer Service</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">FAQ</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Contact Us</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Track Your Order</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Live Chat</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-md-3 mb-4">
+                    <h5 class="text-uppercase">Contact</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-geo-alt-fill"></i> 123 Shoe St, London, UK</li>
+                        <li><i class="bi bi-telephone-fill"></i> +44 1234 567890</li>
+                        <li><i class="bi bi-envelope-fill"></i> support@shoehaven.com</li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div class="col-md-3 mb-4">
+                    <h5 class="text-uppercase">Legal</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Privacy Policy</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Terms of Service</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Cookie Policy</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Copyright -->
+            <div class="text-center mt-4">
+                <p class="mb-0">&copy; 2025 Shoe Haven. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Link to your external JS file -->
+    <script src="G:\My Drive\Y3 Software Engineering Resources\GitHub\MVP\Frontend\static\js\home.js"></script>
+
+</body>
+</html>

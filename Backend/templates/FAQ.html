@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}FAQ - Shoe Haven{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Frequently Asked Questions</h2>
+    <ul class="list-group mb-4">
+        <li class="list-group-item">
+            <strong>How do I place an order?</strong>
+            <ul class="mb-0">
+                <li>Browse our products, select your size and quantity, then click "Add to Cart." Proceed to checkout to complete your purchase.</li>
+            </ul>
+        </li>
+        <li class="list-group-item">
+            <strong>What payment methods do you accept?</strong>
+            <ul class="mb-0">
+                <li>We accept Visa, MasterCard, American Express, and Stripe payments.</li>
+            </ul>
+        </li>
+        <li class="list-group-item">
+            <strong>How can I track my order?</strong>
+            <ul class="mb-0">
+                <li><span class="text-warning fw-bold">Order status tracking is coming soon!</span></li>
+            </ul>
+        </li>
+        <li class="list-group-item">
+            <strong>What are your shipping options?</strong>
+            <ul class="mb-0">
+                <li>We offer Free Shipping, Standard ($5), and Express ($15) options. See our <a href="{{ url_for('shipping_info') }}">Shipping Info</a> page for details.</li>
+            </ul>
+        </li>
+        <li class="list-group-item">
+            <strong>How do I return or exchange an item?</strong>
+            <ul class="mb-0">
+                <li> Items must be unworn and returned within 30 days. See our <a href="{{ url_for('returns') }}">Returns Policy</a> for more info.</li>
+            </ul>
+        </li>
+        <li class="list-group-item">
+            <strong>How do I know which size to order?</strong>
+            <ul class="mb-0">
+                <li>Check our <a href="{{ url_for('size_guide') }}">Size Guide</a> for detailed sizing charts and tips.</li>
+            </ul>
+        </li>
+        <li class="list-group-item">
+            <strong>Can I change or cancel my order?</strong>
+            <ul class="mb-0">
+                <li>If your order hasn't shipped, contact us as soon as possible at <a href="mailto:support@shoehaven.com">support@shoehaven.com</a> or use Live Chat.</li>
+            </ul>
+        </li>
+        <li class="list-group-item">
+            <strong>Do you ship internationally?</strong>
+            <ul class="mb-0">
+                <li>Yes, we ship worldwide. International shipping costs are calculated at checkout.</li>
+            </ul>
+        </li>
+        <li class="list-group-item">
+            <strong>How do I contact customer service?</strong>
+            <ul class="mb-0">
+                <li>Email us at <a href="mailto:support@shoehaven.com">support@shoehaven.com</a> or use our <a href="#">Contact Us</a> page or Live Chat for immediate help.</li>
+            </ul>
+        </li>
+    </ul>
+    <div class="alert alert-info">
+        <strong>Still have questions?</strong> Contact our support team for further assistance.
+    </div>
+</div>
+{% endblock %}

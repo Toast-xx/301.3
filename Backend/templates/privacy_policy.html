@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy - Shoe Haven{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Privacy Policy</h2>
+    <p>Your privacy is important to us. This policy explains how Shoe Haven collects, uses, and protects your personal information.</p>
+    <ul class="list-group mb-4">
+        <li class="list-group-item">
+            <strong>Information We Collect</strong>
+            <ul class="mb-0">
+                <li>Personal details (name, email, address, phone) provided during registration or checkout.</li>
+                <li>Order history and purchase details.</li>
+                <li>Usage data, such as pages visited and actions taken on our site.</li>
+            </ul>
+        </li>
+        <li class="list-group-item">
+            <strong>How We Use Your Information</strong>
+            <ul class="mb-0">
+                <li>To process orders and provide customer support.</li>
+                <li>To improve our website and services.</li>
+                <li>To send order updates, promotions, and important notifications (you can opt out at any time).</li>
+            </ul>
+        </li>
+        <li class="list-group-item">
+            <strong>Information Sharing</strong>
+            <ul class="mb-0">
+                <li>We do not sell your personal information.</li>
+                <li>We may share data with trusted partners for payment processing, shipping, and analytics.</li>
+                <li>We comply with legal requests and protect against fraud.</li>
+            </ul>
+        </li>
+        <li class="list-group-item">
+            <strong>Cookies & Tracking</strong>
+            <ul class="mb-0">
+                <li>We use cookies to enhance your experience and analyze site usage. See our <a href="{{ url_for('cookie_policy') }}">Cookie Policy</a> for details.</li>
+            </ul>
+        </li>
+        <li class="list-group-item">
+            <strong>Your Rights</strong>
+            <ul class="mb-0">
+                <li>You can access, update, or delete your personal information at any time.</li>
+                <li>Contact us to exercise your privacy rights or for any questions.</li>
+            </ul>
+        </li>
+    </ul>
+    <div class="alert alert-info">
+        <strong>Contact:</strong> For privacy concerns, email us at <a href="mailto:support@shoehaven.com">support@shoehaven.com</a>.
+    </div>
+</div>
+{% endblock %}

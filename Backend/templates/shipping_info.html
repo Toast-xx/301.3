@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Shipping Info - Shoe Haven{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Shipping Information</h2>
+    <p>We offer flexible shipping options to suit your needs. See below for details on each shipping method available at checkout:</p>
+    <ul class="list-group mb-4">
+        <li class="list-group-item">
+            <strong>Free Shipping</strong>
+            <ul class="mb-0">
+                <li>Cost: <span class="text-success fw-bold">$0.00</span></li>
+                <li>Delivery Time: 5-7 business days</li>
+                <li>Eligibility: Automatically applied to all orders (no minimum spend required)</li>
+                <li>Tracking: Included</li>
+            </ul>
+        </li>
+        <li class="list-group-item">
+            <strong>Standard Shipping</strong>
+            <ul class="mb-0">
+                <li>Cost: <span class="fw-bold">$5.00</span></li>
+                <li>Delivery Time: 3-5 business days</li>
+                <li>Eligibility: Available for all orders</li>
+                <li>Tracking: Included</li>
+            </ul>
+        </li>
+        <li class="list-group-item">
+            <strong>Express Shipping</strong>
+            <ul class="mb-0">
+                <li>Cost: <span class="fw-bold">$15.00</span></li>
+                <li>Delivery Time: 1-2 business days</li>
+                <li>Eligibility: Available for all orders</li>
+                <li>Tracking: Priority tracking included</li>
+            </ul>
+        </li>
+    </ul>
+    <div class="alert alert-info">
+        <strong>Order Processing:</strong> Orders placed before 2pm are processed the same day. Tracking information will be emailed to you once your order ships.
+    </div>
+    <div class="alert alert-secondary">
+        <strong>Note:</strong> Delivery times are estimates and may vary due to external factors such as weather or carrier delays.
+    </div>
+    <hr>
+    <h5>Questions?</h5>
+    <p>See our <a href="#">FAQ</a> or <a href="#">Contact Us</a> for more details.</p>
+</div>
+{% endblock %}

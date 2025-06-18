@@ -1,0 +1,100 @@
+﻿{% extends "base.html" %}
+
+{% block head %}
+<style>
+    .sale-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #dc3545;
+        color: #fff;
+        padding: 0.3em 0.8em;
+        font-weight: bold;
+        border-radius: 0.5em;
+        font-size: 1em;
+        z-index: 2;
+        box-shadow: 0 2px 8px rgba(220,53,69,0.15);
+        letter-spacing: 1px;
+    }
+
+    .card-img-top {
+        height: 220px;
+        object-fit: cover;
+        border-bottom: 2px solid #dc3545;
+    }
+
+    .text-decoration-line-through {
+        text-decoration: line-through;
+    }
+
+    .sale-price {
+        color: #dc3545;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .card {
+        border: 2px solid #f8d7da;
+        transition: box-shadow 0.2s;
+    }
+
+        .card:hover {
+            box-shadow: 0 4px 24px rgba(220,53,69,0.15);
+            border-color: #dc3545;
+        }
+
+    .btn-danger {
+        background: linear-gradient(90deg, #dc3545 60%, #ff7675 100%);
+        border: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">
+        <span style="color: #dc3545; font-weight: bold;">🔥 Sale! </span>
+        <span>Shoe Haven Deals</span>
+    </h2>
+    <div class="row g-4">
+        {% if sales %}
+        {% for item in sales %}
+        {% set on_sale = (
+        item.sale_price
+        and item.sale_start_date
+        and item.sale_end_date
+        and item.sale_start_date <= today <= item.sale_end_date
+        ) %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <a href="{{ url_for('product_page') }}?id={{ item.id }}" class="text-decoration-none text-dark">
+                <div class="card position-relative h-100 shadow-sm">
+                    {% if on_sale %}
+                    <span class="sale-badge">SALE</span>
+                    {% endif %}
+                    <img src="{{ item.main_image }}" class="card-img-top" alt="{{ item.title }}">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                        <div class="mb-2">
+                            {% if on_sale %}
+                            <span class="text-decoration-line-through text-muted">${{ '%.2f'|format(item.price) }}</span>
+                            <span class="fw-bold sale-price ms-2">${{ '%.2f'|format(item.sale_price) }}</span>
+                            {% else %}
+                            <span class="fw-bold">${{ '%.2f'|format(item.price) }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-warning text-center">No sale items available right now. Please check back later!</div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="text-center mt-4">
+        <a href="{{ url_for('home') }}" class="btn btn-outline-dark">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmation{% endblock %}
+{% block content %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center bg-light p-5 shadow rounded">
+            <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+            <h2 class="fw-bold mt-3">Thank You for Your Order!</h2>
+            <p class="lead">Your order has been placed successfully.</p>
+            <div class="my-4 text-start">
+                <h5>Order Details</h5>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Order ID:</strong> {{ order_id }}</li>
+                    <li class="list-group-item"><strong>Email:</strong> {{ user_email }}</li>
+                    <li class="list-group-item"><strong>Total:</strong> NZD ${{ total }}</li>
+                    <li class="list-group-item"><strong>Date:</strong> {{ order_date }}</li>
+                </ul>
+            </div>
+            <a href="{{ url_for('home') }}" class="btn btn-outline-primary mt-2">Return Home</a>
+        </div>
+    </div>
+</div>
+<script>// Clear the cart from localStorage after order confirmation
+    localStorage.removeItem('cart');
+    // Optionally, dispatch an event to update the cart badge in the navbar
+    document.dispatchEvent(new Event('cart:cleared'));</script>
+{% endblock %}

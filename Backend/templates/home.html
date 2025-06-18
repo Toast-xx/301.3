@@ -1,275 +1,139 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
+{% block title %}Shoe Haven{% endblock %}
+{% block content %}
 
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Show Haven</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- Temporary plain CSS path for local testing
-    <link rel="stylesheet" href="static/css/home.css">-->
-    <!-- Flask version (uncomment when using Flask) -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-   
-
-</head>
-<body>
-
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-
-            <!-- Brand/Home Link -->
-            <a class="navbar-brand" href="{{ url_for('home') }}">Shoe Haven</a>
-
-            <!-- Mobile toggle button (collapsible menu on small screens) -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Navbar Content -->
-            <div class="collapse navbar-collapse" id="navbarContent">
-
-                <!-- Search Bar in Center -->
-                <form class="d-flex mx-auto w-75">
-                    <input class="form-control me-2" type="search" placeholder="Search for shoes..." aria-label="Search">
-                    <button class="btn btn-outline-light" type="submit">Search</button>
-                </form>
-
-                <!-- Icons on Right -->
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item me-3"><a class="nav-link" href="#"><i class="bi bi-person-circle" title="Login"></i></a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cart3" title="Cart"></i></a></li>
+<!-- Submenu -->
+<div class="bg-light shadow-sm">
+    <div class="container">
+        <ul class="nav justify-content-center py-2">
+            <li class="nav-item">
+                <a class="btn btn-outline-success mx-1" href="{{ url_for('new_arrivals') }}">New Arrivals</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-dark mx-1" href="{{ url_for('product_listing') }}">Products</a>
+            </li>
+            <!-- Dropdown for Brands -->
+            <li class="nav-item dropdown">
+                <a class="btn btn-outline-dark mx-1 dropdown-toggle" href="#" id="brandsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Brands
+                </a>
+                <ul class="dropdown-menu p-3" aria-labelledby="brandsDropdown" style="min-width: 500px;">
+                    <li><a class="dropdown-item" href="{{ url_for('product_listing', brand='Nike') }}">Nike</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('product_listing', brand='Adidas') }}">Adidas</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('product_listing', brand='Vans') }}">Vans</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('product_listing', brand='Etnies') }}">Etnies</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('product_listing', brand='DC Shoes') }}">DC Shoes</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('product_listing', brand='New Balance') }}">New Balance</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('product_listing', brand='Converse') }}">Converse</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('product_listing', brand='Puma') }}">Puma</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('product_listing', brand='Reebok') }}">Reebok</a></li>
                 </ul>
-                <!-- JS will populate this -->
+            </li>
+            <li class="nav-item dropdown">
+                <a class="btn btn-outline-dark mx-1 dropdown-toggle" href="#" id="stylesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Styles
+                </a>
+                <ul class="dropdown-menu p-3" aria-labelledby="stylesDropdown" style="min-width: 400px;">
+                    <li><a class="dropdown-item" href="{{ url_for('product_listing', style='Running') }}">Running</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('product_listing', style='Skate') }}">Skate</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('product_listing', style='Lifestyle') }}">Lifestyle</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
 
-
-
-            </div>
+<!-- Exclusive Sale Section -->
+<div class="container my-5">
+    <div class="row justify-content-center align-items-center bg-light p-4 shadow rounded">
+        <!-- Text + Button Column (larger) -->
+        <div class="col-md-8 text-center text-md-start">
+            <h2 class="fw-bold">Exclusive Shoe Sale</h2>
+            <p class="lead">Shop your favorite styles now with unbeatable discounts on top brands.</p>
+            <a href="{{ url_for('sales_page') }}" class="btn btn-outline-dark btn-lg mt-2">Shop Now</a>
         </div>
-    </nav>
-    <!-- Submenu -->
-    <div class="bg-light shadow-sm">
-        <div class="container">
-            <ul class="nav justify-content-center py-2">
-                <li class="nav-item">
-                    <a class="btn btn-outline-dark mx-1" href="#">New Arrivals</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-outline-dark mx-1" href="{{ url_for('product_listing') }}">Products</a>
-                </li>
-                <!-- Dropdown for Brands -->
-                <li class="nav-item dropdown">
-                    <a class="btn btn-outline-dark mx-1" href="#" id="brandsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Brands
-                    </a>
-                    <ul class="dropdown-menu p-3 position-absolute start-50 translate-middle-x mt-5" style="min-width: 500px;" aria-labelledby="brandsDropdown">
-                        <li>
-                            <div class="row">
-                                <div class="col-4">
-                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='Nike') }}">Nike</a>
-                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='Adidas') }}">Adidas</a>
-                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='Vans') }}">Vans</a>
-                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='Etnies') }}">Etnies</a>
-
-
-                                </div>
-                                <div class="col-4">
-                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='DC Shoes') }}">DC Shoes</a>
-                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='New Balance') }}">New Balance</a>
-                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='Converse') }}">Converse</a>
-                                </div>
-                                <div class="col-4">
-                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='Puma') }}">Puma</a>
-                                    <a class="dropdown-item brand-option" href="{{ url_for('product_listing', brand='Reebok') }}">Reebok</a>
-
-
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Dropdown for Styles -->
-                <li class="nav-item dropdown position-relative">
-                    <a class="btn btn-outline-dark mx-1" href="#" id="stylesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Styles
-                    </a>
-                    <ul class="dropdown-menu p-3 position-absolute start-50 translate-middle-x mt-5" style="min-width: 400px;" aria-labelledby="stylesDropdown">
-                        <li>
-                            <div class="row">
-                                <div class="col-6">
-                                    <a class="dropdown-item style-option" href="{{ url_for('product_listing', style='Running') }}">Running</a>
-                                    <a class="dropdown-item style-option" href="{{ url_for('product_listing', style='Skate') }}">Skate</a>
-                                    <a class="dropdown-item style-option" href="{{ url_for('product_listing', style='Lifestyle') }}">Lifestyle</a>
-                                </div>
-
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+        <!-- Image Column (smaller) -->
+        <div class="col-md-4 text-center mb-3 mb-md-0">
+            <img src="https://img.freepik.com/premium-vector/poster-super-sale-shows-collection-sneakers_1321897-537.jpg" class="img-fluid rounded" alt="Exclusive Sale">
         </div>
     </div>
+</div>
 
-    <!-- Exclusive Sale Section -->
-    <div class="container my-5">
-        <div class="row justify-content-center align-items-center bg-light p-4 shadow rounded">
-            <!-- Text + Button Column (larger) -->
-            <div class="col-md-8 text-center text-md-start">
-                <h2 class="fw-bold">Exclusive Shoe Sale</h2>
-                <p class="lead">Shop your favorite styles now with unbeatable discounts on top brands.</p>
-                <a href="#" class="btn btn-outline-dark btn-lg mt-2">Shop Now</a>
-            </div>
-
-            <!-- Image Column (smaller) -->
-            <div class="col-md-4 text-center mb-3 mb-md-0">
-                <img src="https://img.freepik.com/premium-vector/poster-super-sale-shows-collection-sneakers_1321897-537.jpg" class="img-fluid rounded" alt="Exclusive Sale">
-            </div>
+<!-- Product Categories -->
+<div class="container my-5">
+    <div class="row text-center">
+        <!-- Men's Category -->
+        <div class="col-md-4 mb-4">
+            <img src="{{ url_for('static', filename='images/SNEAKER_GUIDE_OPENER.webp') }}" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Men's Category">
+            <a href="{{ url_for('product_listing', category='men') }}" class="btn btn-dark btn-lg w-100" data-filter="men">Men</a>
+        </div>
+        <!-- Women's Category -->
+        <div class="col-md-4 mb-4">
+            <img src="{{ url_for('static', filename='images/aleali-may-for-feature-tsw.png.webp') }}" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Women's Category">
+            <a href="{{ url_for('product_listing', category='women') }}" class="btn btn-dark btn-lg w-100" data-filter="women">Women</a>
+        </div>
+        <!-- Kids' Category -->
+        <div class="col-md-4 mb-4">
+            <img src="{{ url_for('static', filename='images/Best Sneakers.jpg') }}" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Kids Category">
+            <a href="{{ url_for('product_listing', category='kids') }}" class="btn btn-dark btn-lg w-100" data-filter="kids">Kids</a>
         </div>
     </div>
-    <!-- Product Categories -->
-    <div class="container my-5">
-        <div class="row text-center">
-            <!-- Men's Category -->
-            <div class="col-md-4 mb-4">
-                <img src="{{ url_for('static', filename='images/SNEAKER_GUIDE_OPENER.webp') }}" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Men's Category">
-                <a href="{{ url_for('product_listing', category='men') }}" class="btn btn-dark btn-lg w-100" data-filter="men">Men</a>
-            </div>
+</div>
 
-            <!-- Women's Category -->
-            <div class="col-md-4 mb-4">
-                <img src="{{ url_for('static', filename='images/aleali-may-for-feature-tsw.png.webp') }}" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Women's Category">
-                <a href="{{ url_for('product_listing', category='women') }}" class="btn btn-dark btn-lg w-100" data-filter="women">Women</a>
+<footer class="bg-light text-dark pt-5 pb-4 mt-5 border-top">
+    <div class="container">
+        <div class="row">
+            <!-- Helpful Links -->
+            <div class="col-md-3 mb-4">
+                <h5 class="text-uppercase">Helpful Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="{{ url_for('size_guide') }}" class="text-secondary text-decoration-none">Size Guide</a></li>
+                    <li><a href="{{ url_for('shipping_info') }}" class="text-secondary text-decoration-none">Shipping Info</a></li>
+                    <li><a href="{{ url_for('returns') }}" class="text-secondary text-decoration-none">Returns</a></li>
+                </ul>
             </div>
-
-            <!-- Kids' Category -->
-            <div class="col-md-4 mb-4">
-                <img src="{{ url_for('static', filename='images/Best Sneakers.jpg') }}" class="img-fluid rounded mb-3" style="height: 250px; object-fit: cover;" alt="Kids Category">
-                <a href="{{ url_for('product_listing', category='kids') }}" class="btn btn-dark btn-lg w-100" data-filter="kids">Kids</a>
+            <!-- Customer Service -->
+            <div class="col-md-3 mb-4">
+                <h5 class="text-uppercase">Customer Service</h5>
+                <ul class="list-unstyled">
+                    <li><a href="{{ url_for('faq') }}" class="text-secondary text-decoration-none">FAQ</a></li>
+                </ul>
             </div>
+            <!-- Contact Info -->
+            <div class="col-md-3 mb-4">
+                <h5 class="text-uppercase">Contact</h5>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-geo-alt-fill"></i> 123 Shoe St, Wellington New Zealand</li>
+                    <li><i class="bi bi-telephone-fill"></i> +44 1234 567890</li>
+                    <li><i class="bi bi-envelope-fill"></i> support@shoehaven.com</li>
+                </ul>
+            </div>
+            <!-- Legal -->
+            <div class="col-md-3 mb-4">
+                <h5 class="text-uppercase">Legal</h5>
+                <ul class="list-unstyled">
+                    <li><a href="{{ url_for('privacy_policy') }}" class="text-secondary text-decoration-none">Privacy Policy</a></li>
+                    <li><a href="{{ url_for('terms_of_service') }}" class="text-secondary text-decoration-none">Terms of Service</a></li>
+                    <li><a href="{{ url_for('cookie_policy') }}" class="text-secondary text-decoration-none">Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- Copyright -->
+        <div class="text-center mt-4">
+            <p class="mb-0">&copy; 2025 Shoe Haven. All rights reserved.</p>
         </div>
     </div>
-    <!-- Featured Products Section -->
-    <div class="container my-5">
-        <h2 class="text-center mb-4 fw-bold">Featured Products</h2>
-        <div class="row" id="featured-products-container">
-            <!-- Dynamic featured products will be inserted here -->
-        </div>
-    </div>
+</footer>
 
-
-
-    <!-- Login Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="loginForm" method="POST" action="/login">
-                        <div class="mb-3">
-                            <label for="loginEmail" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="loginEmail" name="email" placeholder="Enter email" required/>
-                        </div>
-                        <div class="mb-3">
-                            <label for="loginPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="loginPassword" name="password" placeholder="Password" required />
-                        </div>
-                        <p class="text-muted small mb-0">
-                            New here? <a href="/register" class="text-decoration-none">Register</a>
-                        </p>
-                        <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
-                    </form>
-                    <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Continue as Guest</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Footer -->
-    <footer class="bg-dark text-light pt-5 pb-4 mt-5">
-        <div class="container">
-            <div class="row">
-
-                <!-- Helpful Links -->
-                <div class="col-md-3 mb-4">
-                    <h5 class="text-uppercase">Helpful Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-light text-decoration-none">Order Status</a></li>
-                        <li><a href="#" class="text-light text-decoration-none">Size Guide</a></li>
-                        <li><a href="#" class="text-light text-decoration-none">Shipping Info</a></li>
-                        <li><a href="#" class="text-light text-decoration-none">Returns</a></li>
-                    </ul>
-                </div>
-
-                <!-- Customer Service -->
-                <div class="col-md-3 mb-4">
-                    <h5 class="text-uppercase">Customer Service</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-light text-decoration-none">FAQ</a></li>
-                        <li><a href="#" class="text-light text-decoration-none">Contact Us</a></li>
-                        <li><a href="#" class="text-light text-decoration-none">Track Your Order</a></li>
-                        <li><a href="#" class="text-light text-decoration-none">Live Chat</a></li>
-                    </ul>
-                </div>
-
-                <!-- Contact Info -->
-                <div class="col-md-3 mb-4">
-                    <h5 class="text-uppercase">Contact</h5>
-                    <ul class="list-unstyled">
-                        <li><i class="bi bi-geo-alt-fill"></i> 123 Shoe St, London, UK</li>
-                        <li><i class="bi bi-telephone-fill"></i> +44 1234 567890</li>
-                        <li><i class="bi bi-envelope-fill"></i> support@shoehaven.com</li>
-                    </ul>
-                </div>
-
-                <!-- Legal -->
-                <div class="col-md-3 mb-4">
-                    <h5 class="text-uppercase">Legal</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-light text-decoration-none">Privacy Policy</a></li>
-                        <li><a href="#" class="text-light text-decoration-none">Terms of Service</a></li>
-                        <li><a href="#" class="text-light text-decoration-none">Cookie Policy</a></li>
-                    </ul>
-                </div>
-
-            </div>
-
-            <!-- Copyright -->
-            <div class="text-center mt-4">
-                <p class="mb-0">&copy; 2025 Shoe Haven. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
+<script>
   window.USER_EMAIL = "{{ user_email | default('', true) }}";
   console.log("USER_EMAIL set to:", window.USER_EMAIL);
-    </script>
+</script>
+
+<!-- Bootstrap JS Bundle --->
+<script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+<script src="{{ url_for('static', filename='js/login.js') }}"></script> 
+<script src="{{ url_for('static', filename='js/cartOverlay.js')}}"></script> 
 
 
-
-
-
-
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Link to your external JS file
-    <script src="C:\Users\Software Engineering\GitHub\MVP\Frontend\static\js\home.js"></script>
-    <script src="C:\Users\Software Engineering\GitHub\MVP\Frontend\static\js\filtering.js"></script>-->
-
-    <script type="module" src="{{ url_for('static', filename='js/home.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
-
-
-
-</body>
-</html>
+{% endblock %}

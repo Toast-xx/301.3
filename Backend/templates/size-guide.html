@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Size Guide - Shoe Haven{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Size Guide</h2>
+    <p>Find your perfect fit! Use our comprehensive size charts below to ensure your new shoes are just right.</p>
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>US Size</th>
+                    <th>UK Size</th>
+                    <th>EU Size</th>
+                    <th>Foot Length (cm)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>6</td><td>5.5</td><td>39</td><td>24.5</td></tr>
+                <tr><td>7</td><td>6.5</td><td>40</td><td>25.0</td></tr>
+                <tr><td>8</td><td>7.5</td><td>41</td><td>26.0</td></tr>
+                <tr><td>9</td><td>8.5</td><td>42</td><td>27.0</td></tr>
+                <tr><td>10</td><td>9.5</td><td>43</td><td>28.0</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="alert alert-secondary">
+        <strong>Tip:</strong> Measure your foot from heel to toe and compare with the chart above for the best fit.
+    </div>
+    <hr>
+    <h5>Still unsure?</h5>
+    <p>Contact our <a href="#">Customer Service</a> for personalized sizing advice.</p>
+</div>
+{% endblock %}

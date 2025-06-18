@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Search Results - Shoe Haven{% endblock %}
+{% block content %}
+<div class="bg-light shadow-sm">
+    <div class="container">
+        <ul class="nav justify-content-center py-2">
+            <li class="nav-item">
+                <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='men') }}" data-filter="men">Men</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='women') }}" data-filter="women">Women's</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='kids') }}" data-filter="kids">Kids</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-danger mx-1 filter-btn" href="#" data-filter="sale">Sale</a>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-dark mx-1"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#filterSidebar"
+                        aria-controls="filterSidebar">
+                    <i class="bi bi-funnel-fill"></i> Filter
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<main class="container my-5" role="main">
+    <h2>{{ message }}</h2>
+    <div class="row" id="product-list" aria-live="polite" aria-relevant="additions">
+        {% if results %}
+            {% for shoe in results %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <a href="{{ url_for('product_page') }}?id={{ shoe.id }}" class="text-decoration-none text-dark">
+                        <img src="{{ shoe.main_image }}" class="card-img-top" alt="{{ shoe.title }}" style="height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ shoe.title }}</h5>
+                            <p class="card-text mb-1"><strong>${{ shoe.price }}</strong></p>
+                            <p class="card-text text-muted mb-0">{{ shoe.brand }} | {{ shoe.style }}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <p>No results found.</p>
+            </div>
+        {% endif %}
+    </div>
+</main>
+
+<a href="{{ url_for('home') }}" class="btn btn-outline-secondary mb-5 ms-3">Back to Home</a>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

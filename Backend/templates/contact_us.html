@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Contact Us - Shoe Haven{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Contact Us</h2>
+    <p>We're here to help! Reach out to our customer service team using the details below or the contact form.</p>
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <i class="bi bi-geo-alt-fill"></i> 123 Shoe St, Wellington New Zealand
+                </li>
+                <li class="list-group-item">
+                    <i class="bi bi-telephone-fill"></i> +44 1234 567890
+                </li>
+                <li class="list-group-item">
+                    <i class="bi bi-envelope-fill"></i> <a href="mailto:support@shoehaven.com">support@shoehaven.com</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <form>
+                <div class="mb-3">
+                    <label for="contactName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="contactName" placeholder="Your Name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="contactEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="contactEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="mb-3">
+                    <label for="contactMessage" class="form-label">Message</label>
+                    <textarea class="form-control" id="contactMessage" rows="4" placeholder="How can we help you?" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-dark">Send Message</button>
+            </form>
+        </div>
+    </div>
+    <div class="alert alert-info">
+        <strong>Customer Service Hours:</strong> Mon-Fri, 9am-5pm NZT. We aim to respond within 1 business day.
+    </div>
+</div>
+{% endblock %}

@@ -1,3 +1,9 @@
+document.addEventListener('cart:cleared', function () {
+    if (typeof renderCartTable === 'function') renderCartTable();
+    if (typeof renderOrderSummary === 'function') renderOrderSummary();
+    if (typeof updateCartBadge === 'function') updateCartBadge();
+});
+
 function loadCart() {
     const storedCart = localStorage.getItem('cart');
     return storedCart ? JSON.parse(storedCart) : [];
@@ -7,18 +13,18 @@ function saveCart(cart) {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-function removeCartItem(id, size) {
+function removeCartItem(id, size, color) {
     let cart = loadCart();
-    cart = cart.filter(item => !(item.id === id && item.size === size));
+    cart = cart.filter(item => !(item.id === id && item.size === size && item.color === color));
     saveCart(cart);
     renderCartTable();
     renderOrderSummary();
 }
 
-function updateCartQuantity(id, size, quantity) {
+function updateCartQuantity(id, size, color, quantity) {
     let cart = loadCart();
     cart.forEach(item => {
-        if (item.id === id && item.size === size) {
+        if (item.id === id && item.size === size && item.color === color) {
             item.quantity = parseInt(quantity);
         }
     });
@@ -31,11 +37,14 @@ function clearCart() {
     saveCart([]);
     renderCartTable();
     renderOrderSummary();
+    // Dispatch a custom event for other scripts (e.g., navbar badge)
+    document.dispatchEvent(new Event('cart:cleared'));
 }
 
 function renderCartTable() {
     const cart = loadCart();
     const container = document.getElementById('cart-table-container');
+    if (!container) return;
     if (!cart.length) {
         container.innerHTML = '<p>Your cart is empty.</p>';
         return;
@@ -62,15 +71,15 @@ function renderCartTable() {
             <td><img src="${item.imageSrc || ''}" alt="${item.title}" style="width:60px;height:60px;object-fit:cover;"></td>
             <td>${item.title}</td>
             <td>${item.color || '-'}</td>
-            <td>${item.size}</td>
+            <td>${item.size || '-'}</td>
             <td>
-                <select class="form-select form-select-sm quantity-select" data-id="${item.id}" data-size="${item.size}">
+                <select class="form-select form-select-sm quantity-select" data-id="${item.id}" data-size="${item.size}" data-color="${item.color}">
                     ${[...Array(10).keys()].map(i => `<option value="${i + 1}"${item.quantity == i + 1 ? ' selected' : ''}>${i + 1}</option>`).join('')}
                 </select>
             </td>
             <td>$${(item.price * item.quantity).toFixed(2)}</td>
             <td>
-                <button class="btn btn-sm btn-danger remove-btn" data-id="${item.id}" data-size="${item.size}">&times;</button>
+                <button class="btn btn-sm btn-danger remove-btn" data-id="${item.id}" data-size="${item.size}" data-color="${item.color}">&times;</button>
             </td>
         </tr>
         `;
@@ -87,7 +96,8 @@ function renderCartTable() {
         btn.addEventListener('click', function () {
             const id = parseInt(this.getAttribute('data-id'));
             const size = this.getAttribute('data-size');
-            removeCartItem(id, size);
+            const color = this.getAttribute('data-color');
+            removeCartItem(id, size, color);
         });
     });
 
@@ -96,8 +106,9 @@ function renderCartTable() {
         select.addEventListener('change', function () {
             const id = parseInt(this.getAttribute('data-id'));
             const size = this.getAttribute('data-size');
+            const color = this.getAttribute('data-color');
             const quantity = this.value;
-            updateCartQuantity(id, size, quantity);
+            updateCartQuantity(id, size, color, quantity);
         });
     });
 }
@@ -123,5 +134,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const clearBtn = document.getElementById('clear-cart-btn');
     if (clearBtn) {
         clearBtn.addEventListener('click', clearCart);
+    }
+});
+
+// Listen for cart changes from other tabs/pages
+window.addEventListener('storage', function (e) {
+    if (e.key === 'cart') {
+        renderCartTable();
+        renderOrderSummary();
     }
 });
