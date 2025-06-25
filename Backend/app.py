@@ -733,7 +733,9 @@ def api_products():
     } for shoe in shoes]
     return jsonify(result)  # Return products as JSON
 
+application = app
+
 if __name__ == '__main__':  # Main entry point
     app.run(debug=True)  # Run Flask app in debug mode
 
-    application = app
+  
