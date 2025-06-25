@@ -668,12 +668,16 @@ def sales_page():
 
 from datetime import date, timedelta  # Import date and timedelta
 
-@app.route('/new-arrivals')  # New arrivals route
+@app.route('/new-arrivals')
 def new_arrivals():
-    today = date.today()  # Get today
-    cutoff = today - timedelta(days=30)  # Calculate cutoff
-    arrivals = Shoes.query.filter(Shoes.date_added >= cutoff).all()  # Get new arrivals
-    return render_template('new_arrivals.html', arrivals=arrivals, today=today)  # Render arrivals
+      today = date.today()
+      cutoff = today - timedelta(days=30)
+      page = request.args.get('page', 1, type=int)
+      per_page = request.args.get('per_page', 20, type=int)
+      pagination = Shoes.query.filter(Shoes.date_added >= cutoff).paginate(page=page, per_page=per_page, error_out=False)
+      arrivals = pagination.items
+      return render_template('new_arrivals.html', arrivals=arrivals, today=today, pagination=pagination)
+  
 
 @app.route('/size-guide')  # Size guide route
 def size_guide():
