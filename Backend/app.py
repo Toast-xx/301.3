@@ -18,6 +18,7 @@ import json  # Import json for JSON handling
 import stripe  # Import Stripe for payment processing
 import io  # Import io for in-memory file operations
 
+
 # --- Flask-Mail configuration ---
 from flask_mail import Mail, Message  # Import Flask-Mail for email sending
 
@@ -33,7 +34,7 @@ logging.basicConfig(level=logging.DEBUG)  # Set logging level to DEBUG
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'fallback-default-key')  # Set secret key for sessions
 
 # PostgreSQL configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:IylaRosa2549!@shoe-haven-db.czocwcgkqw0k.ap-northeast-2.rds.amazonaws.com:5432/shoe_haven_db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable SQLAlchemy modification tracking
 
 # Stripe configuration
@@ -200,11 +201,14 @@ def home():
     print("Session:", session)  # Print session info
     return render_template("home.html")  # Render home page
 
+# --- UPDATED PRODUCT LISTINGS ROUTE WITH PAGINATION AND ERROR HANDLING ---
 @app.route('/productlistings')  # Product listings route
 def product_listing():
     brand_filter = request.args.get('brand')  # Get brand filter
     style_filter = request.args.get('style')  # Get style filter
     category_filter = request.args.get('category')  # Get category filter
+    page = request.args.get('page', 1, type=int)  # Get page number
+    per_page = request.args.get('per_page', 20, type=int)  # Get items per page
 
     query = Shoes.query  # Start query
     if brand_filter:  # If brand filter present
@@ -217,7 +221,13 @@ def product_listing():
         app.logger.debug(f"Filtering by category: {category_filter}")  # Log filter
         query = query.filter(Shoes.category.ilike(f'%{category_filter}%'))  # Filter by category
 
-    shoes = query.all()  # Get all shoes
+    try:
+        pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+        shoes = pagination.items
+    except Exception as e:
+        app.logger.error(f"Error querying shoes: {e}")
+        return "Internal Server Error", 500
+
     app.logger.debug(f"Found {len(shoes)} shoes after filtering")  # Log count
 
     products = []  # List for products
@@ -235,7 +245,9 @@ def product_listing():
             "featured": shoe.featured,
         })
 
-    return render_template('productlisting.html', products=products)  # Render product listing
+    return render_template('productlisting.html', products=products, pagination=pagination)  # Render product listing
+
+# --- END UPDATED ROUTE ---
 
 @app.route('/product.html')  # Product page route
 def product_page():
