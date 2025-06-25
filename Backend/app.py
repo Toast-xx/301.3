@@ -1,238 +1,232 @@
-﻿from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash, send_file  # Import Flask and related modules
-from flask_sqlalchemy import SQLAlchemy  # Import SQLAlchemy for ORM
-from flask_migrate import Migrate  # Import Flask-Migrate for migrations
-from sqlalchemy.dialects.postgresql import ARRAY  # Import ARRAY type for PostgreSQL
-from sqlalchemy import String, Boolean, or_, cast  # Import SQLAlchemy types and helpers
-from sqlalchemy.dialects.postgresql import JSONB  # Import JSONB type for PostgreSQL
-from sqlalchemy.ext.mutable import MutableDict  # Import MutableDict for mutable JSON columns
-from werkzeug.security import generate_password_hash, check_password_hash  # Import password hashing utilities
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user  # Import Flask-Login for user session management
-from urllib.parse import urlparse, urljoin  # Import URL parsing utilities
-from dotenv import load_dotenv  # Import dotenv to load environment variables
-from datetime import datetime, date, timedelta  # Import date/time utilities
-from weasyprint import HTML  # Import WeasyPrint for PDF generation
-from decimal import Decimal  # Import Decimal for precise currency calculations
-import os  # Import os for environment variable access
-import logging  # Import logging for application logging
-import json  # Import json for JSON handling
-import stripe  # Import Stripe for payment processing
-import io  # Import io for in-memory file operations
-
+﻿from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash, send_file
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy import String, Boolean, or_, cast
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.ext.mutable import MutableDict
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from urllib.parse import urlparse, urljoin
+from dotenv import load_dotenv
+from datetime import datetime, date, timedelta
+from weasyprint import HTML
+from decimal import Decimal
+import os
+import logging
+import json
+import stripe
+import io
+import time  # For timing logs
 
 # --- Flask-Mail configuration ---
-from flask_mail import Mail, Message  # Import Flask-Mail for email sending
+from flask_mail import Mail, Message
 
-load_dotenv()  # Load environment variables from .env file
+load_dotenv()
 
 # Initialize Flask app
-app = Flask(__name__)  # Create Flask application instance
+app = Flask(__name__)
 
 # Configure logging to DEBUG level
-logging.basicConfig(level=logging.DEBUG)  # Set logging level to DEBUG
+logging.basicConfig(level=logging.DEBUG)
+app.logger.setLevel(logging.DEBUG)
 
 # Secret key for session management 
-app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'fallback-default-key')  # Set secret key for sessions
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'fallback-default-key')
 
 # PostgreSQL configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:IylaRosa2549!@shoe-haven-db.czocwcgkqw0k.ap-northeast-2.rds.amazonaws.com:5432/shoe_haven_db"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable SQLAlchemy modification tracking
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Stripe configuration
-stripe.api_key = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_...')  # Set Stripe secret key
+stripe.api_key = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_...')
 
 # --- Flask-Mail configuration ---
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Set mail server
-app.config['MAIL_PORT'] = 587  # Set mail port
-app.config['MAIL_USE_TLS'] = True  # Enable TLS for email
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')  # Set mail username from env
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')  # Set mail password from env
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER')  # Set default sender
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER')
 
-mail = Mail(app)  # Initialize Flask-Mail
+mail = Mail(app)
 
 # Extensions
-db = SQLAlchemy(app)  # Initialize SQLAlchemy
-migrate = Migrate(app, db)  # Initialize Flask-Migrate
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # Flask-Login setup
-login_manager = LoginManager(app)  # Initialize Flask-Login
-login_manager.login_view = 'login'  # Set login view
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
 
 # User loader for Flask-Login
-@login_manager.user_loader  # Decorator to register user loader
-def load_user(user_id):  # Function to load user by ID
-    return User.query.get(int(user_id))  # Query user from database
+@login_manager.user_loader
+def load_user(user_id):
+    app.logger.debug(f"Loading user with id: {user_id}")
+    return User.query.get(int(user_id))
 
 # Helper to check if a URL is safe for redirects
-def is_safe_url(target):  # Function to check if URL is safe
-    ref_url = urlparse(request.host_url)  # Parse host URL
-    test_url = urlparse(urljoin(request.host_url, target))  # Parse target URL
-    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc  # Check scheme and netloc
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
 
 # --- UTF-8 Data Sanitization Helper ---
-def ensure_utf8(obj):  # Function to ensure UTF-8 encoding
-    if isinstance(obj, str):  # If object is string
-        return obj.encode('utf-8', errors='replace').decode('utf-8')  # Encode and decode as UTF-8
-    if isinstance(obj, list):  # If object is list
-        return [ensure_utf8(x) for x in obj]  # Recursively ensure UTF-8 for list items
-    if isinstance(obj, dict):  # If object is dict
-        return {k: ensure_utf8(v) for k, v in obj.items()}  # Recursively ensure UTF-8 for dict values
-    if hasattr(obj, '__table__'):  # If object is SQLAlchemy model
-        data = {}  # Create data dict
-        for col in obj.__table__.columns:  # For each column
-            val = getattr(obj, col.name)  # Get column value
-            data[col.name] = ensure_utf8(val)  # Ensure UTF-8 for value
-        return type(obj)(**data)  # Return new instance with sanitized data
-    return obj  # Return object as is
+def ensure_utf8(obj):
+    if isinstance(obj, str):
+        return obj.encode('utf-8', errors='replace').decode('utf-8')
+    if isinstance(obj, list):
+        return [ensure_utf8(x) for x in obj]
+    if isinstance(obj, dict):
+        return {k: ensure_utf8(v) for k, v in obj.items()}
+    if hasattr(obj, '__table__'):
+        data = {}
+        for col in obj.__table__.columns:
+            val = getattr(obj, col.name)
+            data[col.name] = ensure_utf8(val)
+        return type(obj)(**data)
+    return obj
 
-# Shoe model
-class Shoes(db.Model):  # Define Shoes model
-    __tablename__ = "Shoes"  # Set table name
+# --- Models ---
+class Shoes(db.Model):
+    __tablename__ = "Shoes"
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    price = db.Column(db.Numeric, nullable=False)
+    category = db.Column(db.String(100), nullable=False)
+    sizes = db.Column(db.String(100), nullable=False)
+    model = db.Column(db.String(100), nullable=False)
+    style = db.Column(db.String(100), nullable=False)
+    brand = db.Column(db.String(100), nullable=False)
+    main_image = db.Column(db.Text, nullable=False)
+    gallery = db.Column(ARRAY(String))
+    featured = db.Column(Boolean, default=False)
+    related_ids = db.Column(db.String)
+    variants = db.Column(MutableDict.as_mutable(JSONB), default={})
+    description = db.Column(db.Text, nullable=True)
+    color = db.Column(db.String(50), nullable=True)
+    sale_price = db.Column(db.Numeric, nullable=True)
+    sale_start_date = db.Column(db.Date, nullable=True)
+    sale_end_date = db.Column(db.Date, nullable=True)
+    date_added = db.Column(db.Date, nullable=False, default=datetime.utcnow)
 
-    id = db.Column(db.Integer, primary_key=True)  # Primary key
-    title = db.Column(db.String(100), nullable=False)  # Shoe title
-    price = db.Column(db.Numeric, nullable=False)  # Shoe price
-    category = db.Column(db.String(100), nullable=False)  # Shoe category
-    sizes = db.Column(db.String(100), nullable=False)  # Shoe sizes as comma-separated string
-    model = db.Column(db.String(100), nullable=False)  # Shoe model
-    style = db.Column(db.String(100), nullable=False)  # Shoe style
-    brand = db.Column(db.String(100), nullable=False)  # Shoe brand
-    main_image = db.Column(db.Text, nullable=False)  # Main image URL
-    gallery = db.Column(ARRAY(String))  # Gallery images as array
-    featured = db.Column(Boolean, default=False)  # Featured flag
-    related_ids = db.Column(db.String)  # Related shoe IDs
-    variants = db.Column(MutableDict.as_mutable(JSONB), default={})  # Shoe variants as JSONB
-    description = db.Column(db.Text, nullable=True)  # Shoe description
-    color = db.Column(db.String(50), nullable=True)  # Shoe color
-    sale_price = db.Column(db.Numeric, nullable=True)  # Sale price
-    sale_start_date = db.Column(db.Date, nullable=True)  # Sale start date
-    sale_end_date = db.Column(db.Date, nullable=True)  # Sale end date
-    date_added = db.Column(db.Date, nullable=False, default=datetime.utcnow)  # Date added
+    def __repr__(self):
+        return f"<Shoe {self.id} - {self.title}>"
 
-    def __repr__(self):  # String representation
-        return f"<Shoe {self.id} - {self.title}>"  # Return formatted string
+class User(UserMixin, db.Model):
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(80), nullable=False)
+    last_name = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
+    address = db.Column(db.String(255))
+    password = db.Column(db.String(512), nullable=False)
 
-# User model
-class User(UserMixin, db.Model):  # Define User model with Flask-Login mixin
-    __tablename__ = "users"  # Set table name
+    def __repr__(self):
+        return f"<User {self.email}>"
 
-    id = db.Column(db.Integer, primary_key=True)  # Primary key
-    first_name = db.Column(db.String(80), nullable=False)  # First name
-    last_name = db.Column(db.String(80), nullable=False)  # Last name
-    email = db.Column(db.String(120), unique=True, nullable=False)  # Email (unique)
-    phone = db.Column(db.String(20), nullable=False)  # Phone number
-    address = db.Column(db.String(255))  # Address
-    password = db.Column(db.String(512), nullable=False)  # Password hash
+class Order(db.Model):
+    __tablename__ = "orders"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    email = db.Column(db.String(120), nullable=False)
+    address = db.Column(db.String(255), nullable=False)
+    total = db.Column(db.Numeric, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    items = db.relationship('OrderItem', backref='order', lazy=True)
+    shipping_method = db.Column(db.String(50), nullable=False, default='standard', server_default='standard')
+    shipping_cost = db.Column(db.Float, nullable=False, default=0.0, server_default='0')
 
-    def __repr__(self):  # String representation
-        return f"<User {self.email}>"  # Return formatted string
-
-class Order(db.Model):  # Define Order model
-    __tablename__ = "orders"  # Set table name
-    id = db.Column(db.Integer, primary_key=True)  # Primary key
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)  # Foreign key to user
-    email = db.Column(db.String(120), nullable=False)  # Email
-    address = db.Column(db.String(255), nullable=False)  # Address
-    total = db.Column(db.Numeric, nullable=False)  # Order total
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)  # Creation timestamp
-    items = db.relationship('OrderItem', backref='order', lazy=True)  # Relationship to order items
-    shipping_method = db.Column(  # Shipping method
-        db.String(50),
-        nullable=False,
-        default='standard',
-        server_default='standard'
-    )
-    shipping_cost = db.Column(  # Shipping cost
-        db.Float,
-        nullable=False,
-        default=0.0,
-        server_default='0'
-    )
-    
-class OrderItem(db.Model):  # Define OrderItem model
-    __tablename__ = "order_items"  # Set table name
-    id = db.Column(db.Integer, primary_key=True)  # Primary key
-    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=False)  # Foreign key to order
-    product_id = db.Column(db.Integer, nullable=False)  # Product ID
-    title = db.Column(db.String(100), nullable=False)  # Product title
-    price = db.Column(db.Numeric, nullable=False)  # Product price
-    size = db.Column(db.String(20))  # Product size
-    quantity = db.Column(db.Integer, default=1)  # Quantity
-    image = db.Column(db.String(255))  # Image URL
+class OrderItem(db.Model):
+    __tablename__ = "order_items"
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=False)
+    product_id = db.Column(db.Integer, nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    price = db.Column(db.Numeric, nullable=False)
+    size = db.Column(db.String(20))
+    quantity = db.Column(db.Integer, default=1)
+    image = db.Column(db.String(255))
 
 # --- PDF Generation Helper ---
-def generate_order_pdf(order, order_items):  # Function to generate PDF for order
-    order = ensure_utf8(order)  # Ensure order data is UTF-8
-    sanitized_items = []  # List for sanitized items
-    for item in order_items:  # For each order item
-        data = {}  # Data dict
-        for col in item.__table__.columns:  # For each column
-            val = getattr(item, col.name)  # Get value
-            data[col.name] = ensure_utf8(val)  # Ensure UTF-8
-        sanitized_items.append(type(item)(**data))  # Add sanitized item
-    html = render_template('order_pdf.html', order=order, order_items=sanitized_items)  # Render HTML
-    pdf_file = io.BytesIO()  # Create in-memory file
-    HTML(string=html).write_pdf(pdf_file)  # Write PDF to file
-    pdf_file.seek(0)  # Seek to start
-    return pdf_file  # Return PDF file
+def generate_order_pdf(order, order_items):
+    app.logger.debug(f"Generating PDF for order {order.id}")
+    order = ensure_utf8(order)
+    sanitized_items = []
+    for item in order_items:
+        data = {}
+        for col in item.__table__.columns:
+            val = getattr(item, col.name)
+            data[col.name] = ensure_utf8(val)
+        sanitized_items.append(type(item)(**data))
+    html = render_template('order_pdf.html', order=order, order_items=sanitized_items)
+    pdf_file = io.BytesIO()
+    HTML(string=html).write_pdf(pdf_file)
+    pdf_file.seek(0)
+    app.logger.debug(f"PDF generation complete for order {order.id}")
+    return pdf_file
 
 # --- Email Sending Helper ---
-def send_order_pdf_email(order, order_items):  # Function to send order PDF by email
-    pdf_file = generate_order_pdf(order, order_items)  # Generate PDF
-    msg = Message(  # Create email message
-        subject=f"Your Shoe Haven Order #{order.id}",  # Email subject
-        recipients=[order.email],  # Recipient list
-        body="Thank you for your order! Please find your order confirmation attached as a PDF."  # Email body
+def send_order_pdf_email(order, order_items):
+    app.logger.debug(f"Preparing to send order confirmation email for order {order.id}")
+    pdf_file = generate_order_pdf(order, order_items)
+    msg = Message(
+        subject=f"Your Shoe Haven Order #{order.id}",
+        recipients=[order.email],
+        body="Thank you for your order! Please find your order confirmation attached as a PDF."
     )
-    msg.attach(  # Attach PDF to email
-        filename=f"order_{order.id}.pdf",  # Filename
-        content_type="application/pdf",  # Content type
-        data=pdf_file.read()  # PDF data
+    msg.attach(
+        filename=f"order_{order.id}.pdf",
+        content_type="application/pdf",
+        data=pdf_file.read()
     )
-    app.logger.debug(f"Email subject: {msg.subject}")  # Log subject
-    app.logger.debug(f"Email recipients: {msg.recipients}")  # Log recipients
-    app.logger.debug(f"Email sender: {msg.sender}")  # Log sender
-    app.logger.debug(f"Email body: {msg.body}")  # Log body
-    app.logger.debug(f"Sending order confirmation to: {order.email}")  # Log sending
-    mail.send(msg)  # Send email
+    app.logger.debug(f"Sending email to {order.email} for order {order.id}")
+    mail.send(msg)
+    app.logger.info(f"Order confirmation email sent to {order.email} for order {order.id}")
 
-@app.route('/')  # Home page route
+# --- ROUTES ---
+
+@app.route('/')
 def home():
-    print("Session:", session)  # Print session info
-    return render_template("home.html")  # Render home page
+    app.logger.debug("Home page accessed")
+    app.logger.debug(f"Session: {session}")
+    return render_template("home.html")
 
-# --- UPDATED PRODUCT LISTINGS ROUTE WITH PAGINATION AND ERROR HANDLING ---
-@app.route('/productlistings')  # Product listings route
+@app.route('/productlistings')
 def product_listing():
-    brand_filter = request.args.get('brand')  # Get brand filter
-    style_filter = request.args.get('style')  # Get style filter
-    category_filter = request.args.get('category')  # Get category filter
-    page = request.args.get('page', 1, type=int)  # Get page number
-    per_page = request.args.get('per_page', 20, type=int)  # Get items per page
+    app.logger.debug("Product listings page accessed")
+    brand_filter = request.args.get('brand')
+    style_filter = request.args.get('style')
+    category_filter = request.args.get('category')
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
 
-    query = Shoes.query  # Start query
-    if brand_filter:  # If brand filter present
-        app.logger.debug(f"Filtering by brand: {brand_filter}")  # Log filter
-        query = query.filter(Shoes.brand.ilike(f'%{brand_filter}%'))  # Filter by brand
-    if style_filter:  # If style filter present
-        app.logger.debug(f"Filtering by style: {style_filter}")  # Log filter
-        query = query.filter(Shoes.style.ilike(f'%{style_filter}%'))  # Filter by style
-    if category_filter:  # If category filter present
-        app.logger.debug(f"Filtering by category: {category_filter}")  # Log filter
-        query = query.filter(Shoes.category.ilike(f'%{category_filter}%'))  # Filter by category
+    query = Shoes.query
+    if brand_filter:
+        app.logger.debug(f"Filtering by brand: {brand_filter}")
+        query = query.filter(Shoes.brand.ilike(f'%{brand_filter}%'))
+    if style_filter:
+        app.logger.debug(f"Filtering by style: {style_filter}")
+        query = query.filter(Shoes.style.ilike(f'%{style_filter}%'))
+    if category_filter:
+        app.logger.debug(f"Filtering by category: {category_filter}")
+        query = query.filter(Shoes.category.ilike(f'%{category_filter}%'))
 
     try:
+        start = time.time()
         pagination = query.paginate(page=page, per_page=per_page, error_out=False)
         shoes = pagination.items
+        app.logger.debug(f"Product listings query took {time.time() - start:.2f} seconds")
     except Exception as e:
         app.logger.error(f"Error querying shoes: {e}")
         return "Internal Server Error", 500
 
-    app.logger.debug(f"Found {len(shoes)} shoes after filtering")  # Log count
+    app.logger.debug(f"Found {len(shoes)} shoes after filtering")
 
-    products = []  # List for products
-    for shoe in shoes:  # For each shoe
-        products.append({  # Add product dict
+    products = []
+    for shoe in shoes:
+        products.append({
             "id": shoe.id,
             "title": shoe.title,
             "price": float(shoe.price),
@@ -245,38 +239,34 @@ def product_listing():
             "featured": shoe.featured,
         })
 
-    return render_template('productlisting.html', products=products, pagination=pagination)  # Render product listing
+    return render_template('productlisting.html', products=products, pagination=pagination)
 
-# --- END UPDATED ROUTE ---
-
-@app.route('/product.html')  # Product page route
+@app.route('/product.html')
 def product_page():
-    shoe_id = request.args.get('id', type=int)  # Get shoe ID from query
-    app.logger.debug(f"Accessing product page with id={shoe_id}")  # Log access
-    if not shoe_id:  # If no ID provided
-        app.logger.error("No product ID provided in query string")  # Log error
-        return "No product ID provided", 400  # Return error
+    shoe_id = request.args.get('id', type=int)
+    app.logger.debug(f"Accessing product page with id={shoe_id}")
+    if not shoe_id:
+        app.logger.error("No product ID provided in query string")
+        return "No product ID provided", 400
 
-    shoe = Shoes.query.get(shoe_id)  # Get shoe by ID
-    if not shoe:  # If shoe not found
-        app.logger.warning(f"Product with id={shoe_id} not found")  # Log warning
-        return "Product not found", 404  # Return error
+    shoe = Shoes.query.get(shoe_id)
+    if not shoe:
+        app.logger.warning(f"Product with id={shoe_id} not found")
+        return "Product not found", 404
 
-    app.logger.info(f"Rendering product page for shoe: {shoe}")  # Log info
+    app.logger.info(f"Rendering product page for shoe: {shoe}")
+    return render_template('product.html', shoe=shoe, variants=shoe.variants or {}, today=date.today())
 
-    from datetime import date  # Import date
-    return render_template('product.html', shoe=shoe, variants=shoe.variants or {}, today=date.today())  # Render product page
-
-@app.route('/api/product/<int:shoe_id>')  # API route for product
+@app.route('/api/product/<int:shoe_id>')
 def get_product(shoe_id):
-    app.logger.info(f"API request for product with shoe_id={shoe_id}")  # Log API request
-    shoe = Shoes.query.get(shoe_id)  # Get shoe by ID
+    app.logger.info(f"API request for product with shoe_id={shoe_id}")
+    shoe = Shoes.query.get(shoe_id)
 
-    if not shoe:  # If shoe not found
-        app.logger.warning(f"Product with id={shoe_id} not found")  # Log warning
-        return render_template('404.html'), 404  # Return 404 page
+    if not shoe:
+        app.logger.warning(f"Product with id={shoe_id} not found")
+        return render_template('404.html'), 404
 
-    products = {  # Build product dict
+    products = {
         "id": shoe.id,
         "title": shoe.title,
         "price": float(shoe.price),
@@ -290,27 +280,30 @@ def get_product(shoe_id):
         "sale_start_date": shoe.sale_start_date.isoformat() if shoe.sale_start_date else None,
         "sale_end_date": shoe.sale_end_date.isoformat() if shoe.sale_end_date else None
      }
-    return jsonify(products)  # Return product as JSON
+    return jsonify(products)
 
-@app.route('/add-to-cart', methods=['POST'])  # Add to cart route
+@app.route('/add-to-cart', methods=['POST'])
 def add_to_cart():
-    data = request.get_json()  # Get JSON data
-    product_id = data.get("id")  # Get product ID
-    size = data.get("size")  # Get size
-    quantity = data.get("quantity", 1)  # Get quantity
+    app.logger.debug("Add to cart endpoint hit")
+    data = request.get_json()
+    product_id = data.get("id")
+    size = data.get("size")
+    quantity = data.get("quantity", 1)
 
-    if not product_id or not size:  # If missing data
-        return jsonify({"error": "Missing product ID or size"}), 400  # Return error
+    if not product_id or not size:
+        app.logger.error("Missing product ID or size in add-to-cart")
+        return jsonify({"error": "Missing product ID or size"}), 400
 
-    shoe = Shoes.query.get(product_id)  # Get shoe by ID
-    if not shoe:  # If shoe not found
-        return jsonify({"error": "Product not found"}), 404  # Return error
+    shoe = Shoes.query.get(product_id)
+    if not shoe:
+        app.logger.error(f"Product not found for add-to-cart: {product_id}")
+        return jsonify({"error": "Product not found"}), 404
 
-    if 'cart' not in session:  # If cart not in session
-        session['cart'] = []  # Initialize cart
+    if 'cart' not in session:
+        session['cart'] = []
 
-    cart = session['cart']  # Get cart
-    cart.append({  # Add item to cart
+    cart = session['cart']
+    cart.append({
         "id": product_id,
         "title": shoe.title,
         "price": float(shoe.price),
@@ -318,24 +311,26 @@ def add_to_cart():
         "quantity": quantity,
         "imageSrc": shoe.main_image
     })
-    session['cart'] = cart  # Save cart to session
+    session['cart'] = cart
 
-    return jsonify({"message": "Product added to cart"}), 200  # Return success
+    app.logger.debug(f"Product {product_id} added to cart")
+    return jsonify({"message": "Product added to cart"}), 200
 
-@app.route('/api/cart', methods=['POST'])  # API route for cart
+@app.route('/api/cart', methods=['POST'])
 def get_cart():
-    data = request.get_json()  # Get JSON data
-    app.logger.debug(f"Received data for cart: {data}")  # Log data
-    if not data or 'id' not in data:  # If invalid data
-        return jsonify({'error': 'Invalid data'}), 400  # Return error
+    data = request.get_json()
+    app.logger.debug(f"Received data for cart: {data}")
+    if not data or 'id' not in data:
+        app.logger.error("Invalid data in /api/cart")
+        return jsonify({'error': 'Invalid data'}), 400
 
-    cart = session.get('cart', [])  # Get cart from session
-    for item in cart:  # For each item in cart
-        if item.get('id') == data['id']:  # If item matches
-            item['quantity'] += data.get('quantity', 1)  # Increment quantity
+    cart = session.get('cart', [])
+    for item in cart:
+        if item.get('id') == data['id']:
+            item['quantity'] += data.get('quantity', 1)
             break
-    else:  # If not found
-        cart.append({  # Add new item
+    else:
+        cart.append({
             'id': data.get('id'),
             'title': data.get('title'),
             'price': data.get('price'),
@@ -343,13 +338,15 @@ def get_cart():
             'imageSrc': data.get('imageSrc'),
             'size': data.get('size')
         })
-    session['cart'] = cart  # Save cart to session
-    return jsonify({'cart': cart})  # Return cart
+    session['cart'] = cart
+    app.logger.debug(f"Cart updated: {cart}")
+    return jsonify({'cart': cart})
 
-@app.route('/register', methods=['GET', 'POST'])  # Register route
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method == 'POST':  # If POST request
-        new_user = User(  # Create new user
+    if request.method == 'POST':
+        app.logger.debug("Register POST request received")
+        new_user = User(
             first_name=request.form['first_name'],
             last_name=request.form['last_name'],
             email=request.form['email'],
@@ -357,47 +354,48 @@ def register():
             address=request.form['address'],
             password=generate_password_hash(request.form['password']),
         )
-        db.session.add(new_user)  # Add user to session
-        db.session.commit()  # Commit to DB
-        flash('Registration successful! Please log in.', 'success')  # Flash message
-        return redirect(url_for('login'))  # Redirect to login
+        db.session.add(new_user)
+        db.session.commit()
+        app.logger.info(f"New user registered: {new_user.email}")
+        flash('Registration successful! Please log in.', 'success')
+        return redirect(url_for('login'))
 
-    return render_template('register.html')  # Render register page
+    return render_template('register.html')
 
-# ========== STRIPE CHECKOUT SESSION ROUTE ==========
-@app.route('/create-checkout-session', methods=['POST'])  # Stripe checkout session route
+@app.route('/create-checkout-session', methods=['POST'])
 def create_checkout_session():
-    data = request.get_json()  # Get JSON data
-    cart = data.get('cart', [])  # Get cart
-    shipping_method = data.get('shipping_method', 'Free Shipping')  # Get shipping method
-    shipping_cost = float(data.get('shipping_cost', 0.0))  # Get shipping cost
+    app.logger.debug("Stripe checkout session creation started")
+    data = request.get_json()
+    cart = data.get('cart', [])
+    shipping_method = data.get('shipping_method', 'Free Shipping')
+    shipping_cost = float(data.get('shipping_cost', 0.0))
 
     # Extract additional fields from JSON
-    contact_email = data.get('contactEmail', '')  # Get contact email
-    contact_first_name = data.get('contactFirstName', '')  # Get contact first name
-    contact_last_name = data.get('contactLastName', '')  # Get contact last name
-    contact_phone = data.get('contactPhone', '')  # Get contact phone
-    shipping_first_name = data.get('shippingFirstName', '')  # Get shipping first name
-    shipping_last_name = data.get('shippingLastName', '')  # Get shipping last name
-    shipping_address = data.get('shippingAddress', '')  # Get shipping address
+    contact_email = data.get('contactEmail', '')
+    contact_first_name = data.get('contactFirstName', '')
+    contact_last_name = data.get('contactLastName', '')
+    contact_phone = data.get('contactPhone', '')
+    shipping_first_name = data.get('shippingFirstName', '')
+    shipping_last_name = data.get('shippingLastName', '')
+    shipping_address = data.get('shippingAddress', '')
 
     # Calculate total
-    total = sum(float(item['price']) * int(item['quantity']) for item in cart) + shipping_cost  # Calculate total
+    total = sum(float(item['price']) * int(item['quantity']) for item in cart) + shipping_cost
 
     # Get user info if available
-    user_id = None  # Initialize user_id
-    email = contact_email  # Set email
-    address = shipping_address  # Set address
+    user_id = None
+    email = contact_email
+    address = shipping_address
 
-    if current_user.is_authenticated:  # If user is authenticated
-        user_id = current_user.id  # Set user_id
-        if not email:  # If no email
-            email = current_user.email  # Use current user's email
-        if not address:  # If no address
-            address = current_user.address  # Use current user's address
+    if current_user.is_authenticated:
+        user_id = current_user.id
+        if not email:
+            email = current_user.email
+        if not address:
+            address = current_user.address
 
     # 1. Create order in DB
-    order = Order(  # Create order
+    order = Order(
         user_id=user_id,
         email=email,
         address=address,
@@ -405,12 +403,12 @@ def create_checkout_session():
         shipping_method=shipping_method,
         shipping_cost=shipping_cost
     )
-    db.session.add(order)  # Add order to session
+    db.session.add(order)
     db.session.flush()  # get order.id
 
     # 2. Add order items
-    for item in cart:  # For each item in cart
-        order_item = OrderItem(  # Create order item
+    for item in cart:
+        order_item = OrderItem(
             order_id=order.id,
             product_id=item['id'],
             title=item['title'],
@@ -419,26 +417,26 @@ def create_checkout_session():
             quantity=item['quantity'],
             image=item.get('imageSrc')
         )
-        db.session.add(order_item)  # Add order item to session
+        db.session.add(order_item)
 
-    db.session.commit()  # Commit to DB
+    db.session.commit()
+    app.logger.info(f"Order {order.id} created for checkout session")
 
     # 3. Build line items for Stripe
-    line_items = []  # List for Stripe line items
-    for item in cart:  # For each item in cart
-        line_items.append({  # Add line item
+    line_items = []
+    for item in cart:
+        line_items.append({
             'price_data': {
                 'currency': 'usd',
                 'product_data': {
                     'name': item['title'],
                 },
-                'unit_amount': int(float(item['price']) * 100),  # Stripe expects cents
+                'unit_amount': int(float(item['price']) * 100),
             },
             'quantity': item['quantity'],
         })
-    # Add shipping as a line item if needed
-    if shipping_cost > 0:  # If shipping cost > 0
-        line_items.append({  # Add shipping line item
+    if shipping_cost > 0:
+        line_items.append({
             'price_data': {
                 'currency': 'usd',
                 'product_data': {
@@ -449,9 +447,9 @@ def create_checkout_session():
             'quantity': 1,
         })
 
-    # 4. Create Stripe session with metadata and correct success_url
-    app.logger.debug("[STRIPE] Creating checkout session. Setting success_url to /order/confirmation")  # Log debug
-    session_obj = stripe.checkout.Session.create(  # Create Stripe session
+    # 4. Create Stripe session
+    app.logger.debug("[STRIPE] Creating checkout session. Setting success_url to /order/confirmation")
+    session_obj = stripe.checkout.Session.create(
         payment_method_types=['card'],
         line_items=line_items,
         mode='payment',
@@ -459,48 +457,49 @@ def create_checkout_session():
         cancel_url=url_for('checkout', _external=True) + '?canceled=true',
         metadata={'order_id': order.id}
     )
-    return jsonify({'id': session_obj.id})  # Return session ID
+    app.logger.info(f"Stripe checkout session created for order {order.id}")
+    return jsonify({'id': session_obj.id})
 
-# ========== LOGIN ==========
-@app.route('/login', methods=['GET', 'POST'])  # Login route
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':  # If POST request
-        email = request.form.get('email', '').strip()  # Get email
-        password = request.form.get('password', '')  # Get password
-        next_page = request.args.get('next') or request.form.get('next')  # Get next page
+    if request.method == 'POST':
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '')
+        next_page = request.args.get('next') or request.form.get('next')
 
-        user = User.query.filter_by(email=email).first()  # Query user by email
-        if user:  # If user found
-            app.logger.debug(f"User found for email: {email}")  # Log debug
-            if check_password_hash(user.password, password):  # Check password
-                login_user(user)  # Log in user
-                session['user_email'] = user.email  # Set session email
-                app.logger.info(f"User {email} logged in successfully.")  # Log info
-                flash('Logged in successfully!', 'success')  # Flash message
-                if next_page and is_safe_url(next_page):  # If next page is safe
-                    return redirect(next_page)  # Redirect to next page
-                return redirect(url_for('home'))  # Redirect to home
+        user = User.query.filter_by(email=email).first()
+        if user:
+            app.logger.debug(f"User found for email: {email}")
+            if check_password_hash(user.password, password):
+                login_user(user)
+                session['user_email'] = user.email
+                app.logger.info(f"User {email} logged in successfully.")
+                flash('Logged in successfully!', 'success')
+                if next_page and is_safe_url(next_page):
+                    return redirect(next_page)
+                return redirect(url_for('home'))
             else:
-                app.logger.warning(f"Password mismatch for user: {email}")  # Log warning
+                app.logger.warning(f"Password mismatch for user: {email}")
         else:
-            app.logger.warning(f"No user found for email: {email}")  # Log warning
+            app.logger.warning(f"No user found for email: {email}")
 
-        flash('Invalid email or password', 'danger')  # Flash error
-        return redirect(url_for('home'))  # Redirect to home
+        flash('Invalid email or password', 'danger')
+        return redirect(url_for('home'))
 
-    return render_template('home.html')  # Render home page
+    return render_template('home.html')
 
-@app.route('/logout')  # Logout route
+@app.route('/logout')
 def logout():
-    logout_user()  # Log out user
-    session.clear()  # Clear session
-    flash('You have been logged out.', 'info')  # Flash message
-    return redirect(url_for('home'))  # Redirect to home
+    app.logger.info("User logged out")
+    logout_user()
+    session.clear()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('home'))
 
-@app.context_processor  # Context processor for templates
+@app.context_processor
 def inject_user():
-    print("Injecting user:", current_user.is_authenticated)  # Print user status
-    if hasattr(current_user, "is_authenticated") and current_user.is_authenticated:  # If user is authenticated
+    app.logger.debug(f"Injecting user: {getattr(current_user, 'is_authenticated', False)}")
+    if hasattr(current_user, "is_authenticated") and current_user.is_authenticated:
         return {
             "user": current_user,
             "user_email": current_user.email,
@@ -511,49 +510,49 @@ def inject_user():
             "user_email": None,
         }
 
-@app.route('/cart')  # Cart page route
+@app.route('/cart')
 def cart_page():
-    return render_template('cart.html')  # Render cart page
+    app.logger.debug("Cart page accessed")
+    return render_template('cart.html')
 
-@app.route('/checkout', methods=['GET', 'POST'])  # Checkout route
+@app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
-    if request.method == 'POST':  # If POST request
-        cart_data = request.form.get('cart_data')  # Get cart data
-
-        if cart_data:  # If cart data present
-            cart = json.loads(cart_data)  # Load cart from JSON
+    if request.method == 'POST':
+        cart_data = request.form.get('cart_data')
+        if cart_data:
+            cart = json.loads(cart_data)
         else:
-            cart = session.get('cart', [])  # Get cart from session
+            cart = session.get('cart', [])
 
-        app.logger.debug(f"[CHECKOUT] cart_data: {cart_data}")  # Log cart data
-        app.logger.debug(f"[CHECKOUT] cart before processing: {cart}")  # Log cart
+        app.logger.debug(f"[CHECKOUT] cart_data: {cart_data}")
+        app.logger.debug(f"[CHECKOUT] cart before processing: {cart}")
 
-        if not cart:  # If cart is empty
-            flash('Your cart is empty.', 'danger')  # Flash error
-            return redirect(url_for('cart_page'))  # Redirect to cart
+        if not cart:
+            flash('Your cart is empty.', 'danger')
+            return redirect(url_for('cart_page'))
 
-        if current_user.is_authenticated:  # If user is authenticated
-            email = current_user.email  # Get email
-            address = request.form.get('shippingAddress') or current_user.address  # Get address
-            user_id = current_user.id  # Get user ID
+        if current_user.is_authenticated:
+            email = current_user.email
+            address = request.form.get('shippingAddress') or current_user.address
+            user_id = current_user.id
         else:
-            email = request.form.get('contactEmail')  # Get email
-            address = request.form.get('shippingAddress')  # Get address
-            user_id = None  # No user ID
+            email = request.form.get('contactEmail')
+            address = request.form.get('shippingAddress')
+            user_id = None
 
-        total = sum(item['price'] * item['quantity'] for item in cart)  # Calculate total
+        total = sum(item['price'] * item['quantity'] for item in cart)
 
-        order = Order(  # Create order
+        order = Order(
             user_id=user_id,
             email=email,
             address=address,
             total=total
         )
-        db.session.add(order)  # Add order to session
-        db.session.flush()  # Get order ID
+        db.session.add(order)
+        db.session.flush()
 
-        for item in cart:  # For each item in cart
-            order_item = OrderItem(  # Create order item
+        for item in cart:
+            order_item = OrderItem(
                 order_id=order.id,
                 product_id=item['id'],
                 title=item['title'],
@@ -562,53 +561,58 @@ def checkout():
                 quantity=item['quantity'],
                 image=item.get('imageSrc')
             )
-            db.session.add(order_item)  # Add order item to session
+            db.session.add(order_item)
 
-        db.session.commit()  # Commit to DB
-        app.logger.debug(f"[CHECKOUT] Order {order.id} committed. Clearing cart.")  # Log commit
-        session['cart'] = []  # Clear cart
-        session['last_order_id'] = order.id  # Set last order ID
-        app.logger.debug(f"[CHECKOUT] Cart after clearing: {session.get('cart')}")  # Log cart
-        order_items = OrderItem.query.filter_by(order_id=order.id).all()  # Get order items
+        db.session.commit()
+        app.logger.info(f"[CHECKOUT] Order {order.id} committed. Clearing cart.")
+        session['cart'] = []
+        session['last_order_id'] = order.id
+        app.logger.debug(f"[CHECKOUT] Cart after clearing: {session.get('cart')}")
+        order_items = OrderItem.query.filter_by(order_id=order.id).all()
         try:
-            send_order_pdf_email(order, order_items)  # Send order email
-            app.logger.info(f"Order confirmation email with PDF sent to {order.email}")  # Log info
+            send_order_pdf_email(order, order_items)
+            app.logger.info(f"Order confirmation email with PDF sent to {order.email}")
         except Exception as e:
-            app.logger.error(f"Failed to send order confirmation email: {e}")  # Log error
-        flash('Order placed successfully!', 'success')  # Flash success
-        app.logger.debug(f"[CHECKOUT] Redirecting to order_confirmation for order {order.id}")  # Log redirect
-        return redirect(url_for('order_confirmation'))  # Redirect to confirmation
+            app.logger.error(f"Failed to send order confirmation email: {e}")
+        flash('Order placed successfully!', 'success')
+        app.logger.debug(f"[CHECKOUT] Redirecting to order_confirmation for order {order.id}")
+        return redirect(url_for('order_confirmation'))
 
-    stripe_publishable_key = os.environ.get('STRIPE_PUBLISHABLE_KEY', '')  # Get Stripe key
-    return render_template('checkout.html', stripe_publishable_key=stripe_publishable_key)  # Render checkout
+    stripe_publishable_key = os.environ.get('STRIPE_PUBLISHABLE_KEY', '')
+    return render_template('checkout.html', stripe_publishable_key=stripe_publishable_key)
 
-# --- Order Confirmation Route ---
-@app.route('/order/confirmation')  # Order confirmation route
+@app.route('/order/confirmation')
 def order_confirmation():
-    session.pop('cart', None)  # Remove cart from session
-    session_id = request.args.get('session_id')  # Get session ID
-    if not session_id:  # If no session ID
-        flash('No session ID found.', 'warning')  # Flash warning
-        return redirect(url_for('home'))  # Redirect to home
+    app.logger.debug("Order confirmation page accessed")
+    session.pop('cart', None)
+    session_id = request.args.get('session_id')
+    if not session_id:
+        flash('No session ID found.', 'warning')
+        return redirect(url_for('home'))
 
-    checkout_session = stripe.checkout.Session.retrieve(session_id)  # Retrieve Stripe session
-    order_id = checkout_session.metadata.get('order_id') if checkout_session.metadata else None  # Get order ID
-
-    if not order_id:  # If no order ID
-        flash('Order not found.', 'danger')  # Flash error
-        return redirect(url_for('home'))  # Redirect to home
-
-    order = Order.query.get(order_id)  # Get order
-    if not order:  # If order not found
-        flash('Order not found.', 'danger')  # Flash error
-        return redirect(url_for('home'))  # Redirect to home
-
-    order_items = OrderItem.query.filter_by(order_id=order.id).all()  # Get order items
     try:
-        send_order_pdf_email(order, order_items)  # Send order email
-        app.logger.info(f"Order confirmation email with PDF sent to {order.email}")  # Log info
+        checkout_session = stripe.checkout.Session.retrieve(session_id)
+        order_id = checkout_session.metadata.get('order_id') if checkout_session.metadata else None
     except Exception as e:
-        app.logger.error(f"Failed to send order confirmation email: {e}")  # Log error
+        app.logger.error(f"Stripe session retrieval failed: {e}")
+        flash('Order not found.', 'danger')
+        return redirect(url_for('home'))
+
+    if not order_id:
+        flash('Order not found.', 'danger')
+        return redirect(url_for('home'))
+
+    order = Order.query.get(order_id)
+    if not order:
+        flash('Order not found.', 'danger')
+        return redirect(url_for('home'))
+
+    order_items = OrderItem.query.filter_by(order_id=order.id).all()
+    try:
+        send_order_pdf_email(order, order_items)
+        app.logger.info(f"Order confirmation email with PDF sent to {order.email}")
+    except Exception as e:
+        app.logger.error(f"Failed to send order confirmation email: {e}")
 
     return render_template(
         'orderConfirmation.html',
@@ -616,29 +620,32 @@ def order_confirmation():
         user_email=order.email,
         total=order.total,
         order_date=order.created_at.strftime('%Y-%m-%d %H:%M')
-    )  # Render confirmation
+    )
 
-@app.route('/order/<int:order_id>/pdf')  # Download order PDF route
-@login_required  # Require login
+@app.route('/order/<int:order_id>/pdf')
+@login_required
 def download_order_pdf(order_id):
-    order = Order.query.get_or_404(order_id)  # Get order or 404
-    order_items = OrderItem.query.filter_by(order_id=order.id).all()  # Get order items
-    pdf_file = generate_order_pdf(order, order_items)  # Generate PDF
+    app.logger.debug(f"PDF download requested for order {order_id}")
+    order = Order.query.get_or_404(order_id)
+    order_items = OrderItem.query.filter_by(order_id=order.id).all()
+    pdf_file = generate_order_pdf(order, order_items)
     return send_file(
         pdf_file,
         mimetype='application/pdf',
         as_attachment=True,
         download_name=f'order_{order.id}.pdf'
-    )  # Send PDF file
+    )
 
-@app.route('/search')  # Search route
+@app.route('/search')
 def search():
-    query = request.args.get('query', '').strip()  # Get search query
+    query = request.args.get('query', '').strip()
+    app.logger.debug(f"Search requested: '{query}'")
 
-    if not query:  # If no query
-        return render_template("search_results.html", results=[], message="Please enter a search term.")  # Prompt for search
+    if not query:
+        return render_template("search_results.html", results=[], message="Please enter a search term.")
 
-    results = Shoes.query.filter(  # Search shoes
+    start = time.time()
+    results = Shoes.query.filter(
         or_(
             Shoes.title.ilike(f"%{query}%"),
             Shoes.model.ilike(f"%{query}%"),
@@ -650,76 +657,92 @@ def search():
             Shoes.category.ilike(f"%{query}%")
         )
     ).all()
-       
-    if not results:  # If no results
-        return render_template("search_results.html", results=[], message="No matching shoes found.")  # No results
+    app.logger.debug(f"Search query took {time.time() - start:.2f} seconds")
 
-    return render_template("search_results.html", results=results, message=f"Results for '{query}'")  # Show results
+    if not results:
+        return render_template("search_results.html", results=[], message="No matching shoes found.")
 
-@app.route('/sales')  # Sales page route
+    return render_template("search_results.html", results=results, message=f"Results for '{query}'")
+
+@app.route('/sales')
 def sales_page():
-    today = date.today()  # Get today
-    sales = Shoes.query.filter(  # Get sales
+    today = date.today()
+    app.logger.debug("Sales page accessed")
+    start = time.time()
+    sales = Shoes.query.filter(
         Shoes.sale_price.isnot(None),
         Shoes.sale_start_date <= today,
         Shoes.sale_end_date >= today
     ).all()
-    return render_template('sale_items.html', sales=sales, today=today)  # Render sales
-
-from datetime import date, timedelta  # Import date and timedelta
+    app.logger.debug(f"Sales query took {time.time() - start:.2f} seconds")
+    return render_template('sale_items.html', sales=sales, today=today)
 
 @app.route('/new-arrivals')
 def new_arrivals():
-      today = date.today()
-      cutoff = today - timedelta(days=30)
-      page = request.args.get('page', 1, type=int)
-      per_page = request.args.get('per_page', 20, type=int)
-      pagination = Shoes.query.filter(Shoes.date_added >= cutoff).paginate(page=page, per_page=per_page, error_out=False)
-      arrivals = pagination.items
-      return render_template('new_arrivals.html', arrivals=arrivals, today=today, pagination=pagination)
-  
+    app.logger.debug("New arrivals page accessed")
+    today = date.today()
+    cutoff = today - timedelta(days=30)
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
+    start = time.time()
+    pagination = Shoes.query.filter(Shoes.date_added >= cutoff).paginate(page=page, per_page=per_page, error_out=False)
+    arrivals = pagination.items
+    elapsed = time.time() - start
+    app.logger.debug(f"/new-arrivals query took {elapsed:.2f} seconds, found {len(arrivals)} items")
+    return render_template('new_arrivals.html', arrivals=arrivals, today=today, pagination=pagination)
 
-@app.route('/size-guide')  # Size guide route
+@app.route('/size-guide')
 def size_guide():
-    return render_template('size-guide.html')  # Render size guide
+    app.logger.debug("Size guide page accessed")
+    return render_template('size-guide.html')
 
-@app.route('/shipping-info')  # Shipping info route
+@app.route('/shipping-info')
 def shipping_info():
-    return render_template('shipping_info.html')  # Render shipping info
+    app.logger.debug("Shipping info page accessed")
+    return render_template('shipping_info.html')
 
-@app.route('/returns')  # Returns route
+@app.route('/returns')
 def returns():
-    return render_template('returns.html')  # Render returns
+    app.logger.debug("Returns page accessed")
+    return render_template('returns.html')
 
-@app.route('/privacy-policy')  # Privacy policy route
+@app.route('/privacy-policy')
 def privacy_policy():
-    return render_template('privacy_policy.html')  # Render privacy policy
+    app.logger.debug("Privacy policy page accessed")
+    return render_template('privacy_policy.html')
 
-@app.route('/terms-of-service')  # Terms of service route
+@app.route('/terms-of-service')
 def terms_of_service():
-    return render_template('terms_of_service.html')  # Render terms of service
+    app.logger.debug("Terms of service page accessed")
+    return render_template('terms_of_service.html')
 
-@app.route('/cookie-policy')  # Cookie policy route
+@app.route('/cookie-policy')
 def cookie_policy():
-    return render_template('cookie_policy.html')  # Render cookie policy
+    app.logger.debug("Cookie policy page accessed")
+    return render_template('cookie_policy.html')
 
-@app.route('/faq')  # FAQ route
+@app.route('/faq')
 def faq():
-    return render_template('faq.html')  # Render FAQ
+    app.logger.debug("FAQ page accessed")
+    return render_template('faq.html')
 
-@app.route('/contact-us')  # Contact us route
+@app.route('/contact-us')
 def contact_us():
-    return render_template('contact_us.html')  # Render contact us
+    app.logger.debug("Contact us page accessed")
+    return render_template('contact_us.html')
 
-@app.route('/order-status')  # Order status route
+@app.route('/order-status')
 def order_status():
-    return render_template('order_status.html')  # Render order status
+    app.logger.debug("Order status page accessed")
+    return render_template('order_status.html')
 
-@app.route('/api/products')  # API route for all products
+@app.route('/api/products')
 def api_products():
-    shoes = Shoes.query.all()  # Get all shoes
-    app.logger.debug(f"Returning all products: count={len(shoes)}")  # Log count
-    result = [{  # Build result list
+    app.logger.debug("API products endpoint hit")
+    start = time.time()
+    shoes = Shoes.query.all()
+    app.logger.debug(f"Returning all products: count={len(shoes)}, query took {time.time() - start:.2f} seconds")
+    result = [{
         "id": shoe.id,
         "title": shoe.title,
         "price": float(shoe.price),
@@ -735,12 +758,9 @@ def api_products():
         "sale_end_date": shoe.sale_end_date.isoformat() if shoe.sale_end_date else None,
         "date_added": shoe.date_added.isoformat() if shoe.date_added else None 
     } for shoe in shoes]
-    return jsonify(result)  # Return products as JSON
+    return jsonify(result)
 
     application = app
 
-if __name__ == '__main__':  # Main entry point
-    app.run(debug=True)  # Run Flask app in debug mode
-
-    
- 
+if __name__ == '__main__':
+    app.run(debug=True)
