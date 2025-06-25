@@ -33,7 +33,7 @@ logging.basicConfig(level=logging.DEBUG)  # Set logging level to DEBUG
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'fallback-default-key')  # Set secret key for sessions
 
 # PostgreSQL configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:JaiKaia2549!@localhost:5432/shoe_haven_db'  # Set database URI
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable SQLAlchemy modification tracking
 
 # Stripe configuration
@@ -723,3 +723,5 @@ def api_products():
 
 if __name__ == '__main__':  # Main entry point
     app.run(debug=True)  # Run Flask app in debug mode
+
+    application = app
