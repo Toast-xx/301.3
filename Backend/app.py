@@ -35,7 +35,7 @@ app.logger.setLevel(logging.DEBUG)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'fallback-default-key')
 
 # PostgreSQL configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:IylaRosa2549!@shoe-haven-db.czocwcgkqw0k.ap-northeast-2.rds.amazonaws.com:5432/shoe_haven_db"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:JaiKaia2549!@shoe-haven-db.czocwcgkqw0k.ap-northeast-2.rds.amazonaws.com/shoe_haven_db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Stripe configuration
