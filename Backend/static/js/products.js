@@ -89,10 +89,10 @@ function renderProduct(product, variantKey = null, variant = null) { // Render t
 
     // Show selected color
     let colorDisplay = '';
-    if (variantKey && variantKey !== "original") { // If a color variant is selected
-        colorDisplay = `<div class="mb-2"><strong>Color:</strong> <span id="selected-color">${capitalize(variantKey)}</span></div>`; // Show selected color
+    if (variantKey && variantKey !== "original") {
+        colorDisplay = `<div class="mb-2"><strong>Color:</strong> <span id="selected-color">${capitalize(variantKey)}</span></div>`;
     } else {
-        colorDisplay = `<div class="mb-2"><strong>Color:</strong> <span id="selected-color">Default</span></div>`; // Show default color
+        colorDisplay = `<div class="mb-2"><strong>Color:</strong> <span id="selected-color">${product.color ? capitalize(product.color) : 'Default'}</span></div>`;
     }
 
     container.innerHTML = `
