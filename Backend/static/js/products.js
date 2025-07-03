@@ -39,8 +39,11 @@ document.addEventListener("DOMContentLoaded", () => { // Wait for the DOM to be 
             const imageSrc = document.getElementById("main-shoe-img").src; // Get main image source
             const sizeBtn = document.querySelector(".size-btn.active"); // Get selected size button
             const size = sizeBtn ? sizeBtn.textContent : null; // Get selected size or null
-            const color = window.currentVariantKey || "original"; // Get selected color or default
-            addToCart({ id: currentProduct.id, title, price, imageSrc, size, color }); // Add product to cart
+            const color =
+                window.currentVariantKey && window.currentVariantKey !== "original"
+                    ? capitalize(window.currentVariantKey)
+                    : (currentProduct.color ? capitalize(currentProduct.color) : "Default");
+            addToCart({ id: currentProduct.id, title, price, imageSrc, size, color });
         }
     });
 
