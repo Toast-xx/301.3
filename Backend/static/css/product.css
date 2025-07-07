@@ -1,3 +1,10 @@
+/* 
+  Styles for the cart overlay that appears above all content.
+  - Fixed position covers the entire viewport.
+  - Semi-transparent black background for modal effect.
+  - High z-index ensures it appears above other elements.
+  - Uses flexbox to center its content both vertically and horizontally.
+*/
 .cartOverlay {
     position: fixed;
     top: 0;
@@ -11,6 +18,10 @@
     align-items: center;
 }
 
+/* 
+  Styles for the cart content box within the overlay.
+  - Sets a fixed width of 320px, but allows it to shrink to 90% of the viewport width on smaller screens.
+*/
 .cart-content {
     width: 320px;
     max-width: 90%;
