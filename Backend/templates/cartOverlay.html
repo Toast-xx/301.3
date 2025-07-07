@@ -1,16 +1,31 @@
-<!-- templates/cartOverlay.html -->
+{#
+    cartOverlay.html
+    This template provides a Bootstrap offcanvas sidebar for displaying the user's cart as an overlay.
+    - Shows cart items dynamically in the #cart-items div.
+    - Includes buttons to view the full cart, clear the cart, continue shopping, and proceed to checkout.
+    - Displays the current cart total.
+    - Loads cartOverlay.js for dynamic cart functionality.
+#}
+
+<!-- Offcanvas cart overlay (slides in from the right) -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOverlay" aria-labelledby="cartOverlayLabel">
     <div class="offcanvas-header">
+        <!-- Cart overlay title -->
         <h5 id="cartOverlayLabel">Cart</h5>
+        <!-- Close button for the overlay -->
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
+        <!-- Cart items will be dynamically rendered here by cartOverlay.js -->
         <div id="cart-items"></div>
-        <!-- View Cart and Clear Cart buttons -->
+        <!-- Button to view the full cart page -->
         <a href="/cart" class="btn btn-primary w-100 mb-2">View Cart</a>
+        <!-- Button to clear all items from the cart -->
         <button id="clear-cart-btn" class="btn btn-danger w-100 mb-3">Clear Cart</button>
         <hr />
+        <!-- Display the total price of items in the cart -->
         <p><strong>Total:</strong> $<span id="cart-total">0.00</span></p>
+        <!-- Actions: continue shopping or proceed to checkout -->
         <div class="d-flex justify-content-between mt-4">
             <button class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Continue Shopping</button>
             <a href="/checkout" class="btn btn-primary">Checkout</a>
@@ -18,4 +33,5 @@
     </div>
 </div>
 
+<!-- JavaScript for dynamic cart overlay functionality -->
 <script src="{{ url_for('static', filename='js/cartOverlay.js') }}"></script>
