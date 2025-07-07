@@ -170,6 +170,102 @@
 
 ---
 
+## 🔄 How to Update the Website
+
+If you need to update the website (code, content, or dependencies), follow this outline:
+
+1. **Pull Latest Changes (if using Git)**
+   - `git pull origin main` (or your branch)
+
+2. **Update Code or Content**
+   - Edit files in `Frontend/templates`, `Frontend/static`, or `Backend` as needed.
+   - For backend changes, update Python files in `Backend/`.
+   - For frontend changes, update HTML/CSS/JS in `Frontend/` or `Backend/templates`.
+
+3. **Update Dependencies (if required)**
+   - For Python: update `requirements.txt` and run `pip install -r requirements.txt`
+   - For JS/CSS: update relevant files or package managers if used.
+
+4. **Apply Database Migrations (if models changed)**
+   - Run `flask db migrate` and `flask db upgrade` to apply schema changes.
+
+5. **Restart the Server**
+   - Stop and restart the Flask server to apply code changes.
+
+6. **Test the Website**
+   - Check all major features (login, cart, checkout, etc.) in your browser.
+   - Review logs for errors.
+
+7. **Push Changes (if using Git)**
+   - `git add .`
+   - `git commit -m "Describe your update"`
+   - `git push origin main` (or your branch)
+
+8. **(If Deployed) Redeploy or Restart Hosting**
+   - Follow your hosting provider's instructions to redeploy or restart the app.
+
+**Tip:** Always back up your database and important files before major updates.
+
+---
+
+## 📝 How to Update Git Using the Command Line
+
+1. **Check the status of your files:**
+2. **Stage your changes:**
+  Or to add a specific file:
+3. **Commit your changes with a message:**
+4. **Pull the latest changes from the remote (to avoid conflicts):**
+5. **Push your changes to the remote repository:**
+---
+
+## 📁 File Structure
+   project-root/ │ 
+   ├── Backend/ │   
+   ├── app.py │   
+   ├── models.py │   
+   ├── routes.py │   
+   ├── templates/ │   
+   │   ├── base.html │   
+   │   ├── home.html │   
+   │   ├── productlisting.html │   
+   │   ├── cart.html │   
+   │   ├── checkout.html │   
+   │   ├── ... (other HTML templates) │   
+   ├── static/ │   
+   │   ├── js/ │   
+   │   ├── css/ │   
+   │   └── images/ │   
+   ├── requirements.txt │   
+   └── ... (other backend files) │ 
+   ├── Frontend/ │   ├── templates/ │   
+   │   ├── ... (HTML templates, if separate) │   
+   ├── static/ │   │   ├── js/ │   
+   │   ├── css/ │   │   └── images/ │   
+   └── ... (other frontend files) │ 
+   ├── migrations/ │   └
+   ── ... (Flask-Migrate files) │ 
+   ├── .env.example 
+   ├── README.md 
+   └── ... (other project files)
+   
+---
+
+## ➕ How to Add New Features or Pages
+
+### **Frontend**
+- Add new HTML templates to `Backend/templates/` or `Frontend/templates/`.
+- Add or update CSS/JS in `Backend/static/` or `Frontend/static/`.
+- Use Jinja2 templating for dynamic content if served by Flask.
+- Reference static assets using `{{ url_for('static', filename='...') }}` in templates.
+
+### **Backend**
+- Add new routes or API endpoints in `Backend/app.py` or `Backend/routes.py`.
+- Add or update models in `Backend/models.py`.
+- If you add new database fields, run `flask db migrate` and `flask db upgrade`.
+- Add new templates to `Backend/templates/` and render them in your routes.
+
+---
+
 ## 🧪 Testing & Development
 
 - **Frontend:**  
@@ -182,10 +278,6 @@
   - PostgreSQL connection string in `app.config['SQLALCHEMY_DATABASE_URI']`.
 - **Stripe:**  
   - Test mode enabled by default.
-
----
-
-## 📁 File Structure
 
 ---
 
