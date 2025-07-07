@@ -1,18 +1,22 @@
+// Listen for the custom 'cart:cleared' event and update cart UI components if their functions exist
 document.addEventListener('cart:cleared', function () {
     if (typeof renderCartTable === 'function') renderCartTable();
     if (typeof renderOrderSummary === 'function') renderOrderSummary();
     if (typeof updateCartBadge === 'function') updateCartBadge();
 });
 
+// Load the cart from localStorage, or return an empty array if not present
 function loadCart() {
     const storedCart = localStorage.getItem('cart');
     return storedCart ? JSON.parse(storedCart) : [];
 }
 
+// Save the cart array to localStorage as a JSON string
 function saveCart(cart) {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
+// Remove a specific item from the cart by id, size, and color, then update UI
 function removeCartItem(id, size, color) {
     let cart = loadCart();
     cart = cart.filter(item => !(item.id === id && item.size === size && item.color === color));
@@ -21,6 +25,7 @@ function removeCartItem(id, size, color) {
     renderOrderSummary();
 }
 
+// Update the quantity of a specific cart item, then update UI
 function updateCartQuantity(id, size, color, quantity) {
     let cart = loadCart();
     cart.forEach(item => {
@@ -33,6 +38,7 @@ function updateCartQuantity(id, size, color, quantity) {
     renderOrderSummary();
 }
 
+// Clear all items from the cart, update UI, and dispatch a custom event for other scripts
 function clearCart() {
     saveCart([]);
     renderCartTable();
@@ -41,6 +47,7 @@ function clearCart() {
     document.dispatchEvent(new Event('cart:cleared'));
 }
 
+// Render the cart table in the UI based on the current cart contents
 function renderCartTable() {
     const cart = loadCart();
     const container = document.getElementById('cart-table-container');
@@ -91,7 +98,7 @@ function renderCartTable() {
     `;
     container.innerHTML = table;
 
-    // Attach remove event listeners
+    // Attach event listeners to remove buttons for deleting items from the cart
     document.querySelectorAll('.remove-btn').forEach(btn => {
         btn.addEventListener('click', function () {
             const id = parseInt(this.getAttribute('data-id'));
@@ -101,7 +108,7 @@ function renderCartTable() {
         });
     });
 
-    // Attach quantity change event listeners
+    // Attach event listeners to quantity selectors for updating item quantities
     document.querySelectorAll('.quantity-select').forEach(select => {
         select.addEventListener('change', function () {
             const id = parseInt(this.getAttribute('data-id'));
@@ -113,6 +120,7 @@ function renderCartTable() {
     });
 }
 
+// Render the order summary (subtotal, item count, total) in the UI
 function renderOrderSummary() {
     const cart = loadCart();
     const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -123,7 +131,7 @@ function renderOrderSummary() {
     document.getElementById('summary-total').textContent = (subtotal + shipping).toFixed(2);
 }
 
-// Update order summary when shipping option changes
+// Initialize cart UI and event listeners when the DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
     renderCartTable();
     renderOrderSummary();
@@ -137,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// Listen for cart changes from other tabs/pages
+// Listen for changes to the cart in localStorage (e.g., from other tabs) and update UI accordingly
 window.addEventListener('storage', function (e) {
     if (e.key === 'cart') {
         renderCartTable();
