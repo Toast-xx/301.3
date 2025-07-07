@@ -1,15 +1,30 @@
+/* 
+  Set a light gray background color for the entire page.
+  Provides a clean and neutral backdrop for the registration form.
+*/
 body {
     background-color: #f8f9fa;
 }
 
+/* 
+  Make form labels slightly bolder for better readability and emphasis.
+*/
 form label {
     font-weight: 500;
 }
 
+/* 
+  Add medium border radius to all input and select elements in forms.
+  This gives form controls a modern, rounded appearance.
+*/
 form input, form select {
     border-radius: 0.375rem;
 }
 
+/* 
+  Make dark buttons appear bolder by increasing font weight.
+  Enhances button visibility and importance.
+*/
 .btn-dark {
     font-weight: 600;
 }
