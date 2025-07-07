@@ -1,31 +1,51 @@
-<!-- Backend/templates/base.html -->
+<!--
+    base.html
+    This is the main layout template for the Shoe Haven web application.
+    It provides a consistent structure for all pages, including:
+    - HTML head with Bootstrap and custom CSS
+    - Responsive navigation bar with search, user authentication, and cart
+    - Flash message display
+    - Login modal available on all pages
+    - Blocks for page-specific content, head, and scripts
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Page title, can be overridden by child templates -->
     <title>{% block title %}Shoe Haven{% endblock %}</title>
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS for styling -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons for UI icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <!-- Optional extra head content from child templates -->
     {% block head %}{% endblock %}
 </head>
 <body>
+    <!-- Navigation bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
+            <!-- Brand/logo -->
             <a class="navbar-brand" href="{{ url_for('home') }}">Shoe Haven</a>
+            <!-- Responsive navbar toggler for mobile -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <!-- Navbar content -->
             <div class="collapse navbar-collapse" id="navbarContent">
-                <!-- Updated search form -->
+                <!-- Search form (centered, wide) -->
                 <form class="d-flex mx-auto w-75" method="get" action="{{ url_for('search') }}">
                     <input class="form-control me-2" type="search" name="query" placeholder="Search for shoes..." aria-label="Search">
                     <button class="btn btn-outline-light" type="submit">Search</button>
                 </form>
+                <!-- Right-aligned navigation items -->
                 <ul class="navbar-nav ms-auto">
                     {% if user %}
+                    <!-- Show welcome and logout if user is logged in -->
                     <li class="nav-item me-3">
                         <span class="nav-link">Welcome, {{ user.first_name }}</span>
                     </li>
@@ -35,6 +55,7 @@
                         </a>
                     </li>
                     {% else %}
+                    <!-- Show login/register if user is not logged in -->
                     <li class="nav-item me-3">
                         <a class="nav-link" href="#" title="Login" data-bs-toggle="modal" data-bs-target="#loginModal">
                             <i class="bi bi-person-circle" title="Login"></i> Login
@@ -46,6 +67,7 @@
                         </a>
                     </li>
                     {% endif %}
+                    <!-- Cart icon with badge (cart count updated via JS) -->
                     <li class="nav-item position-relative">
                         <a class="nav-link" href="{{ url_for('get_cart') }}">
                             <i class="bi bi-cart3" title="Cart"></i>
@@ -57,8 +79,10 @@
         </div>
     </nav>
 
+    <!-- Main content block for child templates -->
     {% block content %}{% endblock %}
-    <!-- Flash messages (add here) -->
+
+    <!-- Flash messages for user feedback (success, error, etc.) -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     {% for category, message in messages %}
@@ -67,7 +91,7 @@
     {% endif %}
     {% endwith %}
 
-    <!-- Login Modal (now available on all pages) -->
+    <!-- Login Modal (available on all pages) -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -76,6 +100,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <!-- Login form -->
                     <form id="loginForm" method="POST" action="/login">
                         <div class="mb-3">
                             <label for="loginEmail" class="form-label">Email address</label>
@@ -90,19 +115,24 @@
                         </p>
                         <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
                     </form>
+                    <!-- Option to continue as guest -->
                     <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Continue as Guest</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Bootstrap JS bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Expose user info to JavaScript (for dynamic UI updates) -->
     <script>
-  window.USER_EMAIL = "{{ user_email | default('', true) }}";
-  window.USER_FIRSTNAME = "{{ user.first_name if user else '' }}";
+      window.USER_EMAIL = "{{ user_email | default('', true) }}";
+      window.USER_FIRSTNAME = "{{ user.first_name if user else '' }}";
     </script>
+    <!-- Custom JS for navbar and login modal -->
     <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    <!-- Optional extra scripts from child templates -->
     {% block scripts %}{% endblock %}
 </body>
 </html>
