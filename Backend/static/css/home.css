@@ -1,6 +1,17 @@
+/* 
+  Enable smooth scrolling for anchor links and in-page navigation.
+  This makes scroll transitions less abrupt for a better user experience.
+*/
 html {
     scroll-behavior: smooth;
 }
+
+/* 
+  Style for images that should remain fixed in size and aspect ratio.
+  - Sets a fixed height of 250px.
+  - Ensures the image covers the container without distortion using object-fit: cover.
+  - Makes the image take the full width of its parent container.
+*/
 .fixed-img {
     height: 250px;
     object-fit: cover;
