@@ -1,15 +1,28 @@
+{#
+    home.html
+    Main landing page for Shoe Haven.
+    - Extends base.html for consistent layout and navigation.
+    - Features submenu for quick navigation to new arrivals, products, brands, and styles.
+    - Highlights an exclusive sale section with a call-to-action.
+    - Displays product categories for Men, Women, and Kids with images and links.
+    - Footer includes helpful links, customer service, contact info, and legal information.
+    - Loads JS for navbar, login modal, and cart overlay functionality.
+#}
+
 {% extends "base.html" %}
 {% block title %}Shoe Haven{% endblock %}
 {% block content %}
 
-<!-- Submenu -->
+<!-- Submenu: Quick navigation for new arrivals, products, brands, and styles -->
 <div class="bg-light shadow-sm">
     <div class="container">
         <ul class="nav justify-content-center py-2">
             <li class="nav-item">
+                <!-- Link to New Arrivals page -->
                 <a class="btn btn-outline-success mx-1" href="{{ url_for('new_arrivals') }}">New Arrivals</a>
             </li>
             <li class="nav-item">
+                <!-- Link to all products -->
                 <a class="btn btn-outline-dark mx-1" href="{{ url_for('product_listing') }}">Products</a>
             </li>
             <!-- Dropdown for Brands -->
@@ -18,6 +31,7 @@
                     Brands
                 </a>
                 <ul class="dropdown-menu p-3" aria-labelledby="brandsDropdown" style="min-width: 500px;">
+                    <!-- Brand-specific product links -->
                     <li><a class="dropdown-item" href="{{ url_for('product_listing', brand='Nike') }}">Nike</a></li>
                     <li><a class="dropdown-item" href="{{ url_for('product_listing', brand='Adidas') }}">Adidas</a></li>
                     <li><a class="dropdown-item" href="{{ url_for('product_listing', brand='Vans') }}">Vans</a></li>
@@ -29,11 +43,13 @@
                     <li><a class="dropdown-item" href="{{ url_for('product_listing', brand='Reebok') }}">Reebok</a></li>
                 </ul>
             </li>
+            <!-- Dropdown for Styles -->
             <li class="nav-item dropdown">
                 <a class="btn btn-outline-dark mx-1 dropdown-toggle" href="#" id="stylesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Styles
                 </a>
                 <ul class="dropdown-menu p-3" aria-labelledby="stylesDropdown" style="min-width: 400px;">
+                    <!-- Style-specific product links -->
                     <li><a class="dropdown-item" href="{{ url_for('product_listing', style='Running') }}">Running</a></li>
                     <li><a class="dropdown-item" href="{{ url_for('product_listing', style='Skate') }}">Skate</a></li>
                     <li><a class="dropdown-item" href="{{ url_for('product_listing', style='Lifestyle') }}">Lifestyle</a></li>
@@ -43,7 +59,7 @@
     </div>
 </div>
 
-<!-- Exclusive Sale Section -->
+<!-- Exclusive Sale Section: Highlights a major sale with image and CTA -->
 <div class="container my-5">
     <div class="row justify-content-center align-items-center bg-light p-4 shadow rounded">
         <!-- Text + Button Column (larger) -->
@@ -59,7 +75,7 @@
     </div>
 </div>
 
-<!-- Product Categories -->
+<!-- Product Categories: Men, Women, Kids -->
 <div class="container my-5">
     <div class="row text-center">
         <!-- Men's Category -->
@@ -80,6 +96,7 @@
     </div>
 </div>
 
+<!-- Footer: Helpful links, customer service, contact info, and legal links -->
 <footer class="bg-light text-dark pt-5 pb-4 mt-5 border-top">
     <div class="container">
         <div class="row">
@@ -125,15 +142,15 @@
     </div>
 </footer>
 
+<!-- Expose user email to JS for dynamic UI updates -->
 <script>
   window.USER_EMAIL = "{{ user_email | default('', true) }}";
   console.log("USER_EMAIL set to:", window.USER_EMAIL);
 </script>
 
-<!-- Bootstrap JS Bundle --->
+<!-- JavaScript for navbar, login modal, and cart overlay functionality -->
 <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
-<script src="{{ url_for('static', filename='js/login.js') }}"></script> 
-<script src="{{ url_for('static', filename='js/cartOverlay.js')}}"></script> 
-
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+<script src="{{ url_for('static', filename='js/cartOverlay.js')}}"></script>
 
 {% endblock %}

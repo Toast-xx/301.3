@@ -1,22 +1,28 @@
-<!-- Product Listing Submenu -->
+<!--
+    Product Listing Submenu:
+    Provides quick filter buttons for main categories (Men, Women, Kids, Sale)
+    and a button to open the filter sidebar (offcanvas).
+-->
 <div class="bg-light shadow-sm">
     <div class="container">
         <ul class="nav justify-content-center py-2">
             <li class="nav-item">
+                <!-- Filter by Men category -->
                 <a class="btn btn-outline-dark mx-1 filter-btn" href="#" data-filter="men">Men</a>
             </li>
             <li class="nav-item">
+                <!-- Filter by Women category -->
                 <a class="btn btn-outline-dark mx-1 filter-btn" href="#" data-filter="women">Women's</a>
             </li>
             <li class="nav-item">
+                <!-- Filter by Kids category -->
                 <a class="btn btn-outline-dark mx-1 filter-btn" href="#" data-filter="kids">Kids</a>
             </li>
             <li class="nav-item">
+                <!-- Filter by Sale category -->
                 <a class="btn btn-outline-danger mx-1 filter-btn" href="#" data-filter="sale">Sale</a>
             </li>
-
-
-            <!-- Filter Button (Triggers Offcanvas) -->
+            <!-- Filter Button (Triggers Offcanvas Sidebar) -->
             <li class="nav-item">
                 <button class="btn btn-dark mx-1" data-bs-toggle="offcanvas" data-bs-target="#filterSidebar">
                     <i class="bi bi-funnel-fill"></i> Filter
@@ -26,15 +32,21 @@
     </div>
 </div>
 
-<!-- Filter Offcanvas Sidebar -->
+<!--
+    Filter Offcanvas Sidebar:
+    Contains advanced filtering options for products.
+    Includes filters for Brand, Model, Style, and Price.
+    The sidebar can be opened/closed and is accessible for screen readers.
+-->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="filterSidebar" aria-labelledby="filterSidebarLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="filterSidebarLabel">Filter Products</h5>
+        <!-- Button to close the sidebar -->
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
 
-        <!-- Brand Filter -->
+        <!-- Brand Filter Dropdown -->
         <div class="mb-3">
             <label for="brandFilter" class="form-label">Brand</label>
             <select id="brandFilter" class="form-select">
@@ -51,7 +63,7 @@
             </select>
         </div>
 
-        <!-- Model Filter -->
+        <!-- Model Filter Dropdown (options grouped by brand) -->
         <div class="mb-3">
             <label for="modelFilter" class="form-label">Model</label>
             <select id="modelFilter" class="form-select">
@@ -109,7 +121,7 @@
             </select>
         </div>
 
-        <!-- Style Filter -->
+        <!-- Style Filter Dropdown (options grouped by brand) -->
         <div class="mb-3">
             <label for="styleFilter" class="form-label">Style</label>
             <select id="styleFilter" class="form-select">
@@ -173,7 +185,7 @@
             </select>
         </div>
 
-        <!-- Price Filter -->
+        <!-- Price Filter Dropdown -->
         <div class="mb-3">
             <label for="priceFilter" class="form-label">Price</label>
             <select id="priceFilter" class="form-select">
@@ -185,10 +197,14 @@
             </select>
         </div>
 
-        <!-- Apply Button -->
+        <!-- Apply Filters Button: triggers filtering logic in JS -->
         <button class="btn btn-primary w-100 mt-3">Apply Filters</button>
 
     </div>
 </div>
 
+<!--
+    Filtering logic and dynamic filter population are handled by filtering.js.
+    This script enables dynamic filter options and product rendering.
+-->
 <script src="G:\My Drive\Y3 Software Engineering Resources\GitHub\MVP\Frontend\static\js\filtering.js"></script>

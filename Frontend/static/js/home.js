@@ -1,17 +1,15 @@
-import { products, displayProducts, filterByCategory } from './productslisting.js';
+console.log('home.js loaded');
 
-document.addEventListener("DOMContentLoaded", () => {
-    // Optional: Display all products on load
-    displayProducts(products);
+// Only keep cart-clearing logic and body text logging
+window.addEventListener('DOMContentLoaded', () => {
+    // Log the current body text for debugging
+    console.log('Body innerText:', document.body.innerText);
 
-    // Handle category button clicks
-    document.querySelectorAll(".filter-btn").forEach(button => {
-        button.addEventListener("click", (e) => {
-            e.preventDefault();
-            const category = button.getAttribute("data-filter");
-            const filtered = filterByCategory(category);
-            displayProducts(filtered);
-        });
-    });
+    // Clear localStorage cart if order was placed successfully (after checkout redirect)
+    if (document.body.innerText.includes("Order placed successfully!")) {
+        console.log('Order success message detected!');
+        localStorage.removeItem('cart');
+        document.dispatchEvent(new Event('cart:cleared'));
+        console.log("Cart cleared from localStorage after successful checkout.");
+    }
 });
-

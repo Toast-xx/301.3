@@ -1,286 +1,130 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Products - Shoe Haven</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap CSS & Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+{#
+    productlisting.html
+    Displays the main product listing page for Shoe Haven.
+    - Extends base.html for consistent layout and navigation.
+    - Includes a submenu for quick filtering by category and sale.
+    - Provides an offcanvas sidebar for advanced filtering (brand, model, style, price).
+    - Product grid is dynamically populated by JavaScript.
+    - Includes a "Load More" button for pagination.
+    - Footer provides quick links to support and info pages.
+    - Loads page-specific JS modules and supporting scripts.
+#}
 
+{% extends "base.html" %} {# Inherit from the base template #}
+{% block head %} {# Start the head block for extra head content #}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/productlistings.css') }}"> {# Link to the product listings CSS #}
+{% endblock %} {# End the head block #}
 
-    <!-- Temporary CSS path -->
-    <link rel="stylesheet" href="static/css/productlistings.css">
+{% block title %}Products - Shoe Haven{% endblock %} {# Set the page title #}
+{% block content %} {# Start the main content block #}
 
-    <!-- Flask version (for later when using Flask) -->
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/productlistings.css') }}"> -->
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-</head>
-<body>
-
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="home.html">Shoe Haven</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <form class="d-flex mx-auto w-75">
-                    <input class="form-control me-2" type="search" placeholder="Search for shoes..." aria-label="Search">
-                    <button class="btn btn-outline-light" type="submit">Search</button>
-                </form>
-
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item me-3">
-                        <a class="nav-link" href="#"><i class="bi bi-person-circle" title="Login"></i></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-cart3" title="Cart"></i></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Product Listing Submenu -->
-    <div class="bg-light shadow-sm">
-        <div class="container">
-            <ul class="nav justify-content-center py-2">
-                <li class="nav-item">
-                    <a class="btn btn-outline-dark mx-1 filter-btn" href="#" data-filter="men">Men</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-outline-dark mx-1 filter-btn" href="#" data-filter="women">Women's</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-outline-dark mx-1 filter-btn" href="#" data-filter="kids">Kids</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-outline-danger mx-1 filter-btn" href="#" data-filter="sale">Sale</a>
-                </li>
-
-
-                <!-- Filter Button (Triggers Offcanvas) -->
-                <li class="nav-item">
-                    <button class="btn btn-dark mx-1" data-bs-toggle="offcanvas" data-bs-target="#filterSidebar">
-                        <i class="bi bi-funnel-fill"></i> Filter
-                    </button>
-                </li>
-            </ul>
-        </div>
+<!-- Product Listing Submenu: quick filters for Men, Women, Kids, Sale, and advanced filter sidebar -->
+<div class="bg-light shadow-sm">
+    <div class="container">
+        <ul class="nav justify-content-center py-2">
+            <li class="nav-item">
+                <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='men') }}" data-filter="men">Men</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='women') }}" data-filter="women">Women's</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='kids') }}" data-filter="kids">Kids</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-danger mx-1 filter-btn" href="#" data-filter="sale">Sale</a>
+            </li>
+            <li class="nav-item">
+                <!-- Button to open the filter sidebar -->
+                <button class="btn btn-dark mx-1"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#filterSidebar"
+                        aria-controls="filterSidebar">
+                    <i class="bi bi-funnel-fill"></i> Filter
+                </button>
+            </li>
+        </ul>
     </div>
+</div>
 
-
-
-    <!-- Filter Offcanvas Sidebar -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="filterSidebar" aria-labelledby="filterSidebarLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="filterSidebarLabel">Filter Products</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-
-            <!-- Brand Filter -->
-            <div class="mb-3">
-                <label for="brandFilter" class="form-label">Brand</label>
-                <select id="brandFilter" class="form-select">
-                    <option value="">All Brands</option>
-                    <option>Nike</option>
-                    <option>Adidas</option>
-                    <option>Vans</option>
-                    <option>Etnies</option>
-                    <option>DC Shoes</option>
-                    <option>New Balance</option>
-                    <option>Converse</option>
-                    <option>Puma</option>
-                    <option>Reebok</option>
-                </select>
-            </div>
-
-            <!-- Model Filter -->
-            <div class="mb-3">
-                <label for="modelFilter" class="form-label">Model</label>
-                <select id="modelFilter" class="form-select">
-                    <option value="">All Models</option>
-                    <optgroup label="Nike">
-                        <option>Air Force 1</option>
-                        <option>Air Max 90</option>
-                        <option>Air Max 95</option>
-                        <option>Air Jordan</option>
-                        <option>Dunk</option>
-                        <option>Pegasus</option>
-                    </optgroup>
-                    <optgroup label="Adidas">
-                        <option>Samba</option>
-                        <option>Gazelle</option>
-                        <option>Stan Smith</option>
-                        <option>Ultraboost</option>
-                    </optgroup>
-                    <optgroup label="Vans">
-                        <option>Old Skool</option>
-                        <option>Authentic</option>
-                        <option>Sk8-Hi</option>
-                        <option>Slip-On</option>
-                    </optgroup>
-                    <optgroup label="Etnies">
-                        <option>Marana</option>
-                        <option>Jameson</option>
-                        <option>Scout</option>
-                    </optgroup>
-                    <optgroup label="DC Shoes">
-                        <option>Court Graffik</option>
-                        <option>Lynx OG</option>
-                        <option>Manteca</option>
-                    </optgroup>
-                    <optgroup label="New Balance">
-                        <option>574</option>
-                        <option>990</option>
-                        <option>9060</option>
-                    </optgroup>
-                    <optgroup label="Converse">
-                        <option>Chuck Taylor All Star</option>
-                        <option>Chuck 70</option>
-                        <option>One Star</option>
-                    </optgroup>
-                    <optgroup label="Puma">
-                        <option>Suede Classic</option>
-                        <option>RS-X</option>
-                        <option>Clyde</option>
-                    </optgroup>
-                    <optgroup label="Reebok">
-                        <option>Classic Leather</option>
-                        <option>Club C</option>
-                        <option>Nano</option>
-                    </optgroup>
-                </select>
-            </div>
-
-            <!-- Style Filter -->
-            <div class="mb-3">
-                <label for="styleFilter" class="form-label">Style</label>
-                <select id="styleFilter" class="form-select">
-                    <option value="">All Styles</option>
-                    <optgroup label="Nike">
-                        <option>Sneakers</option>
-                        <option>Running Shoes</option>
-                        <option>Basketball Shoes</option>
-                        <option>Lifestyle Shoes</option>
-                    </optgroup>
-                    <optgroup label="Adidas">
-                        <option>Sneakers</option>
-                        <option>Running Shoes</option>
-                        <option>Training Shoes</option>
-                    </optgroup>
-                    <optgroup label="Vans">
-                        <option>Skate Shoes</option>
-                        <option>High Tops</option>
-                        <option>Slip-Ons</option>
-                    </optgroup>
-                    <optgroup label="Etnies">
-                        <option>Skate Shoes</option>
-                        <option>Lifestyle Shoes</option>
-                    </optgroup>
-                    <optgroup label="DC Shoes">
-                        <option>Skate Shoes</option>
-                        <option>Casual Sneakers</option>
-                    </optgroup>
-                    <optgroup label="Skechers">
-                        <option>Walking Shoes</option>
-                        <option>Slip-Ons</option>
-                        <option>Sandals</option>
-                    </optgroup>
-                    <optgroup label="New Balance">
-                        <option>Running Shoes</option>
-                        <option>Lifestyle Sneakers</option>
-                    </optgroup>
-                    <optgroup label="Converse">
-                        <option>High Tops</option>
-                        <option>Low Tops</option>
-                        <option>Slip-Ons</option>
-                    </optgroup>
-                    <optgroup label="Dr. Martens">
-                        <option>Combat Boots</option>
-                        <option>Chelsea Boots</option>
-                        <option>Oxford Shoes</option>
-                    </optgroup>
-                    <optgroup label="Puma">
-                        <option>Running Shoes</option>
-                        <option>Lifestyle Shoes</option>
-                    </optgroup>
-                    <optgroup label="Reebok">
-                        <option>Running Shoes</option>
-                        <option>Lifestyle Sneakers</option>
-                    </optgroup>
-                    <optgroup label="Crocs">
-                        <option>Clogs</option>
-                        <option>Slides</option>
-                        <option>Sandals</option>
-                    </optgroup>
-                </select>
-            </div>
-
-            <!-- Price Filter -->
-            <div class="mb-3">
-                <label for="priceFilter" class="form-label">Price</label>
-                <select id="priceFilter" class="form-select">
-                    <option value="">All Prices</option>
-                    <option value="0-50">Under $50</option>
-                    <option value="50-100">$50–$100</option>
-                    <option value="100-150">$100–$150</option>
-                    <option value="150+">Over $150</option>
-                </select>
-            </div>
-
-            <!-- Apply Button -->
-            <button class="btn btn-primary w-100 mt-3">Apply Filters</button>
-
-        </div>
+<!-- Filter Offcanvas Sidebar: advanced filtering options -->
+<div class="offcanvas offcanvas-end"
+     tabindex="-1"
+     id="filterSidebar"
+     aria-labelledby="filterSidebarLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="filterSidebarLabel">Filter Products</h5>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
     </div>
-
-
-    <!-- Product Grid -->
-    <div class="container my-5">
-        <div class="row" id="product-list">
-            <!-- JS will inject product cards here -->
+    <div class="offcanvas-body">
+        <div class="mb-3">
+            <label for="brandFilter" class="form-label">Brand</label>
+            <select id="brandFilter" class="form-select" aria-label="Filter by Brand" disabled>
+                <option value="">All Brands</option>
+            </select>
         </div>
-    </div>
-    <div class="container my-4">
-        <nav>
-            <ul class="pagination justify-content-center" id="pagination">
-                <!-- JS will inject pagination buttons here -->
-            </ul>
-        </nav>
-    </div>
-
-    <!-- Footer Navbar -->
-    <footer class="bg-light py-3">
-        <div class="container d-flex justify-content-center flex-wrap gap-3">
-            <button class="btn btn-outline-secondary">Contact Us</button>
-            <button class="btn btn-outline-secondary">Order Status</button>
-            <button class="btn btn-outline-secondary">Shipping & Delivery</button>
-            <button class="btn btn-outline-secondary">Store Finder</button>
-            <button class="btn btn-outline-secondary">Returns & Refunds</button>
-            <button class="btn btn-outline-secondary">Help Center</button>
+        <div class="mb-3">
+            <label for="modelFilter" class="form-label">Model</label>
+            <select id="modelFilter" class="form-select" aria-label="Filter by Model" disabled>
+                <option value="">All Models</option>
+            </select>
         </div>
-    </footer>
-    <!-- Temporary JS path for static file access without Flask -->
-    <script src="C:\Users\Software Engineering\GitHub\MVP\Frontend\static\js\productlistings.js"></script>
-    <script src="C:\Users\Software Engineering\GitHub\MVP\Frontend\static\js\filtering.js"></script>
+        <div class="mb-3">
+            <label for="styleFilter" class="form-label">Style</label>
+            <select id="styleFilter" class="form-select" aria-label="Filter by Style" disabled>
+                <option value="">All Styles</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="priceFilter" class="form-label">Price</label>
+            <select id="priceFilter" class="form-select" aria-label="Filter by Price">
+                <option value="">All Prices</option>
+                <option value="0-50">Under $50</option>
+                <option value="50-100">$50–$100</option>
+                <option value="100-150">$100–$150</option>
+                <option value="150+">Over $150</option>
+            </select>
+        </div>
+        <button class="btn btn-primary w-100 mt-3" id="applyFiltersBtn" type="button">
+            Apply Filters
+        </button>
+    </div>
+</div>
 
-    <!-- Flask version (for later when serving with Flask) -->
-    <!-- <script src="{{ url_for('static', filename='js/productlistings.js') }}"></script> -->
+<!-- Product Grid: dynamically populated by JS -->
+<main class="container my-5" role="main">
+    <div class="row" id="product-list" aria-live="polite" aria-relevant="additions">
+        <!-- Product cards will be injected here by JS -->
+    </div>
+</main>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Load More Button: for paginated product loading -->
+<div class="d-flex justify-content-center mt-4">
+    <button id="load-more-btn" class="btn btn-light border">
+        &#x25BC;
+        Load More Products
+    </button>
+</div>
 
+<!-- Footer Navbar: quick links to support and info pages -->
+<footer class="bg-light py-3">
+    <div class="container d-flex justify-content-center flex-wrap gap-3">
+        <a class="btn btn-outline-secondary" href="{{ url_for('contact_us') }}">Contact Us</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('order_status') }}">Order Status</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('shipping_info') }}">Shipping & Delivery</a>
+        <a class="btn btn-outline-secondary" href="#">Store Finder</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('returns') }}">Returns & Refunds</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('faq') }}">Help Center</a>
+    </div>
+</footer>
+{% endblock %} {# End of content block #}
 
-</body>
-</html>
-
-
-
-
+{% block scripts %} {# Start scripts block for page-specific JS #}
+<script type="module" src="{{ url_for('static', filename='js/productlistings.js') }}"></script>
+<script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %} {# End scripts block #}

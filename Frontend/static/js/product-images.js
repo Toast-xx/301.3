@@ -10,10 +10,10 @@ const imageVariants = {
     // },
     // {% endfor %}
     "white": {
-        mainImg: "static\images\Nike Air Force 1 '07-White_Men.webp",
+        mainImg: "https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0020.jpg?v=1737503185&auto=compress,format",
         thumbnails: [
-            "",
-            "",
+            "https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0021.jpg?v=1737503187&auto=compress,format",
+            "https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0022.jpg?v=1737503187&auto=compress,format",
             "https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0023.jpg?v=1737503187&auto=compress,format",
             "https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0024.jpg?v=1737503187&auto=compress,format",
             "https://culture-kings-nz.imgix.net/files/05006169-YW240_default_0025.jpg?v=1737503187&auto=compress,format",

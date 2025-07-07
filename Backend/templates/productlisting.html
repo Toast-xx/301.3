@@ -1,3 +1,15 @@
+{#
+    productlisting.html
+    Displays the main product listing page for Shoe Haven.
+    - Extends base.html for consistent layout and navigation.
+    - Includes a submenu for quick filtering by category and sale.
+    - Provides an offcanvas sidebar for advanced filtering (brand, model, style, price).
+    - Product grid is dynamically populated by JavaScript.
+    - Includes a "Load More" button for pagination.
+    - Footer provides quick links to support and info pages.
+    - Loads page-specific JS modules and supporting scripts.
+#}
+
 {% extends "base.html" %} {# Inherit from the base template #}
 {% block head %} {# Start the head block for extra head content #}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/productlistings.css') }}"> {# Link to the product listings CSS #}
@@ -6,137 +18,113 @@
 {% block title %}Products - Shoe Haven{% endblock %} {# Set the page title #}
 {% block content %} {# Start the main content block #}
 
-<!-- Product Listing Submenu -->
+<!-- Product Listing Submenu: quick filters for Men, Women, Kids, Sale, and advanced filter sidebar -->
 <div class="bg-light shadow-sm">
-    <!-- Submenu bar with light background and shadow -->
     <div class="container">
-        <!-- Bootstrap container for submenu -->
         <ul class="nav justify-content-center py-2">
-            <!-- Centered navigation bar with padding -->
             <li class="nav-item">
-                <!-- Menu item: Men -->
-                <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='men') }}" data-filter="men">Men</a> <!-- Filter by Men -->
+                <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='men') }}" data-filter="men">Men</a>
             </li>
             <li class="nav-item">
-                <!-- Menu item: Women -->
-                <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='women') }}" data-filter="women">Women's</a> <!-- Filter by Women -->
+                <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='women') }}" data-filter="women">Women's</a>
             </li>
             <li class="nav-item">
-                <!-- Menu item: Kids -->
-                <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='kids') }}" data-filter="kids">Kids</a> <!-- Filter by Kids -->
+                <a class="btn btn-outline-dark mx-1 filter-btn" href="{{ url_for('product_listing', category='kids') }}" data-filter="kids">Kids</a>
             </li>
             <li class="nav-item">
-                <!-- Menu item: Sale -->
-                <a class="btn btn-outline-danger mx-1 filter-btn" href="#" data-filter="sale">Sale</a> <!-- Filter by Sale -->
+                <a class="btn btn-outline-danger mx-1 filter-btn" href="#" data-filter="sale">Sale</a>
             </li>
             <li class="nav-item">
-                <!-- Menu item: Filter sidebar button -->
+                <!-- Button to open the filter sidebar -->
                 <button class="btn btn-dark mx-1"
                         data-bs-toggle="offcanvas"
                         data-bs-target="#filterSidebar"
                         aria-controls="filterSidebar">
-                    <i class="bi bi-funnel-fill"></i> Filter <!-- Filter icon and label -->
+                    <i class="bi bi-funnel-fill"></i> Filter
                 </button>
             </li>
         </ul>
     </div>
 </div>
 
-<!-- Filter Offcanvas Sidebar -->
+<!-- Filter Offcanvas Sidebar: advanced filtering options -->
 <div class="offcanvas offcanvas-end"
      tabindex="-1"
      id="filterSidebar"
      aria-labelledby="filterSidebarLabel">
-    <!-- Offcanvas sidebar for filters -->
     <div class="offcanvas-header">
-        <!-- Sidebar header -->
-        <h5 class="offcanvas-title" id="filterSidebarLabel">Filter Products</h5> <!-- Sidebar title -->
+        <h5 class="offcanvas-title" id="filterSidebarLabel">Filter Products</h5>
         <button type="button"
                 class="btn-close"
                 data-bs-dismiss="offcanvas"
-                aria-label="Close"></button> <!-- Button to close sidebar -->
+                aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <!-- Sidebar body for filter controls -->
         <div class="mb-3">
-            <!-- Brand filter dropdown -->
-            <label for="brandFilter" class="form-label">Brand</label> <!-- Brand label -->
+            <label for="brandFilter" class="form-label">Brand</label>
             <select id="brandFilter" class="form-select" aria-label="Filter by Brand" disabled>
-                <!-- Brand select, disabled by default -->
-                <option value="">All Brands</option> <!-- Option for all brands -->
+                <option value="">All Brands</option>
             </select>
         </div>
         <div class="mb-3">
-            <!-- Model filter dropdown -->
-            <label for="modelFilter" class="form-label">Model</label> <!-- Model label -->
+            <label for="modelFilter" class="form-label">Model</label>
             <select id="modelFilter" class="form-select" aria-label="Filter by Model" disabled>
-                <!-- Model select, disabled by default -->
-                <option value="">All Models</option> <!-- Option for all models -->
+                <option value="">All Models</option>
             </select>
         </div>
         <div class="mb-3">
-            <!-- Style filter dropdown -->
-            <label for="styleFilter" class="form-label">Style</label> <!-- Style label -->
+            <label for="styleFilter" class="form-label">Style</label>
             <select id="styleFilter" class="form-select" aria-label="Filter by Style" disabled>
-                <!-- Style select, disabled by default -->
-                <option value="">All Styles</option> <!-- Option for all styles -->
+                <option value="">All Styles</option>
             </select>
         </div>
         <div class="mb-3">
-            <!-- Price filter dropdown -->
-            <label for="priceFilter" class="form-label">Price</label> <!-- Price label -->
+            <label for="priceFilter" class="form-label">Price</label>
             <select id="priceFilter" class="form-select" aria-label="Filter by Price">
-                <!-- Price select -->
-                <option value="">All Prices</option> <!-- Option for all prices -->
-                <option value="0-50">Under $50</option> <!-- Option for under $50 -->
-                <option value="50-100">$50–$100</option> <!-- Option for $50–$100 -->
-                <option value="100-150">$100–$150</option> <!-- Option for $100–$150 -->
-                <option value="150+">Over $150</option> <!-- Option for over $150 -->
+                <option value="">All Prices</option>
+                <option value="0-50">Under $50</option>
+                <option value="50-100">$50–$100</option>
+                <option value="100-150">$100–$150</option>
+                <option value="150+">Over $150</option>
             </select>
         </div>
         <button class="btn btn-primary w-100 mt-3" id="applyFiltersBtn" type="button">
-            Apply Filters <!-- Button to apply selected filters -->
+            Apply Filters
         </button>
     </div>
 </div>
 
-<!-- Product Grid -->
+<!-- Product Grid: dynamically populated by JS -->
 <main class="container my-5" role="main">
-    <!-- Main content area with margin -->
     <div class="row" id="product-list" aria-live="polite" aria-relevant="additions">
-        <!-- Product grid row, JS will inject cards here -->
-        <!-- JS will inject product cards here -->
+        <!-- Product cards will be injected here by JS -->
     </div>
 </main>
 
-<!-- Load More Button -->
+<!-- Load More Button: for paginated product loading -->
 <div class="d-flex justify-content-center mt-4">
-    <!-- Centered container for load more button -->
     <button id="load-more-btn" class="btn btn-light border">
-        &#x25BC; <!-- Down arrow icon -->
-        Load More Products <!-- Button label -->
+        &#x25BC;
+        Load More Products
     </button>
 </div>
 
-<!-- Footer Navbar -->
+<!-- Footer Navbar: quick links to support and info pages -->
 <footer class="bg-light py-3">
-    <!-- Footer with light background and padding -->
     <div class="container d-flex justify-content-center flex-wrap gap-3">
-        <!-- Centered, wrapped footer buttons with real URLs -->
-        <a class="btn btn-outline-secondary" href="{{ url_for('contact_us') }}">Contact Us</a> <!-- Link to Contact Us page -->
-        <a class="btn btn-outline-secondary" href="{{ url_for('order_status') }}">Order Status</a> <!-- Link to Order Status page -->
-        <a class="btn btn-outline-secondary" href="{{ url_for('shipping_info') }}">Shipping & Delivery</a> <!-- Link to Shipping Info page -->
-        <a class="btn btn-outline-secondary" href="#">Store Finder</a> <!-- Placeholder, update if route exists -->
-        <a class="btn btn-outline-secondary" href="{{ url_for('returns') }}">Returns & Refunds</a> <!-- Link to Returns page -->
-        <a class="btn btn-outline-secondary" href="{{ url_for('faq') }}">Help Center</a> <!-- Link to FAQ/Help Center page -->
+        <a class="btn btn-outline-secondary" href="{{ url_for('contact_us') }}">Contact Us</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('order_status') }}">Order Status</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('shipping_info') }}">Shipping & Delivery</a>
+        <a class="btn btn-outline-secondary" href="#">Store Finder</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('returns') }}">Returns & Refunds</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('faq') }}">Help Center</a>
     </div>
 </footer>
 {% endblock %} {# End of content block #}
 
 {% block scripts %} {# Start scripts block for page-specific JS #}
-<script type="module" src="{{ url_for('static', filename='js/productlistings.js') }}"></script> <!-- Product listings JS module -->
-
-<script src="{{ url_for('static', filename='js/navbar.js') }}"></script> <!-- Navbar JS -->
-<script src="{{ url_for('static', filename='js/login.js') }}"></script> <!-- Login JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> <!-- Bootstrap JS bundle -->
+<script type="module" src="{{ url_for('static', filename='js/productlistings.js') }}"></script>
+<script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %} {# End scripts block #}

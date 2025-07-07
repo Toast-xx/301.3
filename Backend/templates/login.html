@@ -1,21 +1,32 @@
+{#
+    login.html
+    Standalone login page for Shoe Haven.
+    - Provides both a modal (overlay) login and a full-page login form.
+    - The modal is triggered by a button and uses Bootstrap's modal component.
+    - The full-page login is hidden by default and can be shown via JavaScript.
+    - Includes a temporary JS path for local development and a commented Flask static path for production.
+    - Uses Bootstrap 5 for styling and modal functionality.
+#}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Overlay to Full Page Login</title>
+    <!-- Bootstrap CSS for styling -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
 
-    <!-- Button to trigger modal -->
+    <!-- Button to trigger modal login overlay -->
     <div class="container text-center mt-5">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
             Login (Overlay)
         </button>
     </div>
 
-    <!-- Modal overlay login -->
+    <!-- Modal overlay login form (Bootstrap modal) -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -24,6 +35,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <!-- Overlay login form -->
                     <form id="overlayLoginForm">
                         <div class="mb-3">
                             <label for="overlayEmail" class="form-label">Email address</label>
@@ -36,6 +48,7 @@
                         <button type="submit" class="btn btn-primary w-100">Login</button>
                     </form>
                     <hr />
+                    <!-- Button to expand to full page login -->
                     <div class="text-center">
                         <button id="expandLoginBtn" class="btn btn-link">Open Full Page Login</button>
                     </div>
@@ -44,7 +57,7 @@
         </div>
     </div>
 
-    <!-- Full page login (hidden initially) -->
+    <!-- Full page login form (hidden initially, shown via JS) -->
     <div id="fullPageLogin">
         <div class="login-container">
             <h3 class="mb-4 text-center">Full Page Login</h3>
@@ -61,13 +74,13 @@
             </form>
         </div>
     </div>
-    <!-- Temporary JS path for static file access without Flask -->
+
+    <!-- Temporary JS path for static file access without Flask (for local development) -->
     <script src="C:\Users\casst\OneDrive\Documents\GitHub\301.3\Frontend\static\js\login.js"></script>
 
-    <!-- Flask version (for later when serving with Flask) -->
+    <!-- Flask version (for production, uncomment when using Flask static files) -->
     <!-- <script src="{{ url_for('static', filename='js/login.js') }}"></script> -->
-
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap JS for modal and UI functionality -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
