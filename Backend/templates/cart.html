@@ -1,10 +1,21 @@
+{#
+    cart.html
+    Displays the user's shopping cart and order summary.
+    - Extends base.html for consistent layout and navigation.
+    - Cart table is dynamically rendered by cart.js in the #cart-table-container div.
+    - Order summary sidebar shows item count, subtotal, shipping options, and total.
+    - Includes buttons for checkout, continue shopping, and clearing the cart.
+    - Loads cart.js, navbar.js, and login.js for interactivity.
+#}
+
 {% extends "base.html" %}
 {% block content %}
 <div class="container my-5">
     <div class="row">
-        <!-- Cart Table -->
+        <!-- Cart Table Section -->
         <div class="col-lg-8 mb-4">
             <h2>Your Cart</h2>
+            <!-- Cart items will be dynamically inserted here by cart.js -->
             <div id="cart-table-container"></div>
         </div>
         <!-- Order Summary Sidebar -->
@@ -14,8 +25,11 @@
                     <h5 class="mb-0">Order Summary</h5>
                 </div>
                 <div class="card-body">
+                    <!-- Number of items in cart -->
                     <p><strong>Items:</strong> <span id="summary-items">0</span></p>
+                    <!-- Subtotal price of items -->
                     <p><strong>Subtotal:</strong> $<span id="summary-subtotal">0.00</span></p>
+                    <!-- Shipping options dropdown -->
                     <div class="mb-3">
                         <label for="shipping-select" class="form-label"><strong>Shipping</strong></label>
                         <select id="shipping-select" class="form-select">
@@ -24,17 +38,21 @@
                             <option value="15">Express - $15.00</option>
                         </select>
                     </div>
+                    <!-- Total price including shipping -->
                     <p><strong>Total:</strong> $<span id="summary-total">0.00</span></p>
+                    <!-- Checkout button -->
                     <a href="/checkout" class="btn btn-primary w-100 mt-3">Checkout</a>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Cart actions: continue shopping and clear cart -->
     <div class="mt-4 d-flex justify-content-between">
         <a href="/" class="btn btn-outline-secondary">Continue Shopping</a>
         <button id="clear-cart-btn" class="btn btn-danger">Clear Cart</button>
     </div>
 </div>
+<!-- JavaScript for cart functionality and UI interactivity -->
 <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
 <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
 <script src="{{ url_for('static', filename='js/login.js') }}"></script>
